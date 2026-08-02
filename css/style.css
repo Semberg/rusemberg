@@ -162,6 +162,7 @@ strong { font-weight: 600; color: var(--heading); }
 }
 .main-nav a:hover { color: var(--heading); }
 
+.header-actions { display: flex; align-items: center; gap: 12px; }
 .header-cta { padding: 10px 22px; font-size: .76rem; }
 
 .nav-toggle {
@@ -462,34 +463,43 @@ strong { font-weight: 600; color: var(--heading); }
   .cards-grid { grid-template-columns: repeat(2, 1fr); }
   .diff-grid { grid-template-columns: 1fr; gap: 32px; }
   .news-grid { grid-template-columns: 1fr; }
+  .main-nav { gap: 18px; }
+  .main-nav a { font-size: .76rem; }
+  .header-actions { gap: 8px; }
+  .header-cta { padding: 9px 14px; font-size: .7rem; }
 }
 
 @media (max-width: 760px) {
-  .main-nav, .header-cta { display: none; }
+  .main-nav, .header-actions { display: none; }
   .nav-toggle { display: flex; }
   .cards-grid { grid-template-columns: 1fr; }
   .section { padding: 70px 0; }
   .hero { padding-top: 110px; }
 
-  .site-header.nav-open { border-bottom-color: var(--line); box-shadow: 0 2px 12px rgba(38,41,46,.06); }
+  .site-header.nav-open {
+    background: var(--paper);
+    border-bottom-color: var(--line);
+    box-shadow: 0 12px 24px rgba(38,41,46,.08);
+  }
+  .site-header.nav-open .header-inner { flex-wrap: wrap; row-gap: 20px; }
+  .site-header.nav-open .brand { order: 1; }
+  .site-header.nav-open .nav-toggle { order: 2; }
   .site-header.nav-open .main-nav {
     display: flex;
     flex-direction: column;
-    position: absolute;
-    top: 100%;
-    left: 0; right: 0;
-    background: var(--paper);
-    padding: 20px 28px 28px;
+    order: 3;
+    flex-basis: 100%;
     gap: 18px;
-    border-bottom: 1px solid var(--line);
-    box-shadow: 0 12px 24px rgba(38,41,46,.08);
+    padding-top: 20px;
+    border-top: 1px solid var(--line);
   }
-  .site-header.nav-open .header-cta {
-    display: inline-flex;
-    position: absolute;
-    top: 100%;
-    right: 28px;
-    margin-top: 190px;
+  .site-header.nav-open .header-actions {
+    display: flex;
+    flex-wrap: wrap;
+    order: 4;
+    flex-basis: 100%;
+    gap: 10px;
+    padding-bottom: 8px;
   }
   .nav-toggle.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
   .nav-toggle.open span:nth-child(2) { opacity: 0; }
