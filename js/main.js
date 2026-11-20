@@ -26,141 +26,64 @@ document.getElementById('mainNav').addEventListener('click', (e) => {
   }
 });
 
-/* ---------- Hero animado pela rolagem ---------- */
-const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
-const seg = (p, a, b) => clamp((p - a) / (b - a));
-const ease = (t) => 1 - Math.pow(1 - t, 3);
-const easeIO = (t) => (t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
+/* ---------- Abertura em vídeo ---------- */
+const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+const heroVideo = document.getElementById('heroVideo');
+const heroMedia = document.getElementById('heroMedia');
+const saveData = navigator.connection && navigator.connection.saveData;
 
-const scrolly = document.querySelector('.scrolly');
-const layerScale = document.getElementById('layerScale');
-const layerPaper = document.getElementById('layerPaper');
-const layerRings = document.getElementById('layerRings');
-const layerBadge = document.getElementById('layerBadge');
-const layerSign = document.getElementById('layerSign');
-const beam = document.getElementById('beam');
-const panL = document.getElementById('panL');
-const panR = document.getElementById('panR');
-const scaleDraws = layerScale.querySelectorAll('.draw');
-const paperLines = layerPaper.querySelectorAll('.line');
-const rings = layerRings.querySelectorAll('.ring');
-const steps = document.querySelectorAll('.step');
-const bigNums = document.querySelectorAll('.big-num');
-const stepDots = document.querySelectorAll('#scrollyDots button');
-const scrollCue = document.getElementById('scrollCue');
-const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+function startHeroVideo() {
+  if (!heroVideo || reduceMotion.matches || saveData) return;
+  const mobile = window.matchMedia('(max-width: 760px)').matches;
+  heroVideo.src = mobile ? heroVideo.dataset.srcMobile : heroVideo.dataset.srcDesktop;
+  heroVideo.muted = true;
+  heroVideo.addEventListener('playing', () => heroVideo.classList.add('is-playing'), { once: true });
+  // se o vídeo falhar, a imagem alternativa continua visível
+  heroVideo.addEventListener('error', () => heroVideo.remove(), { once: true });
+  const p = heroVideo.play();
+  if (p && p.catch) p.catch(() => {});
+}
+if (document.readyState === 'complete') startHeroVideo();
+else window.addEventListener('load', startHeroVideo, { once: true });
 
-const sparks = [...document.querySelectorAll('#burst i')].map((el, i) => {
-  const ang = (i / 28) * Math.PI * 2 + (i % 3) * .37;
-  return { el, ang, near: 150 + (i * 37) % 60, far: 190 + (i * 53) % 170, size: .5 + ((i * 7) % 10) / 10, phase: i * 1.7 };
-});
-
-let activeStep = -1;
-function setStep(i) {
-  if (i === activeStep) return;
-  activeStep = i;
-  steps.forEach((s, k) => s.classList.toggle('is-active', k === i));
-  bigNums.forEach((n, k) => n.classList.toggle('is-active', k === i));
-  stepDots.forEach((d, k) => d.classList.toggle('is-active', k === i));
+// pausa o vídeo fora da tela para poupar bateria
+if (heroVideo && 'IntersectionObserver' in window) {
+  new IntersectionObserver(([e]) => {
+    if (!heroVideo.src) return;
+    if (e.isIntersecting) heroVideo.play().catch(() => {});
+    else heroVideo.pause();
+  }).observe(heroVideo);
 }
 
-const t0 = performance.now();
-function render(p, t) {
-  // Etapa 1 (0 a .25): a balança se desenha ao abrir a página e se equilibra com a rolagem
-  const intro = seg(t - t0, 200, 2200);
-  const s1 = Math.max(intro, seg(p, 0, .2));
-  scaleDraws.forEach((el, i) => {
-    const local = seg(s1, i * .06, .45 + i * .06);
-    el.style.strokeDashoffset = 1 - ease(local);
-  });
-  const tilt = -13 * (1 - easeIO(seg(p, .08, .24)));
-  const rad = tilt * Math.PI / 180;
-  beam.setAttribute('transform', `rotate(${tilt} 200 110)`);
-  const dx = 118 * (Math.cos(rad) - 1), dy = 118 * Math.sin(rad);
-  panL.setAttribute('transform', `translate(${-dx} ${-dy})`);
-  panR.setAttribute('transform', `translate(${dx} ${dy})`);
-  const out1 = easeIO(seg(p, .25, .34));
-  layerScale.style.opacity = 1 - out1;
-  layerScale.style.transform = `translateY(${-60 * out1}px) scale(${1 - .15 * out1})`;
-
-  // Etapa 2 (.28 a .55): o documento sobe, se escreve e recebe a assinatura
-  const in2 = easeIO(seg(p, .28, .38));
-  const out2 = easeIO(seg(p, .56, .66));
-  layerPaper.style.opacity = in2 * (1 - out2);
-  layerPaper.style.transform = `translateY(${80 * (1 - in2) + 50 * out2}px) rotate(${-4 * (1 - in2) + 3 * out2}deg) scale(${1 - .12 * out2})`;
-  paperLines.forEach((el, i) => {
-    el.style.strokeDashoffset = 1 - ease(seg(p, .36 + i * .018, .42 + i * .018));
-  });
-  const sign = easeIO(seg(p, .44, .54));
-  layerSign.style.clipPath = `inset(0 ${100 - sign * 100}% 0 0)`;
-  layerSign.style.opacity = sign > 0 ? 1 : 0;
-
-  // Etapa 3 (.6 a .8): o selo se fecha em volta da assinatura
-  rings.forEach((el, i) => {
-    el.style.strokeDashoffset = 1 - easeIO(seg(p, .6 + i * .03, .72 + i * .03));
-  });
-  const badge = easeIO(seg(p, .68, .8));
-  layerRings.style.opacity = 1 - seg(p, .78, .82);
-  layerBadge.style.opacity = badge;
-  layerBadge.style.transform = `rotate(${-50 * (1 - badge)}deg) scale(${.94 + .06 * badge})`;
-
-  // Etapa 4 (.8 a 1): as partículas se espalham e o selo respira
-  const s4 = ease(seg(p, .8, .95));
-  const breathe = 1 + .04 * s4;
-  layerSign.style.transform = `scale(${breathe})`;
-  layerBadge.style.transform += ` scale(${breathe})`;
-  const box = layerSign.getBoundingClientRect().width / 400 || 1;
-  sparks.forEach((sp) => {
-    const wob = Math.sin(t / 900 + sp.phase) * 6;
-    const spread = window.innerWidth < 900 ? .45 : 1;
-    const r = (sp.near + wob + (sp.far - sp.near + 40) * s4 * spread - 60 * (1 - s1)) * box;
-    const x = Math.cos(sp.ang + s4 * .4) * r;
-    const y = Math.sin(sp.ang + s4 * .4) * r * .9;
-    const vis = clamp(s1 * 1.2) * (.35 + .65 * s4);
-    sp.el.style.transform = `translate(${x}px, ${y}px) scale(${sp.size * (1 + s4)})`;
-    sp.el.style.opacity = vis * (1 - .4 * seg(p, .97, 1));
-  });
-
-  setStep(p < .27 ? 0 : p < .57 ? 1 : p < .8 ? 2 : 3);
-  scrollCue.style.opacity = 1 - seg(p, .02, .08);
-}
-
-function progress() {
-  const r = scrolly.getBoundingClientRect();
-  const total = scrolly.offsetHeight - window.innerHeight;
-  return clamp(-r.top / (total || 1));
-}
-
-if (reduceMotion) {
-  render(1, t0 + 5000);
-  setStep(0);
-} else {
-  const loop = (t) => { render(progress(), t); requestAnimationFrame(loop); };
-  requestAnimationFrame(loop);
-}
-
-stepDots.forEach((d, k) => d.addEventListener('click', () => {
-  const total = scrolly.offsetHeight - window.innerHeight;
-  const target = [0.12, 0.47, 0.76, 0.95][k];
-  window.scrollTo({ top: scrolly.offsetTop + total * target, behavior: 'smooth' });
-}));
-
-/* ---------- Paralaxe dos numerais das seções ---------- */
-const ghosts = document.querySelectorAll('.ghost-num');
-function parallax() {
+/* ---------- Paralaxe discreta ---------- */
+const parallaxEls = [
+  { el: heroMedia, k: .25, hero: true },
+  { el: document.querySelector('.sobre-badge'), k: -.06 },
+];
+let ticking = false;
+function updateParallax() {
+  ticking = false;
   const vh = window.innerHeight;
-  ghosts.forEach((g) => {
-    const r = g.parentElement.getBoundingClientRect();
-    const k = (r.top + r.height / 2 - vh / 2) / vh;
-    g.style.transform = `translateY(${k * 60}px)`;
+  parallaxEls.forEach(({ el, k, hero }) => {
+    if (!el) return;
+    const r = (hero ? el.parentElement : el).getBoundingClientRect();
+    if (r.bottom < 0 || r.top > vh) return;
+    const y = hero ? -r.top * k : (r.top + r.height / 2 - vh / 2) * k;
+    el.style.transform = `translate3d(0, ${y.toFixed(1)}px, 0)`;
   });
 }
-if (!reduceMotion) {
-  window.addEventListener('scroll', parallax, { passive: true });
-  parallax();
+if (!reduceMotion.matches) {
+  window.addEventListener('scroll', () => {
+    if (!ticking) { ticking = true; requestAnimationFrame(updateParallax); }
+  }, { passive: true });
+  updateParallax();
 }
 
 /* ---------- Reveal on scroll ---------- */
+// entrada em sequência dos itens de cada grade
+document.querySelectorAll('.cards-grid, .diff-grid').forEach((grid) => {
+  [...grid.children].forEach((el, i) => el.style.setProperty('--d', `${(i % 3) * .12}s`));
+});
 const revealEls = document.querySelectorAll('.reveal');
 const io = new IntersectionObserver((entries) => {
   entries.forEach((entry) => {
