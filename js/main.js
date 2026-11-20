@@ -1,99 +1,130 @@
 // ==========================================================
-// Rusemberg Fernandes — Advogado
+// Rusemberg Fernandes · Advogado
 // ==========================================================
 
 document.getElementById('year').textContent = new Date().getFullYear();
+const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-/* ---------- Header scroll state ---------- */
+/* ---------- Header: estado conforme a seção ---------- */
 const header = document.getElementById('siteHeader');
-const onScroll = () => {
+const cena = document.querySelector('.cena');
+const escuras = [...document.querySelectorAll('.cena, .areas, .diferenciais, .site-footer')];
+function atualizaHeader() {
   header.classList.toggle('scrolled', window.scrollY > 30);
-};
-onScroll();
-window.addEventListener('scroll', onScroll, { passive: true });
+  const y = header.offsetHeight / 2;
+  const sobreEscuro = escuras.some((s) => { const r = s.getBoundingClientRect(); return r.top <= y && r.bottom >= y; });
+  header.classList.toggle('is-dark', sobreEscuro);
+  header.classList.toggle('is-light', !sobreEscuro);
+}
 
-/* ---------- Mobile nav ---------- */
+/* ---------- Menu móvel ---------- */
 const navToggle = document.getElementById('navToggle');
 navToggle.addEventListener('click', () => {
   const open = header.classList.toggle('nav-open');
   navToggle.classList.toggle('open', open);
   navToggle.setAttribute('aria-expanded', String(open));
 });
-document.getElementById('mainNav').addEventListener('click', (e) => {
-  if (e.target.tagName === 'A') {
+header.addEventListener('click', (e) => {
+  if (e.target.closest('.main-nav a, .header-actions a')) {
     header.classList.remove('nav-open');
     navToggle.classList.remove('open');
+    navToggle.setAttribute('aria-expanded', 'false');
   }
 });
 
-/* ---------- Abertura em vídeo ---------- */
-const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-const heroVideo = document.getElementById('heroVideo');
-const heroMedia = document.getElementById('heroMedia');
-const saveData = navigator.connection && navigator.connection.saveData;
-
-function startHeroVideo() {
-  if (!heroVideo || reduceMotion.matches || saveData) return;
-  const mobile = window.matchMedia('(max-width: 760px)').matches;
-  heroVideo.src = mobile ? heroVideo.dataset.srcMobile : heroVideo.dataset.srcDesktop;
-  heroVideo.muted = true;
-  heroVideo.addEventListener('playing', () => heroVideo.classList.add('is-playing'), { once: true });
-  // se o vídeo falhar, a imagem alternativa continua visível
-  heroVideo.addEventListener('error', () => heroVideo.remove(), { once: true });
-  const p = heroVideo.play();
-  if (p && p.catch) p.catch(() => {});
+/* ---------- Manifesto: as palavras acendem com a rolagem ---------- */
+const manifesto = document.getElementById('manifesto');
+let palavras = [];
+if (manifesto) {
+  manifesto.innerHTML = manifesto.textContent.trim().split(/\s+/).map((w) => `<span class="w">${w}</span>`).join(' ');
+  palavras = [...manifesto.querySelectorAll('.w')];
 }
-if (document.readyState === 'complete') startHeroVideo();
-else window.addEventListener('load', startHeroVideo, { once: true });
-
-// pausa o vídeo fora da tela para poupar bateria
-if (heroVideo && 'IntersectionObserver' in window) {
-  new IntersectionObserver(([e]) => {
-    if (!heroVideo.src) return;
-    if (e.isIntersecting) heroVideo.play().catch(() => {});
-    else heroVideo.pause();
-  }).observe(heroVideo);
+function atualizaManifesto() {
+  if (!palavras.length || reduceMotion) return;
+  const r = manifesto.getBoundingClientRect(); const vh = window.innerHeight;
+  const t = Math.min(1, Math.max(0, (vh * 0.85 - r.top) / (r.height + vh * 0.35)));
+  const n = Math.round(t * palavras.length);
+  palavras.forEach((w, i) => w.classList.toggle('on', i < n));
 }
 
-/* ---------- Paralaxe discreta ---------- */
-const parallaxEls = [
-  { el: heroMedia, k: .25, hero: true },
-  { el: document.querySelector('.sobre-badge'), k: -.06 },
-];
-let ticking = false;
-function updateParallax() {
-  ticking = false;
+/* ---------- Paralaxe das fotos ---------- */
+const selo = document.querySelector('.sobre-selo');
+const difFoto = document.getElementById('difFoto');
+const whats = document.getElementById('whatsFloat');
+function atualizaParalaxe() {
+  if (reduceMotion) return;
   const vh = window.innerHeight;
-  parallaxEls.forEach(({ el, k, hero }) => {
-    if (!el) return;
-    const r = (hero ? el.parentElement : el).getBoundingClientRect();
-    if (r.bottom < 0 || r.top > vh) return;
-    const y = hero ? -r.top * k : (r.top + r.height / 2 - vh / 2) * k;
-    el.style.transform = `translate3d(0, ${y.toFixed(1)}px, 0)`;
+  if (selo) {
+    const r = selo.getBoundingClientRect();
+    const k = Math.max(-1, Math.min(1, (r.top - vh / 2) / vh));
+    const amp = window.innerWidth < 900 ? 12 : 30;
+    selo.style.transform = `translateY(${(k * amp).toFixed(1)}px) rotate(${(k * -40).toFixed(1)}deg)`;
+  }
+  if (difFoto) {
+    const r = difFoto.parentElement.parentElement.getBoundingClientRect();
+    if (r.bottom > 0 && r.top < vh) {
+      const k = (r.top + r.height / 2 - vh / 2) / vh;
+      difFoto.style.transform = `translate3d(0, ${(k * -12).toFixed(2)}%, 0) scale(1.05)`;
+    }
+  }
+}
+
+let ticking = false;
+function aoRolar() {
+  if (ticking) return; ticking = true;
+  requestAnimationFrame(() => {
+    ticking = false;
+    atualizaHeader(); atualizaManifesto(); atualizaParalaxe();
+    if (whats && cena) { const mostrar = cena.getBoundingClientRect().bottom < window.innerHeight * 1.02 || (window.innerWidth < 900 && window.scrollY > window.innerHeight * 0.4); whats.style.opacity = mostrar ? '1' : '0'; whats.style.pointerEvents = mostrar ? 'auto' : 'none'; }
   });
 }
-if (!reduceMotion.matches) {
-  window.addEventListener('scroll', () => {
-    if (!ticking) { ticking = true; requestAnimationFrame(updateParallax); }
-  }, { passive: true });
-  updateParallax();
-}
+window.addEventListener('scroll', aoRolar, { passive: true });
+window.addEventListener('resize', aoRolar);
+aoRolar();
 
-/* ---------- Reveal on scroll ---------- */
-// entrada em sequência dos itens de cada grade
-document.querySelectorAll('.cards-grid, .diff-grid').forEach((grid) => {
-  [...grid.children].forEach((el, i) => el.style.setProperty('--d', `${(i % 3) * .12}s`));
-});
-const revealEls = document.querySelectorAll('.reveal');
+/* ---------- Entradas na rolagem ---------- */
+document.querySelectorAll('.diff-grid, .sobre-values').forEach((g) => [...g.children].forEach((el, i) => el.style.setProperty('--d', `${i * .12}s`)));
 const io = new IntersectionObserver((entries) => {
   entries.forEach((entry) => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('in-view');
-      io.unobserve(entry.target);
-    }
+    if (entry.isIntersecting) { entry.target.classList.add('in-view'); io.unobserve(entry.target); }
   });
 }, { threshold: 0.15, rootMargin: '0px 0px -60px 0px' });
-revealEls.forEach((el) => io.observe(el));
+document.querySelectorAll('.reveal, .revela-img').forEach((el) => io.observe(el));
+
+/* ---------- Áreas de atuação ---------- */
+const areas = [...document.querySelectorAll('.area')];
+const palcoImgs = [...document.querySelectorAll('#areasPalco img')];
+const palcoNum = document.getElementById('palcoNum');
+let areaAtiva = 0;
+function ativarArea(i, alternar = false) {
+  const mobile = window.innerWidth < 900;
+  if (mobile && alternar && i === areaAtiva && areas[i].classList.contains('is-on')) {
+    areas[i].classList.remove('is-on'); areas[i].querySelector('.area-btn').setAttribute('aria-expanded', 'false'); return;
+  }
+  const anterior = areaAtiva; areaAtiva = i;
+  areas.forEach((a, k) => { a.classList.toggle('is-on', k === i); a.querySelector('.area-btn').setAttribute('aria-expanded', String(k === i)); });
+  if (anterior !== i) {
+    palcoImgs.forEach((im, k) => { im.classList.toggle('is-sai', k === anterior); im.classList.toggle('is-on', k === i); });
+  }
+  if (palcoNum) palcoNum.textContent = String(i + 1).padStart(2, '0');
+}
+areas.forEach((a, i) => {
+  const btn = a.querySelector('.area-btn');
+  btn.addEventListener('click', () => ativarArea(i, true));
+  a.addEventListener('mouseenter', () => { if (window.matchMedia('(hover: hover)').matches && window.innerWidth >= 900) ativarArea(i); });
+  btn.addEventListener('focus', () => { if (window.innerWidth >= 900) ativarArea(i); });
+});
+// o palco acompanha o cursor com leve inclinação
+const palco = document.getElementById('areasPalco');
+if (palco && !reduceMotion) {
+  palco.addEventListener('pointermove', (e) => {
+    const r = palco.getBoundingClientRect();
+    const x = (e.clientX - r.left) / r.width - .5, y = (e.clientY - r.top) / r.height - .5;
+    const im = palco.querySelector('img.is-on');
+    if (im) im.style.transform = `scale(1.06) translate(${(-x * 14).toFixed(1)}px, ${(-y * 14).toFixed(1)}px)`;
+  });
+  palco.addEventListener('pointerleave', () => { const im = palco.querySelector('img.is-on'); if (im) im.style.transform = ''; });
+}
 
 /* ---------- Notícias jurídicas (feed diário) ---------- */
 const NEWS_API = 'https://rusemberg-news.digitec.workers.dev/';
@@ -106,20 +137,17 @@ const SOURCE_LABELS = {
 };
 
 function formatDate(iso) {
-  try {
-    const d = new Date(iso);
-    return d.toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' });
-  } catch {
-    return '';
-  }
+  try { return new Date(iso).toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' }); }
+  catch { return ''; }
 }
-
 function stripHtml(html) {
   const tmp = document.createElement('div');
   tmp.innerHTML = html || '';
   return (tmp.textContent || tmp.innerText || '').trim();
 }
-
+function escapeHtml(s) {
+  return String(s || '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+}
 function truncate(text, max) {
   if (text.length <= max) return text;
   return text.slice(0, max).replace(/\s+\S*$/, '') + '…';
@@ -133,21 +161,22 @@ async function loadNews() {
     if (data.status !== 'ok' || !Array.isArray(data.items) || data.items.length === 0) {
       throw new Error('Feed vazio ou indisponível');
     }
-
     newsGrid.innerHTML = '';
-    data.items.slice(0, 6).forEach((item) => {
+    data.items.slice(0, 5).forEach((item, i) => {
       const card = document.createElement('article');
-      card.className = 'news-card';
-      const summary = truncate(stripHtml(item.description || item.content || ''), 130);
+      card.className = 'news-card reveal' + (i === 0 ? ' is-destaque' : '');
+      card.style.setProperty('--d', `${i * .08}s`);
+      const summary = truncate(stripHtml(item.description || item.content || ''), i === 0 ? 220 : 120);
+      const link = /^https?:\/\//.test(item.link || '') ? item.link : '#';
       card.innerHTML = `
         <span class="news-date">${formatDate(item.pubDate)}</span>
-        <h3>${item.title}</h3>
-        <p>${summary}</p>
-        <a class="news-link" href="${item.link}" target="_blank" rel="noopener">Ler notícia</a>
+        <h3>${escapeHtml(item.title)}</h3>
+        <p>${escapeHtml(summary)}</p>
+        <a class="news-link" href="${escapeHtml(link)}" target="_blank" rel="noopener">Ler notícia</a>
       `;
       newsGrid.appendChild(card);
+      io.observe(card);
     });
-
     const src = SOURCE_LABELS[data.source] || SOURCE_LABELS['https://www.conjur.com.br/rss.xml'];
     newsSource.innerHTML = `Fonte: <a href="${src.url}" target="_blank" rel="noopener">${src.name}</a>`;
   } catch (err) {
@@ -163,5 +192,4 @@ async function loadNews() {
     newsSource.innerHTML = '';
   }
 }
-
 loadNews();

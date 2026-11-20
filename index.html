@@ -2,35 +2,42 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Rusemberg Fernandes | Advogado em Campina Grande/PB</title>
-<meta name="description" content="Rusemberg Tavares Fernandes — Advogado OAB/PB 30.070. Advocacia estratégica em Direito Civil, Trabalhista, Empresarial, Imobiliário, Previdenciário e Execução Civil, em Campina Grande/PB.">
+<meta name="description" content="Rusemberg Tavares Fernandes, Advogado OAB/PB 30.070. Advocacia estratégica em Direito Civil, Trabalhista, Empresarial, Imobiliário, Previdenciário e Execução Civil, em Campina Grande/PB.">
+<meta name="theme-color" content="#17191c">
 
 <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16.png">
 <link rel="icon" type="image/png" sizes="192x192" href="assets/favicon-192.png">
 <link rel="apple-touch-icon" sizes="180x180" href="assets/favicon-180.png">
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="preload" href="assets/fonts/cormorant-garamond-latin-500-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/barlow-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/img/cena-poster.webp" as="image" media="(min-width: 761px)">
+<link rel="preload" href="assets/img/cena-poster-mobile.webp" as="image" media="(max-width: 760px)">
 
 <link rel="stylesheet" href="css/style.css">
+
+<script type="importmap">
+{ "imports": { "three": "./assets/vendor/three/three.module.min.js" } }
+</script>
 </head>
 <body>
 
 <!-- ===== HEADER ===== -->
-<header class="site-header" id="siteHeader">
+<header class="site-header is-dark" id="siteHeader">
   <div class="container header-inner">
-    <a href="#topo" class="brand">
-      <img src="assets/icon-on-light-transparent.png" alt="Rusemberg Fernandes" class="brand-mark">
+    <a href="#topo" class="brand" aria-label="Rusemberg Fernandes, Advogado">
+      <img src="assets/icon-on-dark-transparent.png" alt="" class="brand-mark brand-mark-dark" width="40" height="30">
+      <img src="assets/icon-on-light-transparent.png" alt="" class="brand-mark brand-mark-light" width="40" height="30">
       <span class="brand-text">
         <strong>Rusemberg Fernandes</strong>
         <em>Advogado</em>
       </span>
     </a>
 
-    <nav class="main-nav" id="mainNav">
+    <nav class="main-nav" id="mainNav" aria-label="Principal">
       <a href="#sobre">Sobre</a>
       <a href="#areas">Áreas de Atuação</a>
       <a href="#noticias">Notícias</a>
@@ -40,87 +47,104 @@
 
     <div class="header-actions">
       <!-- TODO: substituir o "#" pela URL do Juris 360 quando ela for definida -->
-      <a href="#" class="btn btn-outline header-cta">Juris 360</a>
+      <a href="#" class="btn btn-ghost header-cta">Juris 360</a>
       <a href="https://wa.me/5583996069271" target="_blank" rel="noopener" class="btn btn-gold header-cta">Fale no WhatsApp</a>
     </div>
 
-    <button class="nav-toggle" id="navToggle" aria-label="Abrir menu" aria-expanded="false">
+    <button class="nav-toggle" id="navToggle" aria-label="Abrir menu" aria-expanded="false" aria-controls="mainNav">
       <span></span><span></span><span></span>
     </button>
   </div>
 </header>
 
-<!-- ===== HERO ===== -->
-<section class="hero" id="topo">
-  <div class="hero-media" id="heroMedia" aria-hidden="true">
-    <picture>
-      <source media="(max-width: 760px)" srcset="assets/video/abertura-mobile.jpg">
-      <img class="hero-poster" src="assets/video/abertura-desktop.jpg" alt="" width="1280" height="720">
-    </picture>
-    <video class="hero-video" id="heroVideo" muted loop playsinline preload="none"
-      data-src-desktop="assets/video/abertura-desktop.mp4"
-      data-src-mobile="assets/video/abertura-mobile.mp4"></video>
-  </div>
-  <div class="hero-veil" aria-hidden="true"></div>
-
-  <div class="container hero-inner">
-    <p class="eyebrow hero-in">Advocacia · Ética · Técnica · Compromisso</p>
-    <h1 class="hero-in">Defesa jurídica com clareza, rigor técnico e atenção humana</h1>
-    <p class="hero-lead hero-in">
-      Atendimento personalizado para pessoas físicas e empresas, com orientação transparente
-      sobre prazos, riscos e estratégias em cada etapa do processo.
-    </p>
-    <div class="hero-actions hero-in">
-      <a href="https://wa.me/5583996069271" target="_blank" rel="noopener" class="btn btn-gold">Agendar Consulta</a>
-      <a href="#areas" class="btn btn-outline btn-on-media">Áreas de Atuação</a>
+<!-- ===== CENA DE ABERTURA (narrativa conduzida pela rolagem) ===== -->
+<section class="cena" id="topo" aria-label="Apresentação">
+  <div class="cena-sticky" id="cenaSticky">
+    <div class="cena-fundo" aria-hidden="true">
+      <div class="cena-luz"></div>
+      <div class="cena-ambiente" id="cenaAmbiente"></div>
     </div>
+    <picture><source media="(max-width: 760px)" srcset="assets/img/cena-poster-mobile.webp"><img class="cena-poster" id="cenaPoster" src="assets/img/cena-poster.webp" alt="" aria-hidden="true"></picture>
+    <canvas class="cena-canvas" id="cenaCanvas" aria-hidden="true"></canvas>
+    <div class="cena-vinheta" aria-hidden="true"></div>
+
+    <!-- Capítulo 0: abertura -->
+    <div class="cap cap-0 is-on" data-cap="0">
+      <p class="eyebrow cap-eyebrow">Advocacia · Ética · Técnica · Compromisso</p>
+      <h1 class="cap-titulo">
+        <span class="t-esq"><span class="l">Defesa jurídica</span><span class="l">com <em>clareza</em>,</span></span>
+        <span class="t-dir"><span class="l">rigor técnico e</span><span class="l"><em>atenção</em> humana</span></span>
+      </h1>
+      <div class="cap-rodape">
+        <p class="cap-lead">Atendimento personalizado para pessoas físicas e empresas, com orientação transparente sobre prazos, riscos e estratégias em cada etapa do processo.</p>
+        <div class="cap-acoes">
+          <a href="https://wa.me/5583996069271" target="_blank" rel="noopener" class="btn btn-gold">Agendar Consulta</a>
+          <a href="#areas" class="btn btn-ghost">Áreas de Atuação</a>
+        </div>
+      </div>
+      <div class="cap-dica" aria-hidden="true"><span>Role para conhecer</span><i></i></div>
+    </div>
+
+    <!-- Capítulo 1: a pasta se abre -->
+    <div class="cap cap-1" data-cap="1">
+      <p class="cap-frase">Cada caso começa pela <em>escuta</em> e pela leitura atenta dos documentos.</p>
+    </div>
+
+    <!-- Capítulo 2: camadas do trabalho -->
+    <div class="cap cap-2" data-cap="2">
+      <div class="etapa" data-etapa="0">
+        <span class="etapa-num">01</span>
+        <h2 class="etapa-titulo">Análise</h2>
+        <p>Leitura cuidadosa de documentos, prazos e riscos envolvidos em cada situação.</p>
+      </div>
+      <div class="etapa" data-etapa="1">
+        <span class="etapa-num">02</span>
+        <h2 class="etapa-titulo">Estratégia</h2>
+        <p>Definição dos caminhos possíveis, com clareza sobre cada etapa e suas implicações.</p>
+      </div>
+      <div class="etapa" data-etapa="2">
+        <span class="etapa-num">03</span>
+        <h2 class="etapa-titulo">Orientação</h2>
+        <p>Comunicação transparente para que você acompanhe o caso e decida de forma informada.</p>
+      </div>
+    </div>
+
+    <!-- Capítulo 3: ambiente de trabalho -->
+    <div class="cap cap-3" data-cap="3">
+      <p class="eyebrow">Campina Grande · João Pessoa</p>
+      <h2 class="cap-titulo-2">Atendimento próximo,<br><em>presencial e online.</em></h2>
+      <a href="https://wa.me/5583996069271" target="_blank" rel="noopener" class="btn btn-gold">Falar no WhatsApp</a>
+    </div>
+
+    <div class="cena-progresso" aria-hidden="true"><i id="cenaBarra"></i></div>
   </div>
-  <a href="#sobre" class="scroll-cue" aria-label="Rolar para baixo"><span></span></a>
 </section>
 
 <!-- ===== SOBRE ===== -->
 <section class="section sobre" id="sobre">
-  <div class="container sobre-grid">
-    <div class="sobre-visual reveal">
-      <img src="assets/badge-on-light-transparent.png" alt="Selo Rusemberg Fernandes Advogado" class="sobre-badge">
-    </div>
-    <div class="sobre-content reveal">
-      <p class="eyebrow">Sobre</p>
-      <h2>Rusemberg Tavares Fernandes</h2>
-      <div class="sobre-bio">
-        <p>
-          Acredito que a advocacia vai muito além da atuação em processos judiciais. Meu
-          compromisso é oferecer orientação estratégica, prevenir riscos e construir soluções
-          jurídicas seguras, sempre com ética, transparência e excelência técnica.
-        </p>
-        <p>
-          Atendo pessoas físicas e empresas que buscam uma assessoria jurídica confiável, pautada
-          no atendimento personalizado, na comunicação clara e na dedicação a cada caso. Cada
-          demanda é analisada de forma individual, permitindo o desenvolvimento de estratégias
-          sólidas, eficientes e alinhadas aos objetivos de cada cliente.
-        </p>
-        <p>
-          Minha atuação abrange as áreas de Direito Civil, Trabalhista, Empresarial, Imobiliário,
-          Previdenciário e Execução Civil, oferecendo consultoria jurídica, elaboração e revisão
-          de contratos, negociações, atuação judicial e extrajudicial, além do acompanhamento
-          completo de processos.
-        </p>
-        <p>
-          Busco constante atualização profissional e utilizo recursos tecnológicos para
-          proporcionar um atendimento mais ágil, preciso e eficiente, sem abrir mão da
-          proximidade, da confiança e do relacionamento transparente com cada cliente.
-        </p>
-        <p>
-          Se você procura um advogado comprometido com resultados, planejamento jurídico e defesa
-          efetiva dos seus interesses, conte com uma atuação séria, estratégica e voltada para
-          oferecer a segurança jurídica que você precisa.
-        </p>
+  <div class="container">
+    <p class="sobre-manifesto" id="manifesto">Acredito que a advocacia vai muito além da atuação em processos judiciais. Meu compromisso é oferecer orientação estratégica, prevenir riscos e construir soluções jurídicas seguras, sempre com ética, transparência e excelência técnica.</p>
+
+    <div class="sobre-grid">
+      <figure class="sobre-foto revela-img">
+        <img src="assets/img/lawbooks.webp" srcset="assets/img/lawbooks-sm.webp 560w, assets/img/lawbooks.webp 900w" sizes="(max-width: 900px) 90vw, 36vw" alt="Livros de direito em uma estante" loading="lazy" width="900" height="1350">
+        <img src="assets/badge-on-light-transparent.png" alt="Selo Rusemberg Fernandes Advogado" class="sobre-selo" loading="lazy" width="700" height="700">
+      </figure>
+      <div class="sobre-content">
+        <p class="eyebrow reveal">Sobre</p>
+        <h2 class="reveal">Rusemberg Tavares Fernandes</h2>
+        <div class="sobre-bio reveal">
+          <p>Atendo pessoas físicas e empresas que buscam uma assessoria jurídica confiável, pautada no atendimento personalizado, na comunicação clara e na dedicação a cada caso. Cada demanda é analisada de forma individual, permitindo o desenvolvimento de estratégias sólidas, eficientes e alinhadas aos objetivos de cada cliente.</p>
+          <p>Minha atuação abrange as áreas de Direito Civil, Trabalhista, Empresarial, Imobiliário, Previdenciário e Execução Civil, oferecendo consultoria jurídica, elaboração e revisão de contratos, negociações, atuação judicial e extrajudicial, além do acompanhamento completo de processos.</p>
+          <p>Busco constante atualização profissional e utilizo recursos tecnológicos para proporcionar um atendimento mais ágil, preciso e eficiente, sem abrir mão da proximidade, da confiança e do relacionamento transparente com cada cliente.</p>
+          <p>Se você procura um advogado comprometido com resultados, planejamento jurídico e defesa efetiva dos seus interesses, conte com uma atuação séria, estratégica e voltada para oferecer a segurança jurídica que você precisa.</p>
+        </div>
+        <ul class="sobre-values reveal">
+          <li><span>Ética</span>Conduta alinhada ao Código de Ética e Disciplina da OAB.</li>
+          <li><span>Clareza</span>Linguagem acessível em cada orientação jurídica.</li>
+          <li><span>Dedicação</span>Acompanhamento próximo do caso, do início ao fim.</li>
+        </ul>
       </div>
-      <ul class="sobre-values">
-        <li><span>Ética</span> — conduta alinhada ao Código de Ética e Disciplina da OAB.</li>
-        <li><span>Clareza</span> — linguagem acessível em cada orientação jurídica.</li>
-        <li><span>Dedicação</span> — acompanhamento próximo do caso, do início ao fim.</li>
-      </ul>
     </div>
   </div>
 </section>
@@ -130,58 +154,47 @@
   <div class="container">
     <div class="section-head reveal">
       <p class="eyebrow">Áreas de Atuação</p>
-      <h2>Soluções jurídicas para pessoas e empresas</h2>
+      <h2>Soluções jurídicas para <em>pessoas e empresas</em></h2>
       <p class="lead">Consultoria, elaboração de contratos, negociações, defesas judiciais e acompanhamento completo de processos nas seguintes áreas.</p>
     </div>
 
-    <div class="cards-grid">
-      <article class="card reveal">
-        <span class="card-icon">
-          <svg viewBox="0 0 48 48" fill="none"><path d="M24 6v36M10 14l-7 14a7 7 0 0014 0l-7-14zm28 0l-7 14a7 7 0 0014 0l-7-14zM8 44h32M10 14h28" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </span>
-        <h3>Direito Civil</h3>
-        <p>Contratos, responsabilidade civil, cobranças e questões patrimoniais.</p>
-      </article>
+    <div class="areas-wrap">
+      <div class="areas-palco" id="areasPalco" aria-hidden="true">
+        <img src="assets/img/pen.webp" alt="" class="is-on" data-i="0" width="1400" height="933">
+        <img src="assets/img/conference.webp" alt="" data-i="1" loading="lazy" width="1400" height="875">
+        <img src="assets/img/facade.webp" alt="" data-i="2" loading="lazy" width="1100" height="1956">
+        <img src="assets/img/balconies.webp" alt="" data-i="3" loading="lazy" width="1100" height="1650">
+        <img src="assets/img/hourglass.webp" alt="" data-i="4" loading="lazy" width="1400" height="933">
+        <img src="assets/img/typewriter.webp" alt="" data-i="5" loading="lazy" width="1400" height="933">
+        <span class="palco-num" id="palcoNum">01</span>
+      </div>
 
-      <article class="card reveal">
-        <span class="card-icon">
-          <svg viewBox="0 0 48 48" fill="none"><rect x="8" y="18" width="32" height="22" rx="1.5" stroke="currentColor" stroke-width="1.6"/><path d="M17 18v-4a7 7 0 0114 0v4" stroke="currentColor" stroke-width="1.6"/></svg>
-        </span>
-        <h3>Direito Trabalhista</h3>
-        <p>Orientação e representação em demandas trabalhistas para empregados e empregadores.</p>
-      </article>
-
-      <article class="card reveal">
-        <span class="card-icon">
-          <svg viewBox="0 0 48 48" fill="none"><path d="M14 42V10h20v32" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M14 42h20M18 16h4M26 16h4M18 24h4M26 24h4M18 32h4M26 32h4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
-        </span>
-        <h3>Direito Empresarial</h3>
-        <p>Contratos, estruturação societária e assessoria jurídica preventiva para empresas.</p>
-      </article>
-
-      <article class="card reveal">
-        <span class="card-icon">
-          <svg viewBox="0 0 48 48" fill="none"><path d="M6 22L24 8l18 14" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M11 19v21h26V19" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M20 40V27h8v13" stroke="currentColor" stroke-width="1.6"/></svg>
-        </span>
-        <h3>Direito Imobiliário</h3>
-        <p>Contratos de compra e venda, locação, regularização e questões condominiais.</p>
-      </article>
-
-      <article class="card reveal">
-        <span class="card-icon">
-          <svg viewBox="0 0 48 48" fill="none"><path d="M24 4a20 20 0 100 40 20 20 0 000-40z" stroke="currentColor" stroke-width="1.6"/><path d="M24 13v11l8 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </span>
-        <h3>Direito Previdenciário</h3>
-        <p>Aposentadorias, benefícios por incapacidade e revisões junto ao INSS.</p>
-      </article>
-
-      <article class="card reveal">
-        <span class="card-icon">
-          <svg viewBox="0 0 48 48" fill="none"><path d="M14 6h14l8 8v28H14V6z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M28 6v8h8" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M18 26l4 4 8-8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </span>
-        <h3>Execução Civil</h3>
-        <p>Cobrança judicial de dívidas, cumprimento de sentença e execução de títulos extrajudiciais.</p>
-      </article>
+      <ol class="areas-lista" id="areasLista">
+        <li class="area is-on" data-i="0">
+          <button class="area-btn" aria-expanded="true"><span class="area-n">01</span><span class="area-nome">Direito Civil</span><span class="area-seta" aria-hidden="true"></span></button>
+          <div class="area-corpo"><div class="area-in"><img src="assets/img/pen-sm.webp" alt="Caneta tinteiro sobre papel de carta" loading="lazy" width="800" height="533"><p>Contratos, responsabilidade civil, cobranças e questões patrimoniais.</p></div></div>
+        </li>
+        <li class="area" data-i="1">
+          <button class="area-btn" aria-expanded="false"><span class="area-n">02</span><span class="area-nome">Direito Trabalhista</span><span class="area-seta" aria-hidden="true"></span></button>
+          <div class="area-corpo"><div class="area-in"><img src="assets/img/conference-sm.webp" alt="Sala de reuniões com mesa de madeira e cadeiras de couro" loading="lazy" width="800" height="500"><p>Orientação e representação em demandas trabalhistas para empregados e empregadores.</p></div></div>
+        </li>
+        <li class="area" data-i="2">
+          <button class="area-btn" aria-expanded="false"><span class="area-n">03</span><span class="area-nome">Direito Empresarial</span><span class="area-seta" aria-hidden="true"></span></button>
+          <div class="area-corpo"><div class="area-in"><img src="assets/img/facade-sm.webp" alt="Fachada de edifício corporativo" loading="lazy" width="700" height="1245"><p>Contratos, estruturação societária e assessoria jurídica preventiva para empresas.</p></div></div>
+        </li>
+        <li class="area" data-i="3">
+          <button class="area-btn" aria-expanded="false"><span class="area-n">04</span><span class="area-nome">Direito Imobiliário</span><span class="area-seta" aria-hidden="true"></span></button>
+          <div class="area-corpo"><div class="area-in"><img src="assets/img/balconies-sm.webp" alt="Edifício residencial com varandas" loading="lazy" width="700" height="1050"><p>Contratos de compra e venda, locação, regularização e questões condominiais.</p></div></div>
+        </li>
+        <li class="area" data-i="4">
+          <button class="area-btn" aria-expanded="false"><span class="area-n">05</span><span class="area-nome">Direito Previdenciário</span><span class="area-seta" aria-hidden="true"></span></button>
+          <div class="area-corpo"><div class="area-in"><img src="assets/img/hourglass-sm.webp" alt="Ampulheta de madeira" loading="lazy" width="800" height="533"><p>Aposentadorias, benefícios por incapacidade e revisões junto ao INSS.</p></div></div>
+        </li>
+        <li class="area" data-i="5">
+          <button class="area-btn" aria-expanded="false"><span class="area-n">06</span><span class="area-nome">Execução Civil</span><span class="area-seta" aria-hidden="true"></span></button>
+          <div class="area-corpo"><div class="area-in"><img src="assets/img/typewriter-sm.webp" alt="Escrivaninha antiga com papéis e máquina de escrever" loading="lazy" width="800" height="533"><p>Cobrança judicial de dívidas, cumprimento de sentença e execução de títulos extrajudiciais.</p></div></div>
+        </li>
+      </ol>
     </div>
   </div>
 </section>
@@ -191,7 +204,7 @@
   <div class="container">
     <div class="section-head reveal">
       <p class="eyebrow">Notícias Jurídicas</p>
-      <h2>Atualizadas diariamente</h2>
+      <h2>Atualizadas <em>diariamente</em></h2>
       <p class="lead">Principais notícias do mundo jurídico, atualizadas automaticamente a cada visita.</p>
     </div>
 
@@ -208,10 +221,13 @@
 
 <!-- ===== DIFERENCIAIS ===== -->
 <section class="section diferenciais" id="diferenciais">
+  <div class="dif-fundo" aria-hidden="true">
+    <img src="assets/img/columns.webp" srcset="assets/img/columns-sm.webp 1000w, assets/img/columns.webp 2000w" sizes="100vw" alt="" loading="lazy" width="2000" height="1273" id="difFoto">
+  </div>
   <div class="container">
     <div class="section-head reveal">
       <p class="eyebrow">Diferenciais</p>
-      <h2>Como conduzimos o seu caso</h2>
+      <h2>Como conduzimos <em>o seu caso</em></h2>
     </div>
 
     <div class="diff-grid">
@@ -237,12 +253,12 @@
 <!-- ===== CONTATO ===== -->
 <section class="section contato" id="contato">
   <div class="container contato-grid">
-    <div class="contato-info reveal">
-      <p class="eyebrow">Contato</p>
-      <h2>Vamos conversar sobre o seu caso</h2>
-      <p class="lead">Entre em contato pelos canais abaixo e agende um horário de atendimento.</p>
+    <div class="contato-info">
+      <p class="eyebrow reveal">Contato</p>
+      <h2 class="reveal">Vamos conversar sobre <em>o seu caso</em></h2>
+      <p class="lead reveal">Entre em contato pelos canais abaixo e agende um horário de atendimento.</p>
 
-      <ul class="contato-list">
+      <ul class="contato-list reveal">
         <li>
           <span class="contato-label">WhatsApp</span>
           <a href="https://wa.me/5583996069271" target="_blank" rel="noopener">(83) 9 9606-9271</a>
@@ -262,11 +278,16 @@
       </ul>
     </div>
 
-    <div class="contato-card reveal">
-      <img src="assets/icon-on-light-transparent.png" alt="" class="contato-mark" aria-hidden="true">
-      <h3>Consulta inicial</h3>
-      <p>Descreva brevemente sua situação pelo WhatsApp e retornaremos para combinar o melhor horário de atendimento.</p>
-      <a href="https://wa.me/5583996069271" target="_blank" rel="noopener" class="btn btn-gold btn-block">Falar agora</a>
+    <div class="contato-visual">
+      <figure class="contato-foto revela-img">
+        <img src="assets/img/boardroom.webp" srcset="assets/img/boardroom-sm.webp 900w, assets/img/boardroom.webp 1600w" sizes="(max-width: 900px) 92vw, 40vw" alt="Sala de reuniões iluminada por luz natural" loading="lazy" width="1600" height="1067">
+      </figure>
+      <div class="contato-card reveal">
+        <img src="assets/icon-on-light-transparent.png" alt="" class="contato-mark" aria-hidden="true" loading="lazy">
+        <h3>Consulta inicial</h3>
+        <p>Descreva brevemente sua situação pelo WhatsApp e retornaremos para combinar o melhor horário de atendimento.</p>
+        <a href="https://wa.me/5583996069271" target="_blank" rel="noopener" class="btn btn-gold btn-block">Falar agora</a>
+      </div>
     </div>
   </div>
 </section>
@@ -274,33 +295,32 @@
 <!-- ===== FOOTER ===== -->
 <footer class="site-footer">
   <div class="container footer-inner">
-    <a href="#topo" class="brand brand-footer">
-      <img src="assets/icon-on-light-transparent.png" alt="Rusemberg Fernandes" class="brand-mark">
+    <a href="#topo" class="brand brand-footer" aria-label="Rusemberg Fernandes, Advogado">
+      <img src="assets/icon-on-dark-transparent.png" alt="" class="brand-mark" loading="lazy" width="40" height="30">
       <span class="brand-text">
         <strong>Rusemberg Fernandes</strong>
         <em>Advogado</em>
       </span>
     </a>
 
-    <nav class="footer-nav">
+    <nav class="footer-nav" aria-label="Rodapé">
       <a href="#sobre">Sobre</a>
       <a href="#areas">Áreas de Atuação</a>
       <a href="#noticias">Notícias</a>
       <a href="#contato">Contato</a>
     </nav>
-
-    <div class="footer-meta">
-      <p>OAB/PB nº 30.070</p>
-      <p>&copy; <span id="year"></span> Rusemberg Tavares Fernandes Advocacia. Todos os direitos reservados.</p>
-    </div>
+  </div>
+  <div class="container footer-meta">
+    <p>OAB/PB nº 30.070</p>
+    <p>&copy; <span id="year"></span> Rusemberg Tavares Fernandes Advocacia. Todos os direitos reservados.</p>
   </div>
 </footer>
 
-<!-- Botão de WhatsApp sempre visível no celular -->
-<a href="https://wa.me/5583996069271" target="_blank" rel="noopener" class="whats-float" aria-label="Fale no WhatsApp">
+<a href="https://wa.me/5583996069271" target="_blank" rel="noopener" class="whats-float" id="whatsFloat" aria-label="Fale no WhatsApp">
   <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20 11.6A8.4 8.4 0 017.6 19L4 20l1-3.5A8.4 8.4 0 1120 11.6z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M9.2 8.6c.2-.4.5-.4.7-.4h.5c.2 0 .4.1.5.4l.6 1.4c.1.2 0 .4-.1.6l-.4.5c.5.9 1.3 1.7 2.2 2.2l.5-.4c.2-.1.4-.2.6-.1l1.4.6c.3.1.4.3.4.5v.5c0 .2 0 .5-.4.7-.5.3-1.3.5-2.2.2a8 8 0 01-4.6-4.6c-.3-.9-.1-1.7.2-2.2z" fill="currentColor"/></svg>
 </a>
 
 <script src="js/main.js"></script>
+<script type="module" src="js/cena.js"></script>
 </body>
 </html>
