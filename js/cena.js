@@ -354,7 +354,7 @@ async function iniciar() {
     const asp = camera.aspect, mob = asp < 0.8;
     // distância de câmera para a pasta caber na largura em telas verticais
     const dist = Math.max(1.2, 0.40 / (2 * Math.tan(THREE.MathUtils.degToRad(15)) * asp));
-    const yMob = mob ? lerp(-0.07, -0.05, seg(p, 0.1, 0.27)) : 0;
+    const yMob = mob ? lerp(-0.015, -0.05, seg(p, 0.1, 0.27)) : 0;
     const dist0 = mob ? Math.max(dist, 1.9) : dist;
 
     // fases
