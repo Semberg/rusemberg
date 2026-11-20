@@ -62,75 +62,104 @@
   </div>
 </header>
 
-<!-- ===== HERO / SLIDER ===== -->
-<section class="hero" id="topo">
-  <div class="hero-track" id="heroTrack">
+<!-- ===== HERO ANIMADO PELA ROLAGEM ===== -->
+<section class="scrolly" id="topo">
+  <div class="scrolly-sticky">
+    <div class="container scrolly-inner">
 
-    <article class="slide is-active" data-index="0">
-      <div class="container slide-inner">
-        <div class="slide-copy">
-          <span class="slide-num" aria-hidden="true">1</span>
+      <div class="scrolly-copy">
+        <div class="big-nums" aria-hidden="true">
+          <span class="big-num is-active">1</span><span class="big-num">2</span><span class="big-num">3</span><span class="big-num">4</span>
+        </div>
+
+        <div class="step is-active" data-step="0">
           <p class="eyebrow">Advocacia · Ética · Técnica</p>
-          <h1>Defesa<br>com rigor</h1>
-          <p class="slide-lead">Atendimento personalizado para pessoas físicas e empresas, com orientação transparente sobre prazos, riscos e estratégias em cada etapa do processo.</p>
+          <h1>Defesa com<br>equilíbrio</h1>
+          <p class="step-lead">Atendimento personalizado para pessoas físicas e empresas, com orientação transparente sobre prazos, riscos e estratégias em cada etapa do processo.</p>
           <a href="https://wa.me/5583996069271" target="_blank" rel="noopener" class="btn-pill">Agendar consulta</a>
         </div>
-        <div class="slide-visual">
-          <div class="particles" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
-          <img src="assets/icon-on-light-transparent.png" alt="Marca Rusemberg Fernandes" class="float-obj obj-mark">
-        </div>
-      </div>
-    </article>
 
-    <article class="slide" data-index="1">
-      <div class="container slide-inner">
-        <div class="slide-copy">
-          <span class="slide-num" aria-hidden="true">2</span>
-          <p class="eyebrow">Clareza · Transparência</p>
-          <h2 class="slide-title">Clareza<br>em cada passo</h2>
-          <p class="slide-lead">Linguagem acessível, informação honesta sobre custos e possibilidades, e acompanhamento próximo do início ao fim do seu caso.</p>
+        <div class="step" data-step="1">
+          <p class="eyebrow">Contratos · Consultoria · Processos</p>
+          <h2 class="step-title">Clareza em<br>cada linha</h2>
+          <p class="step-lead">Linguagem acessível e informação honesta sobre custos e possibilidades, do primeiro parecer à última assinatura.</p>
           <a href="#areas" class="btn-pill">Áreas de atuação</a>
         </div>
-        <div class="slide-visual">
-          <div class="particles" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
-          <img src="assets/badge-on-light-transparent.png" alt="Selo Rusemberg Fernandes Advogado" class="float-obj obj-badge">
+
+        <div class="step" data-step="2">
+          <p class="eyebrow">Compromisso · Confiança</p>
+          <h2 class="step-title">Atenção<br>humana</h2>
+          <p class="step-lead">Cada demanda é analisada de forma individual, com escuta atenta e estratégia alinhada aos objetivos de cada cliente.</p>
+          <a href="#sobre" class="btn-pill">Conheça o advogado</a>
+        </div>
+
+        <div class="step" data-step="3">
+          <p class="eyebrow">Campina Grande · João Pessoa</p>
+          <h2 class="step-title">Vamos<br>conversar</h2>
+          <p class="step-lead">Descreva brevemente sua situação pelo WhatsApp e retornaremos para combinar o melhor horário, presencial ou online.</p>
+          <a href="https://wa.me/5583996069271" target="_blank" rel="noopener" class="btn-pill">Falar agora</a>
         </div>
       </div>
-    </article>
 
-    <article class="slide" data-index="2">
-      <div class="container slide-inner">
-        <div class="slide-copy">
-          <span class="slide-num" aria-hidden="true">3</span>
-          <p class="eyebrow">Compromisso · Dedicação</p>
-          <h2 class="slide-title">Atenção<br>humana</h2>
-          <p class="slide-lead">Cada demanda é analisada de forma individual, com escuta atenta e estratégia alinhada aos objetivos de cada cliente.</p>
-          <a href="#contato" class="btn-pill">Fale conosco</a>
-        </div>
-        <div class="slide-visual">
-          <div class="particles" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
-          <svg class="float-obj obj-scale" viewBox="0 0 200 200" fill="none" role="img" aria-label="Balança da justiça">
-            <path d="M100 30v140M60 172h80M50 58h100" stroke="#2b2622" stroke-width="2.2" stroke-linecap="round"/>
-            <circle cx="100" cy="28" r="6" stroke="#b8923f" stroke-width="2.2"/>
-            <path d="M50 58l-26 54h52L50 58zM150 58l-26 54h52l-26-54z" stroke="#2b2622" stroke-width="2" stroke-linejoin="round"/>
-            <path d="M24 112a26 13 0 0052 0M124 112a26 13 0 0052 0" stroke="#b8923f" stroke-width="2.2"/>
-          </svg>
-        </div>
+      <div class="stage" id="stage" aria-hidden="true">
+        <div class="stage-glow"></div>
+
+        <!-- 1. Balança que se desenha e se equilibra -->
+        <svg class="layer layer-scale" id="layerScale" viewBox="0 0 400 400" fill="none">
+          <g stroke="#2b2622" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+            <path class="draw" pathLength="1" d="M200 92V340"/>
+            <path class="draw" pathLength="1" d="M140 344h120"/>
+            <path class="draw" pathLength="1" d="M168 344c6-20 18-30 32-30s26 10 32 30"/>
+          </g>
+          <circle class="draw" pathLength="1" cx="200" cy="80" r="11" stroke="#b8923f" stroke-width="2.4"/>
+          <g id="beam">
+            <path class="draw" pathLength="1" d="M78 110h244" stroke="#2b2622" stroke-width="2.4" stroke-linecap="round"/>
+            <circle cx="200" cy="110" r="4.5" fill="#b8923f"/>
+          </g>
+          <g id="panL">
+            <path class="draw" pathLength="1" d="M82 110L46 196M82 110l36 86" stroke="#2b2622" stroke-width="1.6"/>
+            <path class="draw" pathLength="1" d="M38 196h88c0 22-20 34-44 34s-44-12-44-34z" stroke="#b8923f" stroke-width="2.4" stroke-linejoin="round"/>
+          </g>
+          <g id="panR">
+            <path class="draw" pathLength="1" d="M318 110l-36 86M318 110l36 86" stroke="#2b2622" stroke-width="1.6"/>
+            <path class="draw" pathLength="1" d="M274 196h88c0 22-20 34-44 34s-44-12-44-34z" stroke="#b8923f" stroke-width="2.4" stroke-linejoin="round"/>
+          </g>
+        </svg>
+
+        <!-- 2. Documento que se escreve -->
+        <svg class="layer layer-paper" id="layerPaper" viewBox="0 0 400 400" fill="none">
+          <rect x="62" y="22" width="276" height="356" rx="4" fill="#fbf8f3" stroke="#d9cfc1" stroke-width="1.2"/>
+          <path d="M290 22v34h48" stroke="#d9cfc1" stroke-width="1.2" fill="#f1ebe1"/>
+          <g stroke="#2b2622" stroke-width="2" stroke-linecap="round" opacity=".8">
+            <path class="line" pathLength="1" d="M92 58h120"/>
+            <path class="line" pathLength="1" d="M92 84h216"/>
+            <path class="line" pathLength="1" d="M92 100h200"/>
+            <path class="line" pathLength="1" d="M92 116h210"/>
+            <path class="line" pathLength="1" d="M92 132h150"/>
+          </g>
+          <path class="line" pathLength="1" d="M110 338h180" stroke="#8a7f75" stroke-width="1.2" stroke-dasharray="1"/>
+        </svg>
+
+        <!-- 3. Selo que se fecha em volta da assinatura -->
+        <svg class="layer layer-rings" id="layerRings" viewBox="0 0 400 400" fill="none">
+          <circle class="ring" pathLength="1" cx="200" cy="200" r="190.6" stroke="#1e2328" stroke-width="2.2" transform="rotate(-90 200 200)"/>
+          <circle class="ring" pathLength="1" cx="200" cy="200" r="135.1" stroke="#1e2328" stroke-width="2.2" transform="rotate(90 200 200)"/>
+        </svg>
+        <img class="layer layer-badge" id="layerBadge" src="assets/badge-ring.png" alt="">
+        <img class="layer layer-sign" id="layerSign" src="assets/signature-gold.png" alt="">
+
+        <div class="burst" id="burst"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
       </div>
-    </article>
 
-  </div>
+    </div>
 
-  <button class="hero-arrow prev" id="heroPrev" aria-label="Slide anterior">
-    <svg viewBox="0 0 24 24" fill="none"><path d="M15 5l-7 7 7 7" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
-  </button>
-  <button class="hero-arrow next" id="heroNext" aria-label="Próximo slide">
-    <svg viewBox="0 0 24 24" fill="none"><path d="M9 5l7 7-7 7" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
-  </button>
-  <div class="hero-dots" id="heroDots">
-    <button class="is-active" aria-label="Slide 1"></button>
-    <button aria-label="Slide 2"></button>
-    <button aria-label="Slide 3"></button>
+    <div class="scrolly-progress" id="scrollyDots">
+      <button class="is-active" aria-label="Etapa 1"></button>
+      <button aria-label="Etapa 2"></button>
+      <button aria-label="Etapa 3"></button>
+      <button aria-label="Etapa 4"></button>
+    </div>
+    <div class="scroll-cue" id="scrollCue"><span>Role</span><i></i></div>
   </div>
 </section>
 
