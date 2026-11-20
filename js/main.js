@@ -26,6 +26,36 @@ document.getElementById('mainNav').addEventListener('click', (e) => {
   }
 });
 
+/* ---------- Slider do topo ---------- */
+const slides = document.querySelectorAll('.slide');
+const dots = document.querySelectorAll('#heroDots button');
+let current = 0;
+let timer;
+
+function goTo(i) {
+  current = (i + slides.length) % slides.length;
+  slides.forEach((s, idx) => s.classList.toggle('is-active', idx === current));
+  dots.forEach((d, idx) => d.classList.toggle('is-active', idx === current));
+}
+function restart() {
+  clearInterval(timer);
+  timer = setInterval(() => goTo(current + 1), 7000);
+}
+document.getElementById('heroPrev').addEventListener('click', () => { goTo(current - 1); restart(); });
+document.getElementById('heroNext').addEventListener('click', () => { goTo(current + 1); restart(); });
+dots.forEach((d, idx) => d.addEventListener('click', () => { goTo(idx); restart(); }));
+
+let touchX = null;
+const hero = document.querySelector('.hero');
+hero.addEventListener('touchstart', (e) => { touchX = e.touches[0].clientX; }, { passive: true });
+hero.addEventListener('touchend', (e) => {
+  if (touchX === null) return;
+  const dx = e.changedTouches[0].clientX - touchX;
+  if (Math.abs(dx) > 50) { goTo(current + (dx < 0 ? 1 : -1)); restart(); }
+  touchX = null;
+});
+if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) restart();
+
 /* ---------- Reveal on scroll ---------- */
 const revealEls = document.querySelectorAll('.reveal');
 const io = new IntersectionObserver((entries) => {
