@@ -257,7 +257,7 @@ async function iniciar() {
     g.fillStyle = goldC; g.fillText('ADVOGADO', M, 128);
     g.fillStyle = goldC; g.fillRect(M, 152, c.width - M * 2, 2);
     g.letterSpacing = '0px';
-    const titulo = { apresentacao: 'Apresentação', analise: 'Análise', estrategia: 'Estratégia', orientacao: 'Acompanhamento', formacao: 'Formação' }[tipo] || '';
+    const titulo = { apresentacao: 'Apresentação', analise: 'Análise', estrategia: 'Estratégia', orientacao: 'Orientação', formacao: 'Formação' }[tipo] || '';
     g.fillStyle = ink + '.92)'; g.font = '500 92px CormorantCena, serif'; g.fillText(titulo, M, 262);
     const linha = (y, w, a = .16) => { g.fillStyle = ink + a + ')'; g.fillRect(M, y, w, 9); };
     if (tipo === 'analise') {

@@ -8,14 +8,7 @@ const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').match
 /* ---------- Header: estado conforme a seção ---------- */
 const header = document.getElementById('siteHeader');
 const cena = document.querySelector('.cena');
-const escuras = [...document.querySelectorAll('.cena, .areas, .diferenciais, .site-footer')];
-function atualizaHeader() {
-  header.classList.toggle('scrolled', window.scrollY > 30);
-  const y = header.offsetHeight / 2;
-  const sobreEscuro = escuras.some((s) => { const r = s.getBoundingClientRect(); return r.top <= y && r.bottom >= y; });
-  header.classList.toggle('is-dark', sobreEscuro);
-  header.classList.toggle('is-light', !sobreEscuro);
-}
+function atualizaHeader() { /* cabeçalho estável: nenhuma mudança de estado na rolagem */ }
 
 /* ---------- Menu móvel ---------- */
 const navToggle = document.getElementById('navToggle');
@@ -50,11 +43,13 @@ let palavras = [];
 if (manifesto) {
   manifesto.innerHTML = manifesto.textContent.trim().split(/\s+/).map((w) => `<span class="w">${w}</span>`).join(' ');
   palavras = [...manifesto.querySelectorAll('.w')];
+  // destaca, em dourado, os valores ao final da declaração
+  palavras.forEach((w) => { if (/^(ética|transparência|excelência|técnica\.?)[,.]?$/i.test(w.textContent)) w.classList.add('dest'); });
 }
 function atualizaManifesto() {
   if (!palavras.length || reduceMotion) return;
   const r = manifesto.getBoundingClientRect(); const vh = window.innerHeight;
-  const t = Math.min(1, Math.max(0, (vh * 0.85 - r.top) / (r.height + vh * 0.35)));
+  const t = Math.min(1, Math.max(0, (vh * 0.9 - r.top) / (r.height + vh * 0.3)));
   const n = Math.round(t * palavras.length);
   palavras.forEach((w, i) => w.classList.toggle('on', i < n));
 }
