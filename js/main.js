@@ -32,6 +32,18 @@ header.addEventListener('click', (e) => {
   }
 });
 
+/* ---------- Links para etapas dentro da abertura ---------- */
+const alvosCena = { '#apresentacao': 0.205, '#formacao': 0.77, '#topo': 0 };
+document.addEventListener('click', (e) => {
+  const a = e.target.closest('a[href^="#"]');
+  if (!a || !(a.getAttribute('href') in alvosCena) || !cena) return;
+  const estatica = document.documentElement.classList.contains('cena-estatica');
+  if (estatica && a.getAttribute('href') !== '#topo') return;
+  e.preventDefault();
+  const total = cena.offsetHeight - window.innerHeight;
+  window.scrollTo({ top: cena.offsetTop + total * alvosCena[a.getAttribute('href')], behavior: reduceMotion ? 'auto' : 'smooth' });
+});
+
 /* ---------- Manifesto: as palavras acendem com a rolagem ---------- */
 const manifesto = document.getElementById('manifesto');
 let palavras = [];
@@ -75,7 +87,7 @@ function aoRolar() {
   requestAnimationFrame(() => {
     ticking = false;
     atualizaHeader(); atualizaManifesto(); atualizaParalaxe();
-    if (whats && cena) { const mostrar = cena.getBoundingClientRect().bottom < window.innerHeight * 1.02 || (window.innerWidth < 900 && window.scrollY > window.innerHeight * 0.4); whats.style.opacity = mostrar ? '1' : '0'; whats.style.pointerEvents = mostrar ? 'auto' : 'none'; }
+    if (whats && cena) { const mostrar = cena.getBoundingClientRect().bottom < window.innerHeight * 1.02; whats.style.opacity = mostrar ? '1' : '0'; whats.style.pointerEvents = mostrar ? 'auto' : 'none'; }
   });
 }
 window.addEventListener('scroll', aoRolar, { passive: true });
