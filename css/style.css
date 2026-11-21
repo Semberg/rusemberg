@@ -207,7 +207,7 @@ ul, ol { list-style: none; margin: 0; padding: 0; }
 .cena-etapas li.is-on { color: var(--gold-light); }
 
 /* capítulo 3 */
-.cap-3 { z-index: 4; display: flex; flex-direction: column; align-items: flex-start; justify-content: flex-end; padding: 0 max(32px, calc(50vw - 600px)) 13vh; }
+.cap-3 { opacity: 0; z-index: 4; display: flex; flex-direction: column; align-items: flex-start; justify-content: flex-end; padding: 0 max(32px, calc(50vw - 600px)) 13vh; }
 .cap-3 .eyebrow { color: var(--gold-light); }
 .cap-3 .cap-acoes { display: flex; gap: 12px; flex-wrap: wrap; }
 .cap-titulo-2 { font-family: var(--serif); color: #fff; font-size: clamp(2.2rem, 4.4vw, 4.2rem); line-height: 1.02; margin-bottom: .6em; transform: translateY(calc((1 - var(--v, 0)) * 30px)); text-shadow: 0 2px 30px rgba(0,0,0,.4); }
@@ -483,11 +483,16 @@ ul, ol { list-style: none; margin: 0; padding: 0; }
   .nav-toggle.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
 
   /* cena no celular */
-  .cap-eyebrow { top: 92px; font-size: .6rem; letter-spacing: .22em; }
+  .cap-eyebrow { top: 88px; left: 22px; transform: none; font-size: .6rem; letter-spacing: .22em; }
   .cap-titulo { font-size: clamp(2.3rem, 10.4vw, 3.2rem); }
-  .cap-titulo .t-esq { top: 122px; left: 22px; }
-  .cap-titulo .t-dir { top: auto; bottom: 222px; right: 22px; }
+  /* no celular o título fica inteiro no alto, em quatro linhas alinhadas à
+     esquerda, e o texto de apoio e os botões ficam embaixo, sem cruzamentos */
+  .cap-titulo .t-esq { top: 112px; left: 22px; }
+  .cap-titulo .t-dir { top: calc(112px + 2.2em); bottom: auto; left: 22px; right: auto; text-align: left; }
+  .cap-titulo { text-shadow: 0 2px 24px rgba(0,0,0,.55); }
   .cap-rodape { left: 22px; right: 22px; bottom: 26px; flex-direction: column; align-items: stretch; gap: 16px; }
+  .cap-rodape::before { content: ""; position: absolute; left: -22px; right: -22px; top: -48px; bottom: -26px; z-index: -1; background: linear-gradient(rgba(18,19,22,0), rgba(18,19,22,.82) 34%, rgba(18,19,22,.94)); pointer-events: none; }
+  @media (max-height: 680px) { .cap-lead { display: none; } }
   .cap-lead { font-size: .86rem; max-width: none; }
   .cap-acoes .btn { flex: 1 1 auto; padding: 14px 16px; }
   .cap-dica { display: none; }
