@@ -1,0 +1,8 @@
+# Prévias (*.pages.dev) não devem ser indexadas; o domínio de produção segue indexável.
+https://:project.pages.dev/*
+  X-Robots-Tag: noindex
+https://:version.:project.pages.dev/*
+  X-Robots-Tag: noindex
+
+/assets/*
+  Cache-Control: public, max-age=86400
