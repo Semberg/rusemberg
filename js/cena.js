@@ -10,6 +10,7 @@ import { RoomEnvironment } from '../assets/vendor/three/addons/environments/Room
 import { RoundedBoxGeometry } from '../assets/vendor/three/addons/geometries/RoundedBoxGeometry.js';
 import { GLTFLoader } from '../assets/vendor/three/addons/loaders/GLTFLoader.js';
 import { MeshoptDecoder } from '../assets/vendor/three/addons/meshopt_decoder.module.js';
+import { tocarVirada, alternarSom, somLigado } from './som-folha.js';
 
 const cena = document.querySelector('.cena');
 const sticky = document.getElementById('cenaSticky');
@@ -143,12 +144,13 @@ async function iniciar() {
   const conteudos = ['apresentacao', 'analise', 'estrategia', 'orientacao', 'areas', 'formacao'];
   const NC = conteudos.length;
   const NFOLHAS = NC + 2;
+  const SX = 44, SY = 10; // malha fina para a folha dobrar e torcer de verdade
   for (let i = 0; i < NFOLHAS; i++) {
     const especial = i >= NFOLHAS - NC; // as de cima carregam conteúdo
     const idx = especial ? NFOLHAS - 1 - i : -1; // 0 = topo
     const map = especial ? desenharFolha(conteudos[idx], papelCor) : papelCor;
     const mat = new THREE.MeshStandardMaterial({ color: 0xe2ded6, map, normalMap: papelNor, normalScale: new THREE.Vector2(0.35, 0.35), roughness: 0.92, side: THREE.FrontSide });
-    const geo = new THREE.PlaneGeometry(pagW, pagH, 32, 1);
+    const geo = new THREE.PlaneGeometry(pagW, pagH, SX, SY);
     const m = new THREE.Mesh(geo, mat);
     m.castShadow = true; m.receiveShadow = true;
     const verso = new THREE.Mesh(geo, matVerso); verso.receiveShadow = true; m.add(verso);
@@ -433,13 +435,78 @@ async function iniciar() {
   }
 
   // ---------- curvatura das folhas ----------
-  function curvar(m, k) { // k: curvatura (0 = plana)
-    const a = m.geometry.attributes.position; const b = m.userData.base;
-    for (let i = 0; i < a.count; i++) {
-      const x = b[i * 3]; const u = (x + pagW / 2) / pagW;
-      a.array[i * 3 + 2] = Math.sin(u * Math.PI) * k * 0.03 + u * u * k * 0.02;
+  // A folha é tratada como papel inextensível: cada linha da malha é "desenrolada"
+  // a partir da lombada com um ângulo que cresce para a borda livre, de modo que o
+  // comprimento se mantém e a folha se curva em vez de esticar.
+  // dobra: ângulo acumulado na borda (rad; + = borda adiantada no sentido do giro)
+  // torcao: quanto o canto inferior se adianta em relação ao superior
+  function curvar(m, dobra, torcao = 0) {
+    const ud = m.userData;
+    if (Math.abs((ud.dobra ?? 0) - dobra) < 1e-4 && Math.abs((ud.torcao ?? 0) - torcao) < 1e-4) return;
+    ud.dobra = dobra; ud.torcao = torcao;
+    const a = m.geometry.attributes.position, arr = a.array;
+    const ds = pagW / SX;
+    for (let iy = 0; iy <= SY; iy++) {
+      const v = iy / SY; // 0 = borda de cima, 1 = de baixo
+      const A = dobra * (1 + torcao * (v - 0.5));
+      let x = -pagW / 2, z = 0;
+      const i0 = iy * (SX + 1);
+      arr[i0 * 3] = x; arr[i0 * 3 + 2] = 0;
+      for (let ix = 1; ix <= SX; ix++) {
+        const um = (ix - 0.5) / SX;
+        const phi = A * Math.pow(um, 1.7);
+        x += ds * Math.cos(phi); z += ds * Math.sin(phi);
+        const i = i0 + ix;
+        arr[i * 3] = x; arr[i * 3 + 2] = z;
+      }
     }
     a.needsUpdate = true; m.geometry.computeVertexNormals();
+  }
+
+  // ---------- virada das folhas com tempo próprio ----------
+  // A rolagem só decide QUAL folha deve estar virada; o movimento em si tem
+  // duração fixa, para que a folha vire devagar mesmo que o visitante role
+  // rápido ou arraste a barra de rolagem.
+  const DUR_VIRADA = mobile() ? 1.9 : 2.3; // segundos por folha
+  const viradas = paginas.map(() => ({ v: 0, de: 0, para: 0, t0: 0, dur: 1, dir: 1 }));
+  const easeVirada = (t) => 0.5 - 0.5 * Math.cos(Math.PI * t); // sai do repouso e pousa sem tranco
+  function atualizarViradas(p) {
+    const ordem = paginas.map((m, i) => i).filter((i) => { const k = paginas[i].userData.idx; return k >= 0 && k < NC - 1; })
+      .sort((i, j) => paginas[i].userData.idx - paginas[j].userData.idx);
+    // limiar: a meio caminho entre a saída do texto atual e a entrada do próximo
+    const desejado = ordem.map((i) => (p >= janelas[paginas[i].userData.idx][1] - JW * 0.4 ? 1 : 0));
+    // se o visitante saltou várias páginas de uma vez (barra arrastada), o maço
+    // acelera um pouco para não ficar muito atrás do texto, sem perder a suavidade
+    const atraso = ordem.filter((i, n) => Math.abs(desejado[n] - viradas[i].v) > 0.5).length;
+    const ritmo = atraso > 1 ? Math.max(0.55, 1 / (1 + 0.22 * (atraso - 1))) : 1;
+    const folga = atraso > 1 ? 0.3 : 0.42;
+    ordem.forEach((i, n) => {
+      const st = viradas[i];
+      let alvo = desejado[n];
+      // folhas viram uma de cada vez, como num maço de papel
+      if (alvo === 1 && n > 0 && viradas[ordem[n - 1]].v < folga) alvo = st.para;
+      if (alvo === 0 && n < ordem.length - 1 && viradas[ordem[n + 1]].v > 1 - folga) alvo = st.para;
+      if (alvo !== st.para) {
+        st.de = st.v; st.para = alvo; st.t0 = tempo; st.dir = alvo > st.v ? 1 : -1;
+        st.dur = Math.max(0.6, DUR_VIRADA * ritmo * Math.abs(alvo - st.v));
+        if (Math.abs(alvo - st.v) > 0.3) tocarVirada(st.dur, st.dir);
+      }
+      const t = clamp((tempo - st.t0) / st.dur);
+      st.v = lerp(st.de, st.para, easeVirada(t));
+    });
+  }
+
+  // ---------- botão de som ----------
+  const botaoSom = document.getElementById('cenaSom');
+  if (botaoSom) {
+    const pintar = () => {
+      const on = somLigado();
+      botaoSom.setAttribute('aria-pressed', String(on));
+      botaoSom.setAttribute('aria-label', on ? 'Desativar som das páginas' : 'Ativar som das páginas');
+      botaoSom.classList.toggle('is-mudo', !on);
+    };
+    botaoSom.addEventListener('click', () => { alternarSom(); pintar(); });
+    pintar();
   }
 
   // ---------- coreografia ----------
@@ -511,13 +578,22 @@ async function iniciar() {
     dobradica.rotation.y = -curvaCapa * (1 - f3b) * 2.75;
 
     // --- folhas: cada página permanece para leitura e depois vira pela lombada ---
-    paginas.forEach((m) => {
+    atualizarViradas(p);
+    paginas.forEach((m, i) => {
       const k = m.userData.idx; const piv = m.userData.piv;
-      let vira = 0;
-      if (k >= 0 && k < NC - 1) { const t = seg(p, janelas[k][1] - JW * 0.56, janelas[k][1]); vira = 0.5 - 0.5 * Math.cos(Math.PI * t); }
+      const viraveis = k >= 0 && k < NC - 1;
+      const st = viradas[i];
+      let vira = viraveis ? st.v : 0;
       vira *= 1 - f3a; // no fechamento, as folhas voltam antes de a capa fechar
       piv.rotation.y = -vira * (2.64 - Math.max(k, 0) * 0.014);
-      curvar(m, Math.sin(vira * Math.PI) * 1.7 + Math.sin(f3a * Math.PI) * (k >= 0 && k < NC - 1 ? 0.6 : 0));
+      // progresso no sentido do movimento: no início o canto se solta e lidera;
+      // perto do fim a borda livre fica para trás e a folha "plana" até pousar
+      const tm = st.dir > 0 ? vira : 1 - vira;
+      const giroLivre = 1 - Math.min(1, f3a * 4); // no fechamento vale só a flexão de retorno
+      const dobraGiro = viraveis ? Math.sin(Math.PI * tm) * (1.2 * (1 - tm) - 0.36) * 1.25 * st.dir * giroLivre : 0;
+      const torcao = viraveis ? Math.sin(Math.PI * tm) * 0.9 * giroLivre : 0;
+      const dobraFecha = viraveis ? -Math.sin(f3a * Math.PI) * 0.35 : 0;
+      curvar(m, dobraGiro + dobraFecha, torcao);
       if (m.userData.uP) {
         const [a, b] = janelas[k];
         m.userData.uP.value = k < NC - 1 ? seg(p, a + JW * 0.02, b - JW * 0.58) : seg(p, a + JW * 0.10, J1 - 0.03);
