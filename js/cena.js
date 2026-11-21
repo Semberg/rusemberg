@@ -109,6 +109,14 @@ async function iniciar() {
     color: 0xd7b25e, metalness: 1, roughness: 0.26, alphaMap: emblema, transparent: true, alphaTest: 0.35,
     envMapIntensity: 1.4,
   });
+  const uReflexo = { value: -1 };
+  ouro.onBeforeCompile = (sh) => {
+    sh.uniforms.uReflexo = uReflexo;
+    sh.fragmentShader = 'uniform float uReflexo;\n' + sh.fragmentShader.replace('#include <emissivemap_fragment>',
+      `#include <emissivemap_fragment>
+       float faixa = smoothstep(0.14, 0.0, abs((vAlphaMapUv.x + (1.0 - vAlphaMapUv.y)) * 0.5 - uReflexo));
+       totalEmissiveRadiance += vec3(1.0, 0.84, 0.52) * faixa * 1.6;`);
+  };
   const forro = new THREE.MeshStandardMaterial({ color: 0xcdb08a, map: forroCor, roughness: 0.95 });
   const costura = new THREE.MeshStandardMaterial({ color: 0xb7934a, roughness: 0.5, metalness: 0.3 });
 
@@ -130,6 +138,7 @@ async function iniciar() {
 
   // folhas
   const paginas = [];
+  const matVerso = new THREE.MeshStandardMaterial({ color: 0xdcd7ce, map: papelCor, roughness: 0.95, side: THREE.BackSide });
   const pagW = W - 0.028, pagH = H - 0.03;
   const conteudos = ['apresentacao', 'analise', 'estrategia', 'orientacao', 'areas', 'formacao'];
   const NC = conteudos.length;
@@ -138,15 +147,36 @@ async function iniciar() {
     const especial = i >= NFOLHAS - NC; // as de cima carregam conteúdo
     const idx = especial ? NFOLHAS - 1 - i : -1; // 0 = topo
     const map = especial ? desenharFolha(conteudos[idx], papelCor) : papelCor;
-    const mat = new THREE.MeshStandardMaterial({ color: 0xe2ded6, map, normalMap: papelNor, normalScale: new THREE.Vector2(0.35, 0.35), roughness: 0.92, side: THREE.DoubleSide });
-    const geo = new THREE.PlaneGeometry(pagW, pagH, 24, 1);
+    const mat = new THREE.MeshStandardMaterial({ color: 0xe2ded6, map, normalMap: papelNor, normalScale: new THREE.Vector2(0.35, 0.35), roughness: 0.92, side: THREE.FrontSide });
+    const geo = new THREE.PlaneGeometry(pagW, pagH, 32, 1);
     const m = new THREE.Mesh(geo, mat);
     m.castShadow = true; m.receiveShadow = true;
+    const verso = new THREE.Mesh(geo, matVerso); verso.receiveShadow = true; m.add(verso);
     m.userData.base = geo.attributes.position.array.slice();
     m.userData.z = T / 2 + 0.0012 + i * 0.0011;
     m.userData.idx = idx;
-    m.position.set(0.004, -0.002, m.userData.z);
-    pasta.add(m);
+    // pivô na lombada: a folha vira como num livro
+    const piv = new THREE.Group();
+    piv.position.set(-pagW / 2 + 0.006, -0.002, m.userData.z);
+    m.position.x = pagW / 2;
+    piv.add(m); pasta.add(piv);
+    m.userData.piv = piv;
+    if (especial) {
+      const tinta = desenharTinta(conteudos[idx]);
+      if (tinta) {
+        const mt = new THREE.MeshBasicMaterial({ map: tinta.cor, transparent: true, depthWrite: false, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2, color: 0xd9d2c4 });
+        const uP = { value: 0 };
+        mt.onBeforeCompile = (sh) => {
+          sh.uniforms.uP = uP; sh.uniforms.uOrdem = { value: tinta.ordem };
+          sh.fragmentShader = 'uniform float uP; uniform sampler2D uOrdem;\n' + sh.fragmentShader.replace('#include <map_fragment>',
+            `#include <map_fragment>
+             float ordemV = texture2D(uOrdem, vMapUv).r;
+             diffuseColor.a *= smoothstep(ordemV - 0.004, ordemV + 0.004, uP * 1.004);`);
+        };
+        const ov = new THREE.Mesh(geo, mt); ov.renderOrder = 2; m.add(ov);
+        m.userData.uP = uP;
+      }
+    }
     paginas.push(m);
   }
   const folhasConteudo = conteudos.map((_, k) => paginas.find((m) => m.userData.idx === k));
@@ -217,6 +247,15 @@ async function iniciar() {
     }
   });
 
+  // brilho quente que escapa do interior quando a capa se abre
+  const brilho = new THREE.PointLight(0xffc98a, 0, 0.9, 1.6);
+  brilho.position.set(0.02, 0.02, 0.09); pasta.add(brilho);
+  const gc = document.createElement('canvas'); gc.width = gc.height = 128; const gg = gc.getContext('2d');
+  const gr = gg.createRadialGradient(64, 64, 0, 64, 64, 64); gr.addColorStop(0, 'rgba(255,214,150,.9)'); gr.addColorStop(.4, 'rgba(255,190,110,.25)'); gr.addColorStop(1, 'rgba(255,190,110,0)');
+  gg.fillStyle = gr; gg.fillRect(0, 0, 128, 128);
+  const halo = new THREE.Sprite(new THREE.SpriteMaterial({ map: new THREE.CanvasTexture(gc), blending: THREE.AdditiveBlending, depthWrite: false, transparent: true, opacity: 0 }));
+  halo.scale.set(0.55, 0.55, 1); halo.position.set(-0.02, 0.0, 0.03); pasta.add(halo);
+
   // sombra de contato sob a pasta (fases iniciais)
   const sc = document.createElement('canvas'); sc.width = sc.height = 128; const sg = sc.getContext('2d');
   const rg = sg.createRadialGradient(64, 64, 4, 64, 64, 62); rg.addColorStop(0, 'rgba(0,0,0,.75)'); rg.addColorStop(1, 'rgba(0,0,0,0)');
@@ -264,26 +303,19 @@ async function iniciar() {
       let y = 330;
       for (let i = 0; i < 15; i++) {
         const w = (c.width - M * 2) * (i % 4 === 3 ? .55 : .82 + ((i * 37) % 17) / 100);
-        if (i === 3 || i === 4 || i === 9) { g.fillStyle = 'rgba(214,178,94,.38)'; g.fillRect(M - 6, y - 8, w + 12, 24); }
         linha(y, Math.min(w, c.width - M * 2));
         y += 44;
         if (i === 6) y += 26;
       }
-      g.strokeStyle = goldC; g.lineWidth = 4;
-      g.beginPath(); g.moveTo(c.width - M + 30, 452); g.lineTo(c.width - M + 44, 452); g.lineTo(c.width - M + 44, 540); g.lineTo(c.width - M + 30, 540); g.stroke();
-      g.beginPath(); g.arc(c.width - M + 62, 496, 12, 0, Math.PI * 2); g.stroke();
       linha(1080, 260, .3); linha(1110, 180, .18);
     } else if (tipo === 'estrategia') {
       const nos = [[200, 430], [430, 430], [660, 330], [660, 540], [880, 330], [880, 540], [520, 760], [800, 760]];
       g.strokeStyle = ink + '.35)'; g.lineWidth = 4;
       const lig = [[0, 1], [1, 2], [1, 3], [2, 4], [3, 5], [1, 6], [6, 7]];
       lig.forEach(([a, b]) => { g.beginPath(); g.moveTo(...nos[a]); g.bezierCurveTo(nos[a][0] + 80, nos[a][1], nos[b][0] - 80, nos[b][1], ...nos[b]); g.stroke(); });
-      g.strokeStyle = goldC; g.lineWidth = 6;
-      [[0, 1], [1, 2], [2, 4]].forEach(([a, b]) => { g.beginPath(); g.moveTo(...nos[a]); g.bezierCurveTo(nos[a][0] + 80, nos[a][1], nos[b][0] - 80, nos[b][1], ...nos[b]); g.stroke(); });
       nos.forEach(([x, y], i) => {
         g.beginPath(); g.arc(x, y, i === 4 ? 26 : 18, 0, Math.PI * 2);
-        g.fillStyle = [0, 1, 2, 4].includes(i) ? goldC : '#fbf8f1'; g.fill();
-        g.lineWidth = 4; g.strokeStyle = [0, 1, 2, 4].includes(i) ? goldC : ink + '.45)'; g.stroke();
+        g.fillStyle = '#fbf8f1'; g.fill(); g.lineWidth = 4; g.strokeStyle = ink + '.45)'; g.stroke();
       });
       let y = 900; for (let i = 0; i < 5; i++) { linha(y, (c.width - M * 2) * (.6 + (i % 3) * .12)); y += 44; }
     } else if (tipo === 'apresentacao') {
@@ -304,18 +336,15 @@ async function iniciar() {
     } else if (tipo === 'formacao') {
       let y = 340;
       for (let i = 0; i < 6; i++) {
-        g.fillStyle = i < 2 ? goldC : ink + '.35)'; g.beginPath(); g.arc(M + 14, y - 4, 10, 0, Math.PI * 2); g.fill();
+        g.fillStyle = ink + '.3)'; g.beginPath(); g.arc(M + 14, y - 4, 10, 0, Math.PI * 2); g.fill();
         g.fillStyle = ink + '.22)'; g.fillRect(M + 46, y - 12, (c.width - M * 2 - 46) * (.72 + (i % 3) * .08), 11);
         g.fillStyle = ink + '.1)'; g.fillRect(M + 46, y + 16, (c.width - M * 2 - 46) * .42, 8);
         y += 100;
       }
-      g.strokeStyle = goldC; g.lineWidth = 5; g.beginPath(); g.arc(c.width - M - 90, 1040, 70, 0, Math.PI * 2); g.stroke();
-      g.lineWidth = 2; g.beginPath(); g.arc(c.width - M - 90, 1040, 56, 0, Math.PI * 2); g.stroke();
     } else if (tipo === 'orientacao') {
       let y = 340;
       for (let i = 0; i < 5; i++) {
         g.strokeStyle = ink + '.5)'; g.lineWidth = 4; g.strokeRect(M, y - 22, 34, 34);
-        if (i < 3) { g.strokeStyle = goldC; g.lineWidth = 7; g.beginPath(); g.moveTo(M + 6, y - 6); g.lineTo(M + 16, y + 6); g.lineTo(M + 40, y - 30); g.stroke(); }
         g.fillStyle = ink + '.16)'; g.fillRect(M + 70, y - 14, (c.width - M * 2 - 70) * (.7 + (i % 2) * .2), 9);
         g.fillStyle = ink + '.1)'; g.fillRect(M + 70, y + 18, (c.width - M * 2 - 70) * .45, 9);
         y += 108;
@@ -328,6 +357,68 @@ async function iniciar() {
     const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = renderer.capabilities.getMaxAnisotropy();
     return t;
   }
+  // Cada elemento é desenhado duas vezes: em cor (o que aparece) e em tons de cinza
+  // que indicam o instante, de 0 a 1, em que aquele ponto surge durante a leitura.
+  function desenharTinta(tipo) {
+    const Wc = 1024, Hc = Math.round(1024 * pagH / pagW), M = 92, gold = '#b8913f';
+    const cc = document.createElement('canvas'); cc.width = Wc; cc.height = Hc; const g = cc.getContext('2d');
+    const co = document.createElement('canvas'); co.width = Wc; co.height = Hc; const o = co.getContext('2d');
+    o.fillStyle = '#fff'; o.fillRect(0, 0, Wc, Hc); // fundo: nunca aparece
+    const cinza = (t) => { const v = Math.round(clamp(t) * 250); return `rgb(${v},${v},${v})`; };
+    const traco = (pts, t0, t1, w, cor = gold) => {
+      g.strokeStyle = cor; g.lineWidth = w; g.lineCap = 'round'; g.lineJoin = 'round';
+      g.beginPath(); g.moveTo(...pts[0]); pts.slice(1).forEach((q) => g.lineTo(...q)); g.stroke();
+      o.lineCap = 'round'; o.lineWidth = w + 6;
+      for (let i = 1; i < pts.length; i++) { o.strokeStyle = cinza(t0 + (t1 - t0) * (i / pts.length)); o.beginPath(); o.moveTo(...pts[i - 1]); o.lineTo(...pts[i]); o.stroke(); }
+    };
+    const varredura = (x, y, w, h, t0, t1, cor) => {
+      g.fillStyle = cor; g.fillRect(x, y, w, h);
+      const n = 40; for (let i = 0; i < n; i++) { o.fillStyle = cinza(t0 + (t1 - t0) * (i / n)); o.fillRect(x + (w * i) / n, y - 3, w / n + 1, h + 6); }
+    };
+    const disco = (x, y, r, t, cor = gold) => { g.fillStyle = cor; g.beginPath(); g.arc(x, y, r, 0, Math.PI * 2); g.fill(); o.fillStyle = cinza(t); o.beginPath(); o.arc(x, y, r + 3, 0, Math.PI * 2); o.fill(); };
+    const curva = (a, b, n = 24) => { const pts = []; for (let i = 0; i <= n; i++) { const t = i / n, u = 1 - t;
+      const c1 = [a[0] + 80, a[1]], c2 = [b[0] - 80, b[1]];
+      pts.push([u * u * u * a[0] + 3 * u * u * t * c1[0] + 3 * u * t * t * c2[0] + t * t * t * b[0], u * u * u * a[1] + 3 * u * u * t * c1[1] + 3 * u * t * t * c2[1] + t * t * t * b[1]]); } return pts; };
+    const arco = (x, y, r, a0, a1, n = 48) => Array.from({ length: n + 1 }, (_, i) => { const a = a0 + (a1 - a0) * i / n; return [x + Math.cos(a) * r, y + Math.sin(a) * r]; });
+
+    if (tipo === 'apresentacao') {
+      traco([[M, 430], [M + 520, 430]], 0.05, 0.45, 4);
+      traco(arco(Wc - M - 70, 300, 52, -Math.PI / 2, Math.PI * 1.5), 0.35, 0.8, 5);
+      disco(Wc - M - 70, 300, 10, 0.85);
+    } else if (tipo === 'analise') {
+      // marca-texto passando pelos trechos importantes, linha a linha
+      const ys = [330 + 3 * 44, 330 + 4 * 44, 330 + 9 * 44 + 26];
+      ys.forEach((y, i) => varredura(M - 6, y - 8, (Wc - M * 2) * (i === 2 ? .62 : .8), 24, 0.05 + i * 0.22, 0.22 + i * 0.22, 'rgba(214,178,94,.55)'));
+      traco([[Wc - M + 30, 452], [Wc - M + 44, 452], [Wc - M + 44, 540], [Wc - M + 30, 540]], 0.7, 0.85, 4);
+      traco(arco(Wc - M + 62, 496, 12, 0, Math.PI * 2, 20), 0.85, 0.95, 4);
+    } else if (tipo === 'estrategia') {
+      const nos = [[200, 430], [430, 430], [660, 330], [660, 540], [880, 330], [880, 540], [520, 760], [800, 760]];
+      disco(...nos[0], 18, 0.02);
+      traco(curva(nos[0], nos[1]), 0.04, 0.3, 7); disco(...nos[1], 18, 0.3);
+      traco(curva(nos[1], nos[2]), 0.32, 0.58, 7); disco(...nos[2], 18, 0.58);
+      traco(curva(nos[2], nos[4]), 0.6, 0.86, 7); disco(...nos[4], 26, 0.88);
+      traco(arco(...nos[4], 38, 0, Math.PI * 2, 32), 0.9, 1.0, 3);
+    } else if (tipo === 'orientacao') {
+      let y = 340;
+      for (let i = 0; i < 3; i++) { traco([[M + 6, y - 6], [M + 16, y + 6], [M + 40, y - 30]], 0.1 + i * 0.28, 0.24 + i * 0.28, 7); y += 108; }
+      traco([[M, 1120], [M + 380, 1120]], 0.92, 1.0, 3);
+    } else if (tipo === 'areas') {
+      let y = 330;
+      for (let i = 0; i < 6; i++) { varredura(M + 64, y + 30, (Wc - M * 2 - 64) * .55, 4, 0.04 + i * 0.15, 0.16 + i * 0.15, gold); y += 116; }
+    } else if (tipo === 'formacao') {
+      let y = 340;
+      for (let i = 0; i < 4; i++) { disco(M + 14, y - 4, 10, 0.08 + i * 0.14); y += 100; }
+      // o selo é "carimbado" no fim da leitura
+      const sx = Wc - M - 90, sy = 1040;
+      traco(arco(sx, sy, 70, -Math.PI / 2, Math.PI * 1.5, 64), 0.66, 0.9, 6);
+      traco(arco(sx, sy, 56, Math.PI / 2, Math.PI * 2.5, 48), 0.78, 0.96, 2.5);
+      traco([[sx - 26, sy + 2], [sx - 6, sy + 22], [sx + 30, sy - 22]], 0.9, 1.0, 7);
+    } else return null;
+    const cor = new THREE.CanvasTexture(cc); cor.colorSpace = THREE.SRGBColorSpace; cor.anisotropy = renderer.capabilities.getMaxAnisotropy();
+    const ordem = new THREE.CanvasTexture(co); ordem.minFilter = THREE.LinearFilter; ordem.generateMipmaps = false;
+    return { cor, ordem };
+  }
+
   function textoTex(l1, l2) {
     const c = document.createElement('canvas'); c.width = 1024; c.height = 128; const g = c.getContext('2d');
     g.fillStyle = '#000'; g.fillRect(0, 0, 1024, 128); g.fillStyle = '#fff'; g.textAlign = 'center';
@@ -407,10 +498,11 @@ async function iniciar() {
     let rot = [0.16 + mouse.y * 0.08 * (1 - f3c), -0.55 + idle + mouse.x * 0.18 * (1 - f3c), 0.05];
     rot = mix3(rot, [0.02 + mouse.y * 0.04, 0.06 + mouse.x * 0.08, 0], f1);
     let pos = [0, yMob + Math.sin(tempo * 0.8) * 0.006 * (1 - f3c), 0];
-    pos = mix3(pos, [mob ? 0.12 : 0.13, yMob, -0.02], f1);
-    const recua = eio(seg(p, J0 - 0.01, J0 + 0.03)) * (1 - f3a);
-    pos = mix3(pos, [mob ? 0.055 : 0.09, yMob, -0.16], recua);
-    rot = mix3(rot, [0.04, mob ? 0.1 : 0.32, 0], recua);
+    pos = mix3(pos, [mob ? 0.06 : 0.07, yMob, -0.02], f1);
+    // aberta como um livro: no computador a lombada fica à esquerda dos textos; no celular, a página atual centralizada
+    const aberto = eio(seg(p, 0.075, 0.17)) * (1 - f3a);
+    pos = mix3(pos, [mob ? -0.004 : -0.015, yMob, -0.02], aberto);
+    rot = mix3(rot, [0.03 + mouse.y * 0.03, (mob ? 0.0 : 0.1) + mouse.x * 0.05, 0], aberto);
     rot = mix3(rot, [-Math.PI / 2, 0, 0.18], f3c);
     pos = mix3(pos, [0, -0.2 + T / 2 + 0.0005, 0], f3c);
     pasta.rotation.set(...rot); pasta.position.set(...pos);
@@ -418,29 +510,23 @@ async function iniciar() {
     const curvaCapa = abreSuave < .5 ? eio(abreSuave * 2) * .45 : .45 + eio((abreSuave - .5) * 2) * .55;
     dobradica.rotation.y = -curvaCapa * (1 - f3b) * 2.75;
 
-    // --- folhas: cada uma sobe, permanece em leitura e recua para a sua camada ---
-    const foco = mob ? [-0.065, 0.01, 0.17] : [-0.16, 0.0, 0.24];
-    folhasConteudo.forEach((m, k) => {
-      const [a, b] = janelas[k];
-      const sobe = eio(seg(p, a - JW * 0.10, a + JW * 0.22));
-      const sai = k < NC - 1 ? eio(seg(p, b - JW * 0.12, b + JW * 0.18)) : 0;
-      let P = [0.004, -0.002, m.userData.z], R = [0, 0, 0];
-      P = mix3(P, foco, sobe); R = mix3(R, [-0.04, mob ? 0.1 : 0.36, 0.015], sobe);
-      // leve respiração enquanto em leitura
-      const leitura = sobe * (1 - sai);
-      P[1] += Math.sin(tempo * 0.9 + k) * 0.003 * leitura;
-      const camada = [(mob ? -0.02 : -0.03) + k * 0.018, 0.012 - k * 0.006, mob ? 0.03 + (NC - 1 - k) * 0.016 : 0.05 + (NC - 1 - k) * 0.022];
-      P = mix3(P, camada, sai); R = mix3(R, [0, 0.12 + k * 0.04, -0.02 + k * 0.012], sai);
-      P = mix3(P, [0.004, -0.002, m.userData.z], f3a); R = mix3(R, [0, 0, 0], f3a);
-      m.position.set(...P); m.rotation.set(...R);
-      curvar(m, Math.sin(sobe * Math.PI) * 0.9 + Math.sin(sai * Math.PI) * 0.45 + Math.sin(f3a * Math.PI) * 0.8);
+    // --- folhas: cada página permanece para leitura e depois vira pela lombada ---
+    paginas.forEach((m) => {
+      const k = m.userData.idx; const piv = m.userData.piv;
+      let vira = 0;
+      if (k >= 0 && k < NC - 1) vira = eio(seg(p, janelas[k][1] - JW * 0.28, janelas[k][1] - JW * 0.02));
+      vira *= 1 - f3a; // no fechamento, as folhas voltam antes de a capa fechar
+      piv.rotation.y = -vira * (2.64 - Math.max(k, 0) * 0.014);
+      curvar(m, Math.sin(vira * Math.PI) * 1.7 + Math.sin(f3a * Math.PI) * (k >= 0 && k < NC - 1 ? 0.6 : 0));
+      if (m.userData.uP) {
+        const [a, b] = janelas[k];
+        m.userData.uP.value = k < NC - 1 ? seg(p, a + JW * 0.10, b - JW * 0.34) : seg(p, a + JW * 0.10, J1 - 0.03);
+      }
     });
 
     // --- câmera ---
     camPos.set(0, 0.02, lerp(dist0, dist, f1)); camAlvo.set(0, 0, 0);
-    camPos.z -= f1 * 0.1 + Math.sin(fPag * Math.PI) * 0.04;
-    const desloc = mob ? 0 : 0.10 * eio(seg(p, J0 - 0.01, J0 + 0.04)) * (1 - f3a);
-    camPos.x += desloc; camAlvo.x += desloc;
+    camPos.z -= f1 * 0.1 + Math.sin(fPag * Math.PI) * 0.02 - (mob ? 0 : eio(seg(p, 0.075, 0.17)) * (1 - f3a) * 0.08);
     camAlvo.y -= subirMob * 0.15; camPos.y -= subirMob * 0.15; camPos.z += subirMob * 0.38;
     camPos.lerp(new THREE.Vector3(mob ? 0.04 : 0.2, 0.46, mob ? dist * 0.78 : dist * 0.86 + 0.12), f3c);
     camAlvo.lerp(new THREE.Vector3(-0.1, mob ? -0.2 : -0.17, -0.1), f3c);
@@ -453,7 +539,13 @@ async function iniciar() {
     key.target.position.copy(pasta.position);
     key.position.set(-0.9 + Math.sin(tempo * 0.35) * 0.45 * (1 - f3c), 1.4, 1.5);
     key.intensity = lerp(26, 18, f3c);
-    warm.intensity = lerp(0, 2.6, f3c);
+    const acende = eio(seg(p, 0.925, 0.95));
+    warm.intensity = 3.2 * acende + Math.sin(acende * Math.PI) * 0.8;
+    const pico = Math.sin(abreSuave * Math.PI);
+    brilho.intensity = (pico * 1.8 + abreSuave * 0.25) * (1 - f3b);
+    halo.material.opacity = pico * 0.55 * (1 - f3b);
+    halo.position.x = -0.02 - abreSuave * 0.06;
+    uReflexo.value = p < 0.05 ? ((tempo * 0.14) % 1.6) - 0.3 : -0.3 + seg(p, 0.05, 0.12) * 1.6;
     rim.intensity = lerp(1.1, 0.5, f3c);
     sombraPasta.position.x = pasta.position.x; sombraPasta.position.y = pasta.position.y - 0.235;
     sombraPasta.material.opacity = (1 - f1 * 0.6) * (1 - f3c) * 0.85;
@@ -464,6 +556,7 @@ async function iniciar() {
     acessorios.traverse((o) => { if (o.isMesh) { o.material.transparent = fa < 1; o.material.opacity = fa; } });
     if (poeira) { poeira.material.uniforms.uT.value = tempo; poeira.material.uniforms.uA.value = 1 - f4 * 0.6; }
     ambiente.style.opacity = (f3c * (1 - f4 * 0.3)).toFixed(3);
+    ambiente.style.filter = `blur(7px) brightness(${(0.48 + acende * 0.24).toFixed(3)}) saturate(${(0.85 + acende * 0.15).toFixed(3)})`;
     ambiente.style.transform = `scale(${(1.12 - f3c * 0.06 + f4 * 0.04).toFixed(3)})`;
     sticky.style.setProperty('--saida', fBranco.toFixed(3));
 
@@ -477,8 +570,8 @@ async function iniciar() {
     let ativa = 0;
     passos.forEach((el, k) => {
       const [a, b] = janelas[k];
-      const entra = seg(p, a + JW * 0.08, a + JW * 0.24);
-      const saiT = k < NC - 1 ? seg(p, b - JW * 0.06, b + JW * 0.06) : seg(p, J1 - 0.012, J1 + 0.004);
+      const entra = k === 0 ? seg(p, a - JW * 0.06, a + JW * 0.08) : seg(p, a + JW * 0.0, a + JW * 0.12);
+      const saiT = k < NC - 1 ? seg(p, b - JW * 0.30, b - JW * 0.20) : seg(p, J1 - 0.012, J1 + 0.004);
       const v = entra * (1 - saiT);
       el.style.opacity = v.toFixed(3);
       el.style.setProperty('--v', v.toFixed(3));
