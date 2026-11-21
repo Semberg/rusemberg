@@ -563,3 +563,115 @@ ul, ol { list-style: none; margin: 0; padding: 0; }
   .section-head .eyebrow::before, .contato .eyebrow::before { transform: none; }
   .section-head .lead { opacity: 1 !important; transform: none !important; }
 }
+
+/* ==========================================================
+   Interações das seções
+   ========================================================== */
+/* ---------- Qual é a sua situação? ---------- */
+.situacoes { margin: -10px 0 64px; padding: 34px 36px 26px; border: 1px solid rgba(255,255,255,.12); background: linear-gradient(135deg, rgba(255,255,255,.035), rgba(255,255,255,0)); }
+.situacoes-tit { font-family: var(--serif); color: #fff; font-size: clamp(1.5rem, 2.2vw, 1.9rem); margin: 0 0 18px; }
+.situacoes-lista { display: flex; flex-wrap: wrap; gap: 10px; }
+.situacoes-lista button {
+  font: inherit; font-size: .82rem; color: rgba(255,255,255,.82); background: transparent; cursor: pointer;
+  border: 1px solid rgba(255,255,255,.2); padding: 10px 16px; border-radius: 999px;
+  transition: border-color .3s, color .3s, background .3s, transform .3s var(--ease);
+}
+.situacoes-lista button:hover { border-color: var(--gold); color: #fff; transform: translateY(-2px); }
+.situacoes-lista button.is-on { background: var(--gold); border-color: var(--gold); color: #16181b; }
+.situacoes-lista button:focus-visible { outline: 2px solid var(--gold-light); outline-offset: 3px; }
+.situacoes-resp { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px 28px; margin-top: 24px; padding-top: 22px; border-top: 1px solid rgba(255,255,255,.12); }
+.situacoes-resp p { margin: 0; color: rgba(255,255,255,.8); max-width: 560px; }
+.situacoes-resp strong { color: var(--gold-light); font-weight: 600; }
+.situacoes-resp.is-novo { animation: respNova .7s var(--ease); }
+@keyframes respNova { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+.situacoes-nota { margin: 16px 0 0; font-size: .74rem; color: rgba(255,255,255,.5); }
+.area.is-indicada .area-n::before { content: "Indicada · "; color: var(--gold-light); font-size: .62rem; letter-spacing: .16em; text-transform: uppercase; }
+
+/* ---------- O que levar ao primeiro atendimento ---------- */
+.area-docs { margin: 14px 0 6px; border: 1px solid rgba(255,255,255,.14); --prog: 0; position: relative; }
+.area-docs::before { content: ""; position: absolute; left: 0; top: 0; height: 2px; width: 100%; background: var(--gold); transform-origin: left; transform: scaleX(var(--prog)); transition: transform .5s var(--ease); }
+.area-docs summary { cursor: pointer; list-style: none; padding: 13px 16px; color: #fff; font-size: .82rem; letter-spacing: .08em; text-transform: uppercase; display: flex; justify-content: space-between; align-items: center; }
+.area-docs summary::-webkit-details-marker { display: none; }
+.area-docs summary::after { content: "+"; color: var(--gold-light); font-size: 1.1rem; transition: transform .3s; }
+.area-docs[open] summary::after { transform: rotate(45deg); }
+.area-docs ul { padding: 0 16px 6px; }
+.area-docs li { border-top: 1px solid rgba(255,255,255,.08); }
+.area-docs label { display: flex; gap: 12px; align-items: flex-start; padding: 9px 0; cursor: pointer; color: rgba(255,255,255,.78); font-size: .88rem; }
+.area-docs input { appearance: none; flex: none; width: 17px; height: 17px; margin-top: 2px; border: 1px solid rgba(255,255,255,.4); display: grid; place-content: center; transition: background .25s, border-color .25s; cursor: pointer; }
+.area-docs input::after { content: ""; width: 9px; height: 5px; border: solid #16181b; border-width: 0 0 2px 2px; transform: rotate(-45deg) scale(0); margin-top: -2px; transition: transform .25s var(--ease); }
+.area-docs input:checked { background: var(--gold); border-color: var(--gold); }
+.area-docs input:checked::after { transform: rotate(-45deg) scale(1); }
+.area-docs input:checked + span { color: #fff; }
+.area-docs input:focus-visible { outline: 2px solid var(--gold-light); outline-offset: 2px; }
+.area-docs-envio { display: inline-block; margin: 6px 16px 4px; font-size: .74rem; letter-spacing: .12em; text-transform: uppercase; color: var(--gold-light); border-bottom: 1px solid var(--gold); padding-bottom: 2px; }
+.area-docs-nota { margin: 8px 16px 14px !important; font-size: .74rem; color: rgba(255,255,255,.45) !important; }
+
+/* ---------- Fio do método (Diferenciais) ---------- */
+.diff-grid { position: relative; --fio: 0; }
+.diff-fio { position: absolute; left: 0; right: 0; top: -1px; height: 1px; pointer-events: none; }
+.diff-fio i { position: absolute; inset: 0; background: linear-gradient(90deg, var(--gold-light), var(--gold)); transform-origin: left; transform: scaleX(var(--fio)); box-shadow: 0 0 12px rgba(226,196,126,.45); }
+.diff-item { position: relative; }
+.diff-item::before { content: ""; position: absolute; left: 0; top: -5px; width: 9px; height: 9px; border-radius: 50%; background: #2a2c31; border: 1px solid rgba(255,255,255,.35); transition: background .5s, border-color .5s, box-shadow .5s, transform .5s var(--ease); }
+.diff-item.is-aceso::before { background: var(--gold-light); border-color: var(--gold-light); box-shadow: 0 0 0 6px rgba(226,196,126,.14); transform: scale(1.15); }
+.diff-item .diff-num { transition: color .6s, opacity .6s, transform .8s var(--ease); opacity: .35; transform: translateY(8px); }
+.diff-item.is-aceso .diff-num { opacity: 1; transform: none; }
+
+/* ---------- Pessoas físicas / Empresas ---------- */
+.publico-abas { display: none; }
+
+/* ---------- Contato ---------- */
+.contato-valor { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 0; }
+.copiar { font: inherit; margin-left: 12px; font-size: .72rem; letter-spacing: .12em; text-transform: uppercase; color: var(--text-muted); background: none; border: 0; border-bottom: 1px dotted var(--text-muted); padding: 0; cursor: pointer; }
+.copiar:hover { color: var(--gold-dark); border-color: var(--gold); }
+.status-atend { display: inline-flex; align-items: center; gap: 8px; margin-left: 12px; font-size: .74rem; color: var(--text-muted) !important; }
+.status-atend::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: #b9b5ad; }
+.status-atend.is-aberto { color: #3d7a4e !important; }
+.status-atend.is-aberto::before { background: #3d9a5b; box-shadow: 0 0 0 0 rgba(61,154,91,.5); animation: pulsoStatus 2.2s infinite; }
+@keyframes pulsoStatus { 0% { box-shadow: 0 0 0 0 rgba(61,154,91,.45); } 70% { box-shadow: 0 0 0 8px rgba(61,154,91,0); } 100% { box-shadow: 0 0 0 0 rgba(61,154,91,0); } }
+.contato-emblema { position: relative; aspect-ratio: 4 / 5; background: radial-gradient(120% 90% at 50% 40%, #2a2c31, #16181b 70%); overflow: hidden; display: grid; place-items: center; }
+.contato-emblema img { width: 52%; height: auto; opacity: .92; transform: scale(.92); transition: transform 1.6s var(--ease); }
+.contato-emblema.in-view img { transform: none; }
+.ce-fio { position: absolute; background: rgba(226,196,126,.35); transform-origin: left; transform: scaleX(0); transition: transform 1.4s var(--ease) .3s; }
+.ce-fio-1 { left: 8%; right: 8%; top: 9%; height: 1px; }
+.ce-fio-2 { left: 8%; right: 8%; bottom: 9%; height: 1px; transform-origin: right; }
+.contato-emblema.in-view .ce-fio { transform: none; }
+.ce-legenda { position: absolute; bottom: 12%; left: 0; right: 0; text-align: center; color: rgba(226,196,126,.8); font-size: .66rem; letter-spacing: .34em; text-transform: uppercase; }
+
+/* ---------- Brilho nos botões dourados ---------- */
+.btn-gold { --mx: 50%; --my: 50%; }
+.btn-gold::after { content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none; background: radial-gradient(120px circle at var(--mx) var(--my), rgba(255,255,255,.38), transparent 60%); opacity: 0; transition: opacity .3s; }
+.btn-gold:hover::after { opacity: 1; }
+
+@media (max-width: 900px) {
+  .situacoes { padding: 24px 20px 20px; margin-bottom: 44px; }
+  .situacoes-lista { flex-wrap: nowrap; overflow-x: auto; scroll-snap-type: x proximity; margin: 0 -20px; padding: 2px 20px 8px; scrollbar-width: none; }
+  .situacoes-lista::-webkit-scrollbar { display: none; }
+  .situacoes-lista button { flex: none; scroll-snap-align: start; }
+  .situacoes-resp .btn { width: 100%; text-align: center; }
+  /* fio do método na vertical */
+  .diff-fio { left: 0; right: auto; top: 0; bottom: 0; width: 1px; height: auto; }
+  .diff-fio i { transform-origin: top; transform: scaleY(var(--fio)); }
+  .diff-item { border-top: 0; padding: 0 0 0 30px; }
+  .diff-item::before { left: -4px; top: 6px; }
+  /* abas Pessoas físicas / Empresas */
+  .publico-abas { display: grid; grid-template-columns: 1fr 1fr; position: relative; border: 1px solid var(--line); margin-bottom: 14px; --aba: 0; }
+  .publico-abas button { font: inherit; position: relative; z-index: 1; background: none; border: 0; padding: 14px 10px; font-size: .78rem; letter-spacing: .12em; text-transform: uppercase; color: var(--text-muted); cursor: pointer; transition: color .35s; }
+  .publico-abas button[aria-selected="true"] { color: #16181b; }
+  .publico-marca { position: absolute; top: 0; bottom: 0; left: 0; width: 50%; background: var(--gold); transform: translateX(calc(var(--aba) * 100%)); transition: transform .5s var(--ease); }
+  .publico-grid { display: grid; grid-template-columns: 100% 100%; overflow: hidden; gap: 0; }
+  .publico-grid > .publico-card { grid-row: 1; transition: transform .6s var(--ease), opacity .5s; }
+  .publico-grid[data-aba="1"] > .publico-card { transform: translateX(-100%); }
+  .publico-grid[data-aba="0"] > .publico-card:nth-child(2), .publico-grid[data-aba="1"] > .publico-card:nth-child(1) { opacity: 0; pointer-events: none; }
+  /* notícias deslizam com o dedo */
+  .news-grid { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; gap: 12px; background: none; border: 0; margin: 0 -20px; padding: 0 20px 10px; scrollbar-width: none; }
+  .news-grid::-webkit-scrollbar { display: none; }
+  .news-card { flex: 0 0 84%; scroll-snap-align: start; border: 1px solid var(--line); }
+  .news-card.is-destaque { flex-basis: 88%; }
+  .contato-emblema { aspect-ratio: 16 / 11; }
+  .contato-emblema img { width: 34%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .diff-item .diff-num { opacity: 1; transform: none; }
+  .situacoes-resp.is-novo { animation: none; }
+}
+.situacoes-resp[hidden] { display: none; }

@@ -271,3 +271,102 @@ async function loadNews() {
   }
 }
 loadNews();
+
+/* ==========================================================
+   Interações das seções
+   ========================================================== */
+const WHATS = 'https://wa.me/5583996069271';
+const linkWhats = (texto) => `${WHATS}?text=${encodeURIComponent(texto)}`;
+const nomesAreas = areas.map((a) => a.querySelector('.area-nome')?.textContent.trim() || '');
+
+/* ---------- "Qual é a sua situação?" ---------- */
+const situacoes = document.getElementById('situacoes');
+if (situacoes) {
+  const resp = document.getElementById('situacoesResp');
+  const nome = document.getElementById('situacoesArea');
+  const wa = document.getElementById('situacoesWhats');
+  situacoes.querySelectorAll('[data-area]').forEach((b) => b.addEventListener('click', () => {
+    const i = +b.dataset.area;
+    situacoes.querySelectorAll('[data-area]').forEach((x) => x.classList.toggle('is-on', x === b));
+    nome.textContent = nomesAreas[i];
+    wa.href = linkWhats(`Olá. Acessei o site e gostaria de informações sobre atendimento em ${nomesAreas[i].toLowerCase()}, sobre ${b.dataset.assunto}.`);
+    resp.hidden = false; resp.classList.remove('is-novo'); void resp.offsetWidth; resp.classList.add('is-novo');
+    ativarArea(i);
+    if (!areas[i].classList.contains('is-on')) ativarArea(i);
+    areas.forEach((a) => a.classList.remove('is-indicada')); areas[i].classList.add('is-indicada');
+    // no celular, leva até a área indicada depois de um instante
+    if (window.innerWidth < 900) setTimeout(() => areas[i].scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' }), 650);
+  }));
+}
+
+/* ---------- "O que levar ao primeiro atendimento" ---------- */
+document.querySelectorAll('.area-docs').forEach((d) => {
+  const area = d.closest('.area'); const i = areas.indexOf(area);
+  const envio = d.querySelector('.area-docs-envio');
+  const atualizar = () => {
+    const itens = [...d.querySelectorAll('li')];
+    const tenho = itens.filter((li) => li.querySelector('input').checked).map((li) => '✓ ' + li.textContent.trim());
+    const falta = itens.filter((li) => !li.querySelector('input').checked).map((li) => '• ' + li.textContent.trim());
+    let msg = `Olá. Acessei o site e gostaria de agendar um atendimento em ${(nomesAreas[i] || '').toLowerCase()}.`;
+    if (tenho.length) msg += `\n\nJá tenho:\n${tenho.join('\n')}`;
+    if (falta.length && tenho.length) msg += `\n\nAinda não tenho:\n${falta.join('\n')}`;
+    envio.href = linkWhats(msg);
+    d.style.setProperty('--prog', (tenho.length / itens.length).toFixed(3));
+  };
+  d.addEventListener('change', atualizar); atualizar();
+});
+
+/* ---------- Fio do método (Diferenciais) ---------- */
+const diffGrid = document.getElementById('diffGrid');
+function atualizaFio() {
+  if (!diffGrid) return;
+  if (reduceMotion) { diffGrid.style.setProperty('--fio', 1); diffGrid.querySelectorAll('.diff-item').forEach((el) => el.classList.add('is-aceso')); return; }
+  const r = diffGrid.getBoundingClientRect(), vh = window.innerHeight;
+  const t = Math.min(1, Math.max(0, (vh * 0.85 - r.top) / (r.height + vh * 0.25)));
+  diffGrid.style.setProperty('--fio', t.toFixed(3));
+  const itens = [...diffGrid.querySelectorAll('.diff-item')];
+  itens.forEach((el, k) => el.classList.toggle('is-aceso', t >= (k + 0.15) / itens.length));
+}
+window.addEventListener('scroll', atualizaFio, { passive: true });
+window.addEventListener('resize', atualizaFio);
+atualizaFio();
+
+/* ---------- Pessoas físicas / Empresas ---------- */
+const publicoGrid = document.getElementById('publicoGrid');
+document.querySelectorAll('.publico-abas [data-aba]').forEach((b, _, todas) => b.addEventListener('click', () => {
+  todas.forEach((x) => x.setAttribute('aria-selected', String(x === b)));
+  publicoGrid.dataset.aba = b.dataset.aba;
+  b.parentElement.style.setProperty('--aba', b.dataset.aba);
+}));
+
+/* ---------- Contato: situação do atendimento e copiar ---------- */
+const statusAtend = document.getElementById('statusAtend');
+function atualizaStatus() {
+  if (!statusAtend) return;
+  try {
+    const partes = Object.fromEntries(new Intl.DateTimeFormat('en-US', { timeZone: 'America/Fortaleza', weekday: 'short', hour: 'numeric', minute: 'numeric', hour12: false })
+      .formatToParts(new Date()).map((x) => [x.type, x.value]));
+    const dia = partes.weekday, h = (+partes.hour % 24) + (+partes.minute) / 60;
+    const util = !['Sat', 'Sun'].includes(dia);
+    const aberto = util && h >= 9 && h < 18;
+    statusAtend.textContent = aberto ? 'Em horário de atendimento' : (util && h < 9 ? 'Atendimento a partir das 9h' : 'Retorno no próximo dia útil, a partir das 9h');
+    statusAtend.classList.toggle('is-aberto', aberto);
+    statusAtend.hidden = false;
+  } catch { statusAtend.hidden = true; }
+}
+atualizaStatus(); setInterval(atualizaStatus, 60000);
+document.querySelectorAll('[data-copiar]').forEach((b) => b.addEventListener('click', async () => {
+  try { await navigator.clipboard.writeText(b.dataset.copiar); b.textContent = 'Copiado'; }
+  catch { b.textContent = 'Não foi possível copiar'; }
+  setTimeout(() => { b.textContent = 'Copiar'; }, 1800);
+}));
+
+/* ---------- Brilho que acompanha o cursor nos botões dourados ---------- */
+if (!reduceMotion && window.matchMedia('(hover: hover)').matches) {
+  document.addEventListener('pointermove', (e) => {
+    const b = e.target.closest && e.target.closest('.btn-gold');
+    if (!b) return;
+    const r = b.getBoundingClientRect();
+    b.style.setProperty('--mx', `${e.clientX - r.left}px`); b.style.setProperty('--my', `${e.clientY - r.top}px`);
+  }, { passive: true });
+}
