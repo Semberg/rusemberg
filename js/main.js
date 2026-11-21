@@ -46,12 +46,23 @@ if (manifesto) {
   // destaca, em dourado, os valores ao final da declaração
   palavras.forEach((w) => { if (/^(ética|transparência|excelência|técnica\.?)[,.]?$/i.test(w.textContent)) w.classList.add('dest'); });
 }
+const palcoManif = document.getElementById('manifestoPalco');
 function atualizaManifesto() {
   if (!palavras.length || reduceMotion) return;
   const r = manifesto.getBoundingClientRect(); const vh = window.innerHeight;
-  const t = Math.min(1, Math.max(0, (vh * 0.9 - r.top) / (r.height + vh * 0.3)));
-  const n = Math.round(t * palavras.length);
-  palavras.forEach((w, i) => w.classList.toggle('on', i < n));
+  // começa quando o texto entra pela parte de baixo e termina com ele no terço superior
+  const t = Math.min(1, Math.max(0, (vh * 0.92 - r.top) / (r.height + vh * 0.42)));
+  const N = palavras.length, suave = 3.2; // cada palavra acende ao longo de ~3 palavras
+  palavras.forEach((w, i) => {
+    const k = Math.min(1, Math.max(0, t * (N + suave) - i) / suave);
+    w.style.setProperty('--k', k.toFixed(3));
+    w.classList.toggle('on', k > 0.98);
+  });
+  if (palcoManif) {
+    palcoManif.style.setProperty('--t', t.toFixed(3));
+    palcoManif.classList.toggle('is-ativo', t > 0.01);
+    palcoManif.classList.toggle('is-completo', t > 0.995);
+  }
 }
 
 /* ---------- Paralaxe das fotos ---------- */

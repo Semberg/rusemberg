@@ -245,13 +245,33 @@ ul, ol { list-style: none; margin: 0; padding: 0; }
    SOBRE
    ========================================================== */
 .sobre { background: var(--paper); padding-top: 160px; }
-.sobre-manifesto {
-  font-family: var(--serif); font-size: clamp(1.9rem, 3.6vw, 3.3rem); line-height: 1.18; color: var(--heading);
-  max-width: 1040px; margin: 0 0 120px;
+.manifesto-palco { position: relative; max-width: 1080px; margin: 0 0 120px; padding-left: clamp(0px, 4vw, 64px); --t: 0; }
+.sobre-rotulo { display: flex; align-items: center; gap: 14px; }
+.sobre-traco { display: block; width: 56px; height: 1px; background: var(--gold); transform-origin: left; transform: scaleX(0); transition: transform 1.1s var(--ease) .35s; }
+.sobre-rotulo.in-view .sobre-traco { transform: scaleX(1); }
+.sobre-content h2.reveal { letter-spacing: .02em; transition: opacity .9s ease, transform 1s var(--ease), letter-spacing 1.4s var(--ease); transition-delay: .12s; }
+.sobre-content h2.reveal:not(.in-view) { letter-spacing: .12em; }
+.manifesto-aspas {
+  position: absolute; left: clamp(-10px, -1vw, 0px); top: 18px; font-family: var(--serif); font-size: clamp(7rem, 13vw, 12rem); line-height: 1;
+  color: var(--gold); pointer-events: none; user-select: none;
+  opacity: calc(var(--t) * .5); transform: translateY(calc((1 - var(--t)) * 60px)) rotate(calc((1 - var(--t)) * -14deg));
 }
-.sobre-manifesto .w { display: inline-block; color: #c9c6c0; transform: translateY(.18em); transition: color .5s ease, transform .6s var(--ease); }
-.sobre-manifesto .w.on { color: var(--heading); transform: none; }
-.sobre-manifesto .w.on.dest { color: var(--gold-dark); }
+.sobre-manifesto {
+  position: relative; font-family: var(--serif); font-size: clamp(1.9rem, 3.6vw, 3.3rem); line-height: 1.2; color: var(--heading); margin: 0;
+}
+.sobre-manifesto .w {
+  --k: 0; display: inline-block; position: relative; color: var(--heading);
+  opacity: calc(.12 + var(--k) * .88); filter: blur(calc((1 - var(--k)) * 7px));
+  transform: translateY(calc((1 - var(--k)) * .55em)) rotate(calc((1 - var(--k)) * 2.5deg));
+  transform-origin: left bottom; will-change: transform, opacity, filter;
+}
+.sobre-manifesto .w.dest { color: var(--gold-dark); font-style: italic; }
+.sobre-manifesto .w.dest::after {
+  content: ""; position: absolute; left: 0; right: .12em; bottom: .06em; height: 2px; background: var(--gold);
+  transform-origin: left; transform: scaleX(0); transition: transform .9s var(--ease) .1s;
+}
+.sobre-manifesto .w.dest.on::after { transform: scaleX(1); }
+.manifesto-linha { display: block; height: 1px; margin-top: 46px; background: linear-gradient(90deg, var(--gold), rgba(201,162,77,0)); transform-origin: left; transform: scaleX(calc(var(--t))); }
 .sobre-grid { display: grid; grid-template-columns: .85fr 1.15fr; gap: 90px; align-items: start; }
 .sobre-foto { position: relative; margin: 0; aspect-ratio: 3 / 4; }
 .sobre-foto > img:first-child { width: 100%; height: 100%; object-fit: cover; }
@@ -426,7 +446,10 @@ ul, ol { list-style: none; margin: 0; padding: 0; }
   *, *::before, *::after { animation: none !important; transition-duration: .01ms !important; }
   .reveal { opacity: 1; transform: none; }
   .revela-img > img:first-child { clip-path: none; transform: none; }
-  .sobre-manifesto .w { color: var(--heading); transform: none; }
+  .sobre-manifesto .w { opacity: 1; filter: none; transform: none; }
+  .sobre-manifesto .w.dest::after { transform: scaleX(1); }
+  .manifesto-palco { --t: 1; }
+  .sobre-traco { transform: none; }
 }
 
 /* ==========================================================
@@ -484,7 +507,8 @@ ul, ol { list-style: none; margin: 0; padding: 0; }
   .cena-estatica .passos { grid-template-columns: 1fr; padding: 0 16px 60px; }
 
   .sobre { padding-top: 110px; }
-  .sobre-manifesto { margin-bottom: 70px; }
+  .manifesto-palco { margin-bottom: 70px; padding-left: 22px; }
+  .manifesto-aspas { font-size: 5.5rem; top: 8px; left: -6px; }
   .sobre-grid, .contato-grid, .areas-wrap { grid-template-columns: 1fr; gap: 56px; }
   .sobre-foto { max-width: 420px; }
   .sobre-selo { right: -14px; bottom: -40px; width: 120px; }
