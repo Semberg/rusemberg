@@ -37,6 +37,27 @@ document.addEventListener('click', (e) => {
   window.scrollTo({ top: cena.offsetTop + total * alvosCena[a.getAttribute('href')], behavior: reduceMotion ? 'auto' : 'smooth' });
 });
 
+/* ---------- Links para seções depois da abertura ----------
+   A abertura ocupa uma rolagem muito longa. Com rolagem suave, ir do topo
+   até "Sobre" atravessaria o livro inteiro (as folhas passando em alta
+   velocidade) e quem olha no meio do caminho vê outra parte da página.
+   Quando o trajeto cruza a abertura, o salto é direto ao destino. */
+document.addEventListener('click', (e) => {
+  const a = e.target.closest('a[href^="#"]');
+  if (!a || !cena || e.defaultPrevented) return;
+  const id = a.getAttribute('href');
+  if (id.length < 2 || id in alvosCena) return;
+  let alvo; try { alvo = document.querySelector(id); } catch { return; }
+  if (!alvo || cena.contains(alvo)) return;
+  const destino = alvo.getBoundingClientRect().top + window.scrollY;
+  const iniCena = cena.offsetTop, fimCena = iniCena + cena.offsetHeight;
+  const de = Math.min(window.scrollY, destino), ate = Math.max(window.scrollY, destino);
+  if (de >= fimCena - window.innerHeight || ate <= iniCena) return; // não cruza a abertura
+  e.preventDefault();
+  window.scrollTo({ top: destino, behavior: 'instant' });
+  if (history.pushState) history.pushState(null, '', id); else location.hash = id;
+});
+
 /* ---------- Manifesto: as palavras acendem com a rolagem ---------- */
 const manifesto = document.getElementById('manifesto');
 let palavras = [];
