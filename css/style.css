@@ -264,9 +264,11 @@ ul, ol { list-style: none; margin: 0; padding: 0; }
 }
 .sobre-manifesto .w {
   --k: 0; display: inline-block; position: relative; color: var(--heading);
-  opacity: calc(.38 + var(--k) * .62); filter: blur(calc((1 - var(--k)) * 1.6px));
-  transform: translateY(calc((1 - var(--k)) * .32em)) rotate(calc((1 - var(--k)) * 1.2deg));
-  transform-origin: left bottom; will-change: transform, opacity, filter;
+  /* sem desfoque: a palavra ainda não "acesa" fica apenas mais clara,
+     sempre legível; o movimento é só um pequeno deslocamento */
+  opacity: calc(.6 + var(--k) * .4);
+  transform: translateY(calc((1 - var(--k)) * .18em));
+  transform-origin: left bottom; will-change: transform, opacity;
 }
 .sobre-manifesto .w.dest { color: var(--gold-dark); font-style: italic; }
 .sobre-manifesto .w.dest::after {

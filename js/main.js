@@ -50,8 +50,9 @@ const palcoManif = document.getElementById('manifestoPalco');
 function atualizaManifesto() {
   if (!palavras.length || reduceMotion) return;
   const r = manifesto.getBoundingClientRect(); const vh = window.innerHeight;
-  // começa quando o texto entra pela parte de baixo e termina com ele no terço superior
-  const t = Math.min(1, Math.max(0, (vh * 0.92 - r.top) / (r.height + vh * 0.42)));
+  // começa quando o texto entra pela parte de baixo e termina com ele no meio da tela,
+  // para que a declaração inteira esteja acesa enquanto ainda está sendo lida
+  const t = Math.min(1, Math.max(0, (vh * 0.92 - r.top) / (r.height * 0.6 + vh * 0.3)));
   const N = palavras.length, suave = 3.2; // cada palavra acende ao longo de ~3 palavras
   palavras.forEach((w, i) => {
     const k = Math.min(1, Math.max(0, t * (N + suave) - i) / suave);
