@@ -10,7 +10,7 @@ import { RoomEnvironment } from '../assets/vendor/three/addons/environments/Room
 import { RoundedBoxGeometry } from '../assets/vendor/three/addons/geometries/RoundedBoxGeometry.js';
 import { GLTFLoader } from '../assets/vendor/three/addons/loaders/GLTFLoader.js';
 import { MeshoptDecoder } from '../assets/vendor/three/addons/meshopt_decoder.module.js';
-import { tocarVirada, alternarSom, somLigado } from './som-folha.js';
+import { tocarVirada, tocarCapa, tocarFechamento, alternarSom, somLigado } from './som-folha.js';
 
 const cena = document.querySelector('.cena');
 const sticky = document.getElementById('cenaSticky');
@@ -496,6 +496,43 @@ async function iniciar() {
     });
   }
 
+  // ---------- abertura e fechamento do livro com tempo próprio ----------
+  // Mesmo princípio das folhas: a rolagem só diz se o livro deve estar aberto
+  // (ou fechado); o gesto em si tem duração fixa e acontece devagar.
+  const DUR_ABRE = mobile() ? 2.9 : 3.4;     // capa se erguendo, pausa e abrindo
+  const DUR_FECHA = mobile() ? 4.4 : 5.2;    // folhas voltam, capa fecha, livro pousa
+  const P_ABRE = 0.09, P_FECHA = 0.862;
+  const gesto = (ini) => ({ v: ini, de: ini, para: ini, t0: 0, dur: 1 });
+  const abertura = gesto(0), fechamento = gesto(0);
+  let gestoIniciado = false;
+  function conduzir(st, alvo, durTotal, aoMudar) {
+    if (alvo !== st.para) {
+      st.de = st.v; st.para = alvo; st.t0 = tempo;
+      st.dur = Math.max(0.5, durTotal * Math.abs(alvo - st.v));
+      if (gestoIniciado && Math.abs(alvo - st.v) > 0.25) aoMudar(st.dur, alvo > st.v ? 1 : -1);
+    }
+    st.v = lerp(st.de, st.para, clamp((tempo - st.t0) / st.dur));
+    return st.v;
+  }
+  function atualizarGestos(p, forcado) {
+    if (forcado) { // testes e links com ?p=: posição exata, sem animação
+      abertura.v = abertura.de = abertura.para = seg(p, 0.075, 0.17);
+      fechamento.v = fechamento.de = fechamento.para = seg(p, 0.86, 0.95);
+      return;
+    }
+    // ao carregar a página já no meio do livro, começa na posição certa e sem som
+    if (!gestoIniciado) {
+      abertura.v = abertura.de = abertura.para = p >= P_ABRE ? 1 : 0;
+      fechamento.v = fechamento.de = fechamento.para = p >= P_FECHA ? 1 : 0;
+      gestoIniciado = true;
+    }
+    // o livro só fecha depois de aberto, e só reabre depois de levantado da mesa
+    const querAberto = p >= P_ABRE ? 1 : (fechamento.v > 0.02 ? abertura.para : 0);
+    conduzir(abertura, querAberto, DUR_ABRE, (d, dir) => tocarCapa(d, dir));
+    const querFechado = p >= P_FECHA && abertura.v > 0.98 ? 1 : (p < P_FECHA ? 0 : fechamento.para);
+    conduzir(fechamento, querFechado, DUR_FECHA, (d, dir) => tocarFechamento(d, dir));
+  }
+
   // ---------- botão de som ----------
   const botaoSom = document.getElementById('cenaSom');
   if (botaoSom) {
@@ -516,6 +553,7 @@ async function iniciar() {
     mouse.tx = (e.clientX / window.innerWidth - .5) * 2; mouse.ty = (e.clientY / window.innerHeight - .5) * 2;
   }, { passive: true });
 
+  const forcado = new URLSearchParams(location.search).get('p');
   const camPos = new THREE.Vector3(), camAlvo = new THREE.Vector3();
   let tAnt = performance.now(), tempo = 0;
   let pSuave = 0;
@@ -547,12 +585,14 @@ async function iniciar() {
     const dist0 = mob ? Math.max(dist, 1.9) : dist;
 
     const f1 = eio(seg(p, 0.045, 0.095));   // pasta gira de frente
-    const fAbre = seg(p, 0.075, 0.17);      // capa abre em ritmo lento
+    atualizarGestos(p, forcado !== null || window.__forceP !== undefined);
+    const fAbre = abertura.v;               // capa abre em tempo próprio
+    const fF = fechamento.v;
     const abreSuave = fAbre * fAbre * (3 - 2 * fAbre);
     const fPag = seg(p, J0, J1);
-    const f3a = eio(seg(p, 0.86, 0.89)); // folhas voltam
-    const f3b = eio(seg(p, 0.88, 0.91)); // capa fecha
-    const f3c = eio(seg(p, 0.89, 0.95));  // pousa na mesa
+    const f3a = eio(seg(fF, 0.0, 0.34));  // folhas voltam juntas
+    const f3b = eio(seg(fF, 0.26, 0.62)); // capa fecha
+    const f3c = eio(seg(fF, 0.5, 1.0));   // pousa na mesa
     const f4 = eio(seg(p, 0.972, 1.0));    // aproximação final
     const fBranco = seg(p, 0.988, 1.0);
 
@@ -567,7 +607,7 @@ async function iniciar() {
     let pos = [0, yMob + Math.sin(tempo * 0.8) * 0.006 * (1 - f3c), 0];
     pos = mix3(pos, [mob ? 0.06 : 0.07, yMob, -0.02], f1);
     // aberta como um livro: no computador a lombada fica à esquerda dos textos; no celular, a página atual centralizada
-    const aberto = eio(seg(p, 0.075, 0.17)) * (1 - f3a);
+    const aberto = eio(fAbre) * (1 - f3a);
     pos = mix3(pos, [mob ? -0.004 : -0.015, yMob, -0.02], aberto);
     rot = mix3(rot, [0.03 + mouse.y * 0.03, (mob ? 0.0 : 0.1) + mouse.x * 0.05, 0], aberto);
     rot = mix3(rot, [-Math.PI / 2, 0, 0.18], f3c);
@@ -602,7 +642,7 @@ async function iniciar() {
 
     // --- câmera ---
     camPos.set(0, 0.02, lerp(dist0, dist, f1)); camAlvo.set(0, 0, 0);
-    camPos.z -= f1 * 0.1 + Math.sin(fPag * Math.PI) * 0.02 - (mob ? 0 : eio(seg(p, 0.075, 0.17)) * (1 - f3a) * 0.08);
+    camPos.z -= f1 * 0.1 + Math.sin(fPag * Math.PI) * 0.02 - (mob ? 0 : eio(fAbre) * (1 - f3a) * 0.08);
     camAlvo.y -= subirMob * 0.15; camPos.y -= subirMob * 0.15; camPos.z += subirMob * 0.38;
     camPos.lerp(new THREE.Vector3(mob ? 0.04 : 0.2, 0.46, mob ? dist * 0.78 : dist * 0.86 + 0.12), f3c);
     camAlvo.lerp(new THREE.Vector3(-0.1, mob ? -0.2 : -0.17, -0.1), f3c);
@@ -615,7 +655,7 @@ async function iniciar() {
     key.target.position.copy(pasta.position);
     key.position.set(-0.9 + Math.sin(tempo * 0.35) * 0.45 * (1 - f3c), 1.4, 1.5);
     key.intensity = lerp(26, 18, f3c);
-    const acende = eio(seg(p, 0.925, 0.95));
+    const acende = eio(seg(p, 0.925, 0.95)) * eio(seg(fF, 0.75, 1.0));
     warm.intensity = 3.2 * acende + Math.sin(acende * Math.PI) * 0.8;
     const pico = Math.sin(abreSuave * Math.PI);
     brilho.intensity = (pico * 1.8 + abreSuave * 0.25) * (1 - f3b);
@@ -663,10 +703,9 @@ async function iniciar() {
   // ---------- laço ----------
   let visivel = true, primeiro = true;
   new IntersectionObserver(([e]) => { visivel = e.isIntersecting; }).observe(sticky);
-  const forcado = new URLSearchParams(location.search).get('p');
   function laco(t) {
     requestAnimationFrame(laco);
-    const dt = Math.min(0.05, (t - tAnt) / 1000); tAnt = t;
+    const dt = Math.min(window.__dtMax || 0.05, (t - tAnt) / 1000); tAnt = t;
     if (!visivel && !primeiro) return;
     tempo += dt;
     mouse.x += (mouse.tx - mouse.x) * 0.05; mouse.y += (mouse.ty - mouse.y) * 0.05;

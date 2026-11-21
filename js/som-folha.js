@@ -87,6 +87,52 @@ export function tocarVirada(dur = 2, dir = 1) {
   if (dir < 0) estalos(tp - 0.05, 0.12, 2);
 }
 
+/**
+ * Capa de couro abrindo (dir 1) ou fechando sozinha de volta (dir -1):
+ * o couro range de leve na dobradiça, a capa corta o ar e encosta.
+ */
+export function tocarCapa(dur = 3, dir = 1) {
+  if (!ligado || !ctx || ctx.state !== 'running') return;
+  const t0 = ctx.currentTime + 0.01, v = rnd(0.9, 1.1);
+  // 1. a capa se solta do miolo: atrito grave do couro
+  camada(t0, dur * 0.3, { tipo: 'bandpass', freq: 520 * v, freq2: 380 * v, q: 1.1, envelope: [[0.2, 0.22], [0.7, 0.12]] });
+  estalos(t0 + dur * 0.04, dur * 0.22, 3);
+  // 2. a dobradiça range na pausa a meio caminho
+  camada(t0 + dur * 0.36, dur * 0.18, { tipo: 'bandpass', freq: 260 * v, freq2: 340 * v, q: 4, envelope: [[0.3, 0.16], [0.7, 0.1]] });
+  // 3. o sopro largo da capa terminando de abrir
+  camada(t0 + dur * 0.45, dur * 0.45, { tipo: 'bandpass', freq: 600 * v, freq2: 1300 * v, q: 0.5, envelope: [[0.3, 0.12], [0.65, 0.3], [0.9, 0.1]] });
+  // 4. encosta: um baque grave e macio
+  const tp = t0 + dur * (dir > 0 ? 0.9 : 0.86);
+  camada(tp, 0.28, { tipo: 'lowpass', freq: 380, freq2: 120, q: 0.8, envelope: [[0.06, 1], [0.3, 0.3]] });
+  camada(tp + 0.01, 0.14, { tipo: 'bandpass', freq: 1100, q: 1, envelope: [[0.1, 0.18], [0.5, 0.04]] });
+}
+
+/**
+ * Fechamento (dir 1): as folhas voltam juntas num folhear rápido, a capa
+ * fecha com um baque e o livro pousa na mesa. Ao reabrir (dir -1), o inverso.
+ */
+export function tocarFechamento(dur = 5, dir = 1) {
+  if (!ligado || !ctx || ctx.state !== 'running') return;
+  const t0 = ctx.currentTime + 0.01;
+  if (dir > 0) {
+    // folhear: várias folhas passando em sequência
+    for (let i = 0; i < 6; i++) {
+      const t = t0 + dur * (0.03 + i * 0.045) + rnd(-0.03, 0.03), d = dur * 0.09, v = rnd(0.85, 1.2);
+      camada(t, d, { tipo: 'bandpass', freq: 1500 * v, freq2: 2600 * v, q: 0.7, envelope: [[0.3, 0.22], [0.7, 0.1]] });
+      estalos(t, d * 0.6, 1);
+    }
+    setTimeout(() => tocarCapa(dur * 0.36, 1), dur * 260); // coincide com o fechar da capa
+    setTimeout(() => { // pousa na mesa
+      if (!ctx || ctx.state !== 'running') return;
+      const tp = ctx.currentTime + 0.01;
+      camada(tp, 0.34, { tipo: 'lowpass', freq: 300, freq2: 90, q: 0.7, envelope: [[0.05, 0.8], [0.35, 0.2]] });
+      camada(tp, 0.2, { tipo: 'bandpass', freq: 700, q: 1.2, envelope: [[0.08, 0.2], [0.5, 0.05]] });
+    }, dur * 960);
+  } else {
+    tocarCapa(dur * 0.4, -1);
+  }
+}
+
 export function somLigado() { return ligado; }
 
 export function alternarSom(valor = !ligado) {
