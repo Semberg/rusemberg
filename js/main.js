@@ -150,8 +150,8 @@ const newsGrid = document.getElementById('newsGrid');
 const newsSource = document.getElementById('newsSource');
 
 const SOURCE_LABELS = {
-  'https://res.stj.jus.br/hrestp-c-portalp/RSS.xml': { name: 'STJ', url: 'https://www.stj.jus.br' },
-  'https://www.conjur.com.br/rss.xml': { name: 'Consultor Jurídico (Conjur)', url: 'https://www.conjur.com.br' },
+  'https://res.stj.jus.br/hrestp-c-portalp/RSS.xml': { name: 'do STJ', full: 'Superior Tribunal de Justiça (STJ)', url: 'https://www.stj.jus.br' },
+  'https://www.conjur.com.br/rss.xml': { name: 'do Conjur', full: 'Consultor Jurídico (Conjur)', url: 'https://www.conjur.com.br' },
 };
 
 function formatDate(iso) {
@@ -180,23 +180,28 @@ async function loadNews() {
       throw new Error('Feed vazio ou indisponível');
     }
     newsGrid.innerHTML = '';
+    let fonte = SOURCE_LABELS[data.source];
+    if (!fonte) { try { const u = new URL(data.source); fonte = { name: u.hostname.replace(/^www\./, ''), url: u.origin }; } catch { fonte = { name: 'da fonte', url: '#' }; } }
     data.items.slice(0, 5).forEach((item, i) => {
       const card = document.createElement('article');
       card.className = 'news-card reveal' + (i === 0 ? ' is-destaque' : '');
       card.style.setProperty('--d', `${i * .08}s`);
-      const summary = truncate(stripHtml(item.description || item.content || ''), i === 0 ? 220 : 120);
+      // muitas fontes repetem o título no resumo; nesse caso o resumo é omitido
+      const norm = (t) => t.toLowerCase().replace(/[^\p{L}\p{N}]+/gu, ' ').trim();
+      let summary = stripHtml(item.description || item.content || '');
+      if (!summary || norm(summary) === norm(item.title || '') || norm(summary).startsWith(norm(item.title || '')) && summary.length < (item.title || '').length + 40) summary = '';
+      summary = summary ? truncate(summary, i === 0 ? 220 : 120) : '';
       const link = /^https?:\/\//.test(item.link || '') ? item.link : '#';
       card.innerHTML = `
         <span class="news-date">${formatDate(item.pubDate)}</span>
         <h3>${escapeHtml(item.title)}</h3>
-        <p>${escapeHtml(summary)}</p>
-        <a class="news-link" href="${escapeHtml(link)}" target="_blank" rel="noopener">Ler notícia</a>
+        ${summary ? `<p>${escapeHtml(summary)}</p>` : ''}
+        <a class="news-link" href="${escapeHtml(link)}" target="_blank" rel="noopener">Ler no site ${escapeHtml(fonte.name)}</a>
       `;
       newsGrid.appendChild(card);
       io.observe(card);
     });
-    const src = SOURCE_LABELS[data.source] || SOURCE_LABELS['https://www.conjur.com.br/rss.xml'];
-    newsSource.innerHTML = `Fonte: <a href="${src.url}" target="_blank" rel="noopener">${src.name}</a>`;
+    newsSource.innerHTML = `Fonte: <a href="${escapeHtml(fonte.url)}" target="_blank" rel="noopener">${escapeHtml(fonte.full || fonte.name)}</a>`;
   } catch (err) {
     console.error('Falha ao carregar notícias:', err);
     newsGrid.innerHTML = `

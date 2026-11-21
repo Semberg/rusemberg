@@ -44,7 +44,10 @@ body {
   font-variant-numeric: lining-nums;
 }
 h1, h2, h3 { margin: 0 0 .5em; color: var(--heading); font-weight: 500; line-height: 1.08; }
-h2 { font-family: var(--serif); font-size: clamp(2.3rem, 4.6vw, 3.9rem); letter-spacing: -.005em; }
+h2 { font-family: var(--serif); font-size: clamp(2.3rem, 4.6vw, 3.9rem); letter-spacing: -.005em; text-wrap: balance; }
+h3, .lead { text-wrap: pretty; }
+.nobr { white-space: nowrap; }
+@media (max-width: 420px) { .titulo-areas .nobr { white-space: normal; } }
 h2 em, h1 em { font-style: italic; color: var(--gold-dark); }
 h3 { font-size: 1.12rem; font-weight: 600; }
 p { margin: 0 0 1em; }
@@ -106,7 +109,7 @@ ul, ol { list-style: none; margin: 0; padding: 0; }
 /* ==========================================================
    CENA DE ABERTURA
    ========================================================== */
-.cena { position: relative; height: 2100vh; background: var(--graphite); }
+.cena { position: relative; height: 2500vh; background: var(--graphite); }
 .cena-sticky {
   position: sticky; top: 0; height: 100vh; height: 100svh; overflow: hidden;
   color: #fff; --saida: 0;
@@ -261,8 +264,8 @@ ul, ol { list-style: none; margin: 0; padding: 0; }
 }
 .sobre-manifesto .w {
   --k: 0; display: inline-block; position: relative; color: var(--heading);
-  opacity: calc(.12 + var(--k) * .88); filter: blur(calc((1 - var(--k)) * 7px));
-  transform: translateY(calc((1 - var(--k)) * .55em)) rotate(calc((1 - var(--k)) * 2.5deg));
+  opacity: calc(.38 + var(--k) * .62); filter: blur(calc((1 - var(--k)) * 1.6px));
+  transform: translateY(calc((1 - var(--k)) * .32em)) rotate(calc((1 - var(--k)) * 1.2deg));
   transform-origin: left bottom; will-change: transform, opacity, filter;
 }
 .sobre-manifesto .w.dest { color: var(--gold-dark); font-style: italic; }
@@ -437,7 +440,7 @@ ul, ol { list-style: none; margin: 0; padding: 0; }
 .whats-float svg { width: 26px; height: 26px; }
 
 /* ---------- Entradas na rolagem ---------- */
-.reveal { opacity: 0; transform: translateY(28px); transition: opacity .9s ease, transform 1s var(--ease); transition-delay: var(--d, 0s); }
+.reveal { opacity: 0; transform: translateY(26px) scale(.985); transition: opacity .9s ease, transform 1.1s var(--ease); transition-delay: var(--d, 0s); }
 .reveal.in-view { opacity: 1; transform: none; }
 
 /* ---------- Movimento reduzido ---------- */
@@ -486,7 +489,7 @@ ul, ol { list-style: none; margin: 0; padding: 0; }
   .cap-lead { font-size: .86rem; max-width: none; }
   .cap-acoes .btn { flex: 1 1 auto; padding: 14px 16px; }
   .cap-dica { display: none; }
-  .cena { height: 1900vh; }
+  .cena { height: 2200vh; }
   .passo { left: 12px; right: 12px; width: auto; top: auto; bottom: 14px; max-height: 62%; padding: 18px 16px 16px;
     transform: translateY(calc((1 - var(--v, 0)) * 24px)); background: rgba(18,19,22,.9); -webkit-backdrop-filter: none; backdrop-filter: none; }
   .passo h2 { font-size: 1.7rem; }
@@ -533,3 +536,4 @@ ul, ol { list-style: none; margin: 0; padding: 0; }
   .contato-foto { aspect-ratio: 4 / 3; }
   .whats-float { right: 16px; bottom: 16px; width: 54px; height: 54px; }
 }
+.news-card .news-link { margin-top: auto; padding-top: 14px; }

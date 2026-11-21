@@ -469,6 +469,9 @@ async function iniciar() {
   // rápido ou arraste a barra de rolagem.
   const DUR_VIRADA = mobile() ? 1.9 : 2.3; // segundos por folha
   const viradas = paginas.map(() => ({ v: 0, de: 0, para: 0, t0: 0, dur: 1, dir: 1 }));
+  const ordemViraveis = paginas.map((m, i) => i).filter((i) => { const k = paginas[i].userData.idx; return k >= 0 && k < NC - 1; })
+    .sort((i, j) => paginas[i].userData.idx - paginas[j].userData.idx);
+  const opTexto = conteudos.map(() => 0); let tTextos = 0;
   const easeVirada = (t) => 0.5 - 0.5 * Math.cos(Math.PI * t); // sai do repouso e pousa sem tranco
   function atualizarViradas(p) {
     const ordem = paginas.map((m, i) => i).filter((i) => { const k = paginas[i].userData.idx; return k >= 0 && k < NC - 1; })
@@ -499,8 +502,8 @@ async function iniciar() {
   // ---------- abertura e fechamento do livro com tempo próprio ----------
   // Mesmo princípio das folhas: a rolagem só diz se o livro deve estar aberto
   // (ou fechado); o gesto em si tem duração fixa e acontece devagar.
-  const DUR_ABRE = mobile() ? 2.9 : 3.4;     // capa se erguendo, pausa e abrindo
-  const DUR_FECHA = mobile() ? 4.4 : 5.2;    // folhas voltam, capa fecha, livro pousa
+  const DUR_ABRE = mobile() ? 3.6 : 4.3;     // capa se erguendo, pausa e abrindo
+  const DUR_FECHA = mobile() ? 4.8 : 5.6;    // folhas voltam, capa fecha, livro pousa
   const P_ABRE = 0.09, P_FECHA = 0.862;
   const gesto = (ini) => ({ v: ini, de: ini, para: ini, t0: 0, dur: 1 });
   const abertura = gesto(0), fechamento = gesto(0);
@@ -678,23 +681,34 @@ async function iniciar() {
 
     // --- textos (HTML): entram, ficam totalmente visíveis e saem ---
     const vCapa = 1 - seg(p, 0.03, 0.06);
-    const vFim = seg(p, 0.935, 0.955) * (1 - seg(p, 0.992, 1.0));
+    const vFim = seg(p, 0.935, 0.955) * seg(fechamento.v, 0.7, 0.98) * (1 - seg(p, 0.992, 1.0));
     caps[0].style.opacity = vCapa.toFixed(3); caps[0].style.setProperty('--v', vCapa.toFixed(3));
     caps[0].classList.toggle('is-on', vCapa > 0.5);
     caps[1].style.opacity = vFim.toFixed(3); caps[1].style.setProperty('--v', vFim.toFixed(3));
     caps[1].classList.toggle('is-on', vFim > 0.5);
-    let ativa = 0;
+    // Os textos acompanham a página que está realmente aberta diante do
+    // visitante: nunca avançam mais rápido do que as folhas viram, então
+    // nenhuma etapa é pulada, nem descendo nem subindo.
+    let atual = -1;
+    if (abertura.v > 0.62 && fechamento.v < 0.04) {
+      atual = 0;
+      ordemViraveis.forEach((i) => { if (viradas[i].v > 0.5) atual++; });
+      atual = Math.min(atual, NC - 1);
+    }
+    const passoDt = Math.min(0.1, Math.max(0, tempo - tTextos)); tTextos = tempo;
+    const forcadoT = forcado !== null || window.__forceP !== undefined;
     passos.forEach((el, k) => {
-      const [a, b] = janelas[k];
-      const entra = k === 0 ? seg(p, a - JW * 0.06, a + JW * 0.06) : seg(p, a - JW * 0.22, a - JW * 0.06);
-      const saiT = k < NC - 1 ? seg(p, b - JW * 0.56, b - JW * 0.44) : seg(p, J1 - 0.012, J1 + 0.004);
-      const v = entra * (1 - saiT);
+      const alvoV = k === atual ? 1 : 0;
+      // a saída é mais rápida que a entrada, para os dois textos não se sobreporem
+      const taxa = alvoV > opTexto[k] ? 2.4 : 4.2;
+      opTexto[k] = forcadoT ? alvoV : opTexto[k] + (alvoV - opTexto[k]) * Math.min(1, passoDt * taxa);
+      const v = alvoV ? opTexto[k] * Math.pow(1 - Math.max(0, ...opTexto.map((o, j) => (j !== k ? o : 0))), 3) : opTexto[k];
       el.style.opacity = v.toFixed(3);
       el.style.setProperty('--v', v.toFixed(3));
       el.classList.toggle('is-on', v > 0.5);
-      if (p >= a) ativa = k + 1;
     });
-    if (p > 0.89) ativa = NC + 1;
+    let ativa = atual + 1;
+    if (fechamento.v > 0.04) ativa = NC + 1;
     marcas.forEach((li, i) => li.classList.toggle('is-on', i === ativa));
     if (marcas[0]) marcas[0].parentElement.style.opacity = (seg(p, 0.04, 0.08) * (1 - seg(p, 0.92, 0.95))).toFixed(3);
     barra.style.transform = `scaleX(${p.toFixed(4)})`;
