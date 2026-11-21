@@ -514,13 +514,13 @@ async function iniciar() {
     paginas.forEach((m) => {
       const k = m.userData.idx; const piv = m.userData.piv;
       let vira = 0;
-      if (k >= 0 && k < NC - 1) vira = eio(seg(p, janelas[k][1] - JW * 0.335, janelas[k][1] - JW * 0.02));
+      if (k >= 0 && k < NC - 1) { const t = seg(p, janelas[k][1] - JW * 0.56, janelas[k][1]); vira = 0.5 - 0.5 * Math.cos(Math.PI * t); }
       vira *= 1 - f3a; // no fechamento, as folhas voltam antes de a capa fechar
       piv.rotation.y = -vira * (2.64 - Math.max(k, 0) * 0.014);
       curvar(m, Math.sin(vira * Math.PI) * 1.7 + Math.sin(f3a * Math.PI) * (k >= 0 && k < NC - 1 ? 0.6 : 0));
       if (m.userData.uP) {
         const [a, b] = janelas[k];
-        m.userData.uP.value = k < NC - 1 ? seg(p, a + JW * 0.10, b - JW * 0.40) : seg(p, a + JW * 0.10, J1 - 0.03);
+        m.userData.uP.value = k < NC - 1 ? seg(p, a + JW * 0.02, b - JW * 0.58) : seg(p, a + JW * 0.10, J1 - 0.03);
       }
     });
 
@@ -570,8 +570,8 @@ async function iniciar() {
     let ativa = 0;
     passos.forEach((el, k) => {
       const [a, b] = janelas[k];
-      const entra = k === 0 ? seg(p, a - JW * 0.06, a + JW * 0.08) : seg(p, a + JW * 0.0, a + JW * 0.12);
-      const saiT = k < NC - 1 ? seg(p, b - JW * 0.36, b - JW * 0.26) : seg(p, J1 - 0.012, J1 + 0.004);
+      const entra = k === 0 ? seg(p, a - JW * 0.06, a + JW * 0.06) : seg(p, a - JW * 0.22, a - JW * 0.06);
+      const saiT = k < NC - 1 ? seg(p, b - JW * 0.56, b - JW * 0.44) : seg(p, J1 - 0.012, J1 + 0.004);
       const v = entra * (1 - saiT);
       el.style.opacity = v.toFixed(3);
       el.style.setProperty('--v', v.toFixed(3));
@@ -595,7 +595,7 @@ async function iniciar() {
     tempo += dt;
     mouse.x += (mouse.tx - mouse.x) * 0.05; mouse.y += (mouse.ty - mouse.y) * 0.05;
     const alvo = window.__forceP !== undefined ? window.__forceP : (forcado !== null ? +forcado : progresso());
-    pSuave += (alvo - pSuave) * (forcado !== null || window.__forceP !== undefined ? 1 : 0.2);
+    pSuave += (alvo - pSuave) * (forcado !== null || window.__forceP !== undefined ? 1 : 0.13);
     aplicar(pSuave);
     renderer.render(scene, camera);
     if (primeiro) {
