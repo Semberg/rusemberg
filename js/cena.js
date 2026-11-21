@@ -499,54 +499,30 @@ async function iniciar() {
     });
   }
 
-  // ---------- abertura e fechamento do livro com tempo próprio ----------
-  // Mesmo princípio das folhas: a rolagem só diz se o livro deve estar aberto
-  // (ou fechado); o gesto em si tem duração fixa e acontece devagar.
-  const DUR_ABRE = mobile() ? 3.6 : 4.3;     // capa se erguendo, pausa e abrindo
-  const DUR_FECHA = mobile() ? 4.8 : 5.6;    // folhas voltam, capa fecha, livro pousa
-  const P_ABRE = 0.09, P_FECHA = 0.862, P_FECHA_FIM = 0.93; // antes da mensagem final (.935)
-  const gesto = (ini) => ({ v: ini, de: ini, para: ini, t0: 0, dur: 1 });
-  const abertura = gesto(0), fechamento = gesto(0);
-  let gestoIniciado = false;
-  function conduzir(st, alvo, durTotal, aoMudar) {
-    if (alvo !== st.para) {
-      st.de = st.v; st.para = alvo; st.t0 = tempo;
-      st.dur = Math.max(0.5, durTotal * Math.abs(alvo - st.v));
-      if (gestoIniciado && Math.abs(alvo - st.v) > 0.25) aoMudar(st.dur, alvo > st.v ? 1 : -1);
-    }
-    st.v = lerp(st.de, st.para, clamp((tempo - st.t0) / st.dur));
-    return st.v;
+  // ---------- abertura e fechamento do livro, conduzidos pela rolagem ----------
+  // A capa e o fechamento seguem a barra de rolagem quadro a quadro (param
+  // quando ela para e voltam quando ela volta), mas com velocidade máxima:
+  // mesmo numa rolagem rápida, nunca andam mais depressa que o ritmo das folhas.
+  const DUR_ABRE = mobile() ? 2.6 : 3.0;     // tempo mínimo da abertura completa
+  const DUR_FECHA = mobile() ? 2.8 : 3.2;    // tempo mínimo do fechamento completo
+  const A0 = 0.075, A1 = 0.17, C0 = 0.79, C1 = 0.915;
+  const abertura = { v: 0 }, fechamento = { v: 0 };
+  let gestoIniciado = false, tGesto = 0;
+  function seguir(st, alvo, durTotal, dt, aoCruzar) {
+    const antes = st.v, passo = dt / durTotal;
+    st.v += Math.max(-passo, Math.min(passo, alvo - st.v));
+    if (antes < 0.04 && st.v >= 0.04) aoCruzar(durTotal, 1);
+    if (antes > 0.96 && st.v <= 0.96) aoCruzar(durTotal, -1);
   }
   function atualizarGestos(p, forcado) {
-    if (forcado) { // testes e links com ?p=: posição exata, sem animação
-      abertura.v = abertura.de = abertura.para = seg(p, 0.075, 0.17);
-      fechamento.v = fechamento.de = fechamento.para = seg(p, 0.86, 0.95);
-      return;
-    }
-    // ao carregar a página já no meio do livro, começa na posição certa e sem som
-    if (!gestoIniciado) {
-      abertura.v = abertura.de = abertura.para = p >= P_ABRE ? 1 : 0;
-      fechamento.v = fechamento.de = fechamento.para = p >= P_FECHA ? 1 : 0;
-      gestoIniciado = true;
+    const dt = Math.min(0.1, Math.max(0, tempo - tGesto)); tGesto = tempo;
+    const alvoA = seg(p, A0, A1), alvoF = seg(p, C0, C1);
+    if (forcado || !gestoIniciado) { // testes, ?p= e carregamento no meio do livro: posição exata, sem som
+      abertura.v = alvoA; fechamento.v = alvoF; gestoIniciado = true; return;
     }
     // o livro só fecha depois de aberto, e só reabre depois de levantado da mesa
-    const querAberto = p >= P_ABRE ? 1 : (fechamento.v > 0.02 ? abertura.para : 0);
-    conduzir(abertura, querAberto, DUR_ABRE, (d, dir) => tocarCapa(d, dir));
-    const querFechado = p >= P_FECHA && abertura.v > 0.98 ? 1 : (p < P_FECHA ? 0 : fechamento.para);
-    conduzir(fechamento, querFechado, DUR_FECHA, (d, dir) => tocarFechamento(d, dir));
-    // O fechamento também acompanha a rolagem: descendo, o livro nunca fica
-    // mais aberto do que a posição da página pede, então a sequência inteira
-    // (folhas voltando, capa fechando, livro pousando) aparece antes da saída
-    // da cena, mesmo rolando depressa. O tempo próprio completa o gesto
-    // quando o visitante para; subindo, a reabertura segue suave, sem saltos.
-    if (fechamento.para === 1) {
-      const pelaRolagem = seg(p, P_FECHA, P_FECHA_FIM);
-      const v = Math.max(fechamento.v, pelaRolagem);
-      if (v !== fechamento.v) {
-        fechamento.v = fechamento.de = v; fechamento.t0 = tempo;
-        fechamento.dur = Math.max(0.5, DUR_FECHA * Math.abs(fechamento.para - v));
-      }
-    }
+    seguir(abertura, fechamento.v > 0.001 ? Math.max(alvoA, abertura.v) : alvoA, DUR_ABRE, dt, (d, dir) => tocarCapa(d, dir));
+    seguir(fechamento, abertura.v > 0.98 ? alvoF : 0, DUR_FECHA, dt, (d, dir) => tocarFechamento(d, dir));
   }
 
   // ---------- botão de som ----------
@@ -556,9 +532,11 @@ async function iniciar() {
       const on = somLigado();
       botaoSom.setAttribute('aria-pressed', String(on));
       botaoSom.setAttribute('aria-label', on ? 'Desativar som das páginas' : 'Ativar som das páginas');
+      botaoSom.title = on ? 'Desativar som' : 'Ativar som';
+      const rot = botaoSom.querySelector('span'); if (rot) rot.textContent = on ? 'Som ligado' : 'Ativar som';
       botaoSom.classList.toggle('is-mudo', !on);
     };
-    botaoSom.addEventListener('click', () => { alternarSom().then(pintar); });
+    botaoSom.addEventListener('click', () => { alternarSom(); pintar(); });
     aoMudarSom(pintar);
     pintar();
   }
@@ -593,7 +571,7 @@ async function iniciar() {
   // ---------- linha do tempo (0 → 1) ----------
   // capa 0–.06 · abre .06–.13 · páginas .13–.84 (cinco janelas) · fecha e pousa .84–.93 · contato .93–1
   // capa 0–.045 · gira .045–.09 · capa abre devagar .075–.17 · páginas .17–.86 · fecha e pousa .86–.945 · contato .93–1
-  const J0 = 0.17, J1 = 0.86, JW = (J1 - J0) / NC;
+  const J0 = 0.17, J1 = 0.78, JW = (J1 - J0) / NC;
   const janelas = conteudos.map((_, k) => [J0 + k * JW, J0 + (k + 1) * JW]);
 
   function aplicar(p) {
@@ -610,7 +588,7 @@ async function iniciar() {
     const f3a = eio(seg(fF, 0.0, 0.34));  // folhas voltam juntas
     const f3b = eio(seg(fF, 0.26, 0.62)); // capa fecha
     const f3c = eio(seg(fF, 0.5, 1.0));   // pousa na mesa
-    const f4 = eio(seg(p, 0.972, 1.0));    // aproximação final
+    const f4 = eio(seg(p, 0.955, 1.0));    // aproximação final
     const fBranco = seg(p, 0.988, 1.0);
 
     // no celular o objeto sobe para dar espaço ao painel de texto
@@ -672,7 +650,7 @@ async function iniciar() {
     key.target.position.copy(pasta.position);
     key.position.set(-0.9 + Math.sin(tempo * 0.35) * 0.45 * (1 - f3c), 1.4, 1.5);
     key.intensity = lerp(26, 18, f3c);
-    const acende = eio(seg(p, 0.925, 0.95)) * eio(seg(fF, 0.75, 1.0));
+    const acende = eio(seg(fF, 0.75, 1.0));
     warm.intensity = 3.2 * acende + Math.sin(acende * Math.PI) * 0.8;
     const pico = Math.sin(abreSuave * Math.PI);
     brilho.intensity = (pico * 1.8 + abreSuave * 0.25) * (1 - f3b);
@@ -695,7 +673,7 @@ async function iniciar() {
 
     // --- textos (HTML): entram, ficam totalmente visíveis e saem ---
     const vCapa = 1 - seg(p, 0.03, 0.06);
-    const vFim = seg(p, 0.935, 0.955) * seg(fechamento.v, 0.7, 0.98) * (1 - seg(p, 0.992, 1.0));
+    const vFim = seg(p, 0.92, 0.945) * seg(fechamento.v, 0.8, 0.99) * (1 - seg(p, 0.992, 1.0));
     caps[0].style.opacity = vCapa.toFixed(3); caps[0].style.setProperty('--v', vCapa.toFixed(3));
     caps[0].classList.toggle('is-on', vCapa > 0.5);
     caps[1].style.opacity = vFim.toFixed(3); caps[1].style.setProperty('--v', vFim.toFixed(3));
@@ -724,7 +702,7 @@ async function iniciar() {
     let ativa = atual + 1;
     if (fechamento.v > 0.04) ativa = NC + 1;
     marcas.forEach((li, i) => li.classList.toggle('is-on', i === ativa));
-    if (marcas[0]) marcas[0].parentElement.style.opacity = (seg(p, 0.04, 0.08) * (1 - seg(p, 0.92, 0.95))).toFixed(3);
+    if (marcas[0]) marcas[0].parentElement.style.opacity = (seg(p, 0.04, 0.08) * (1 - seg(p, 0.91, 0.94))).toFixed(3);
     barra.style.transform = `scaleX(${p.toFixed(4)})`;
   }
 

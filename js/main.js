@@ -26,7 +26,7 @@ header.addEventListener('click', (e) => {
 });
 
 /* ---------- Links para etapas dentro da abertura ---------- */
-const alvosCena = { '#apresentacao': 0.23, '#areas-livro': 0.74, '#formacao': 0.83, '#topo': 0 };
+const alvosCena = { '#apresentacao': 0.2, '#areas-livro': 0.6, '#formacao': 0.7, '#topo': 0 };
 document.addEventListener('click', (e) => {
   const a = e.target.closest('a[href^="#"]');
   if (!a || !(a.getAttribute('href') in alvosCena) || !cena) return;
@@ -109,6 +109,39 @@ const io = new IntersectionObserver((entries) => {
   });
 }, { threshold: 0.15, rootMargin: '0px 0px -60px 0px' });
 document.querySelectorAll('.reveal, .revela-img').forEach((el) => io.observe(el));
+
+/* ---------- Títulos: as palavras sobem de dentro de uma máscara ---------- */
+function dividirPalavras(el) {
+  let i = 0;
+  const visitar = (no) => {
+    [...no.childNodes].forEach((n) => {
+      if (n.nodeType === 3) {
+        const frag = document.createDocumentFragment();
+        n.textContent.split(/(\s+)/).forEach((parte) => {
+          if (!parte) return;
+          if (/^\s+$/.test(parte)) { frag.appendChild(document.createTextNode(' ')); return; }
+          const pal = document.createElement('span'); pal.className = 'pal';
+          const dentro = document.createElement('span'); dentro.textContent = parte; dentro.style.setProperty('--i', i++);
+          pal.appendChild(dentro); frag.appendChild(pal);
+        });
+        n.replaceWith(frag);
+      } else if (n.nodeType === 1 && n.tagName !== 'BR') visitar(n);
+    });
+  };
+  visitar(el);
+}
+if (!reduceMotion) {
+  document.querySelectorAll('.section-head h2, .sobre-content h2, .contato h2').forEach((h) => {
+    h.setAttribute('aria-label', h.textContent.replace(/\s+/g, ' ').trim());
+    dividirPalavras(h); h.classList.add('h-anim'); io.observe(h);
+  });
+  // listas entram item a item
+  document.querySelectorAll('.areas-lista, .contato-list, .publico-card ul, .sobre-bio').forEach((lista) => {
+    lista.classList.add('escalonada');
+    [...lista.children].forEach((el, i) => el.style.setProperty('--i', i));
+    io.observe(lista);
+  });
+}
 
 /* ---------- Áreas de atuação ---------- */
 const areas = [...document.querySelectorAll('.area')];

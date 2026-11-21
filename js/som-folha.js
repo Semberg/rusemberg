@@ -7,8 +7,16 @@
 // ==========================================================
 const CHAVE = 'rf-som-folha';
 let ctx = null, saida = null, ruido = null;
-let ligado = true;
-try { ligado = localStorage.getItem(CHAVE) !== 'off'; } catch { /* sem armazenamento */ }
+// O som começa desligado: os navegadores só permitem áudio depois de uma
+// ação clara do visitante, e o botão nunca deve indicar "ligado" sem tocar.
+// Quem ativou o som numa visita anterior o terá de volta no primeiro clique
+// ou toque em qualquer ponto da página.
+let ligado = false;
+let preferencia = false;
+try { preferencia = localStorage.getItem(CHAVE) === 'on'; } catch { /* sem armazenamento */ }
+const ouvintes = new Set();
+const avisar = () => ouvintes.forEach((f) => f(somLigado()));
+export function aoMudarSom(f) { ouvintes.add(f); }
 
 function preparar() {
   if (ctx) return ctx;
@@ -34,15 +42,23 @@ function preparar() {
   return ctx;
 }
 
-// libera o áudio no primeiro gesto do visitante
-function desbloquear(ev) {
-  if (!ligado) return;
-  // o clique no próprio botão de som é tratado por alternarSom()
-  if (ev && ev.target && ev.target.closest && ev.target.closest('#cenaSom')) return;
+// liga o áudio dentro do próprio gesto do visitante (exigência dos navegadores)
+function ligar() {
   const c = preparar();
-  if (c && c.state === 'suspended') c.resume().then(avisar).catch(() => {});
+  if (!c) return false;
+  ligado = true;
+  if (c.state !== 'running') c.resume().then(avisar).catch(() => {});
+  avisar();
+  return true;
 }
-['pointerdown', 'keydown', 'touchend'].forEach((ev) => window.addEventListener(ev, desbloquear, { passive: true }));
+// retoma a preferência de uma visita anterior no primeiro gesto, exceto
+// quando o gesto é o próprio botão de som (ele cuida disso sozinho)
+function retomarPreferencia(e) {
+  if (!preferencia || ligado) return;
+  if (e && e.target && e.target.closest && e.target.closest('#cenaSom')) return;
+  ligar();
+}
+['pointerdown', 'keydown', 'touchend'].forEach((ev) => window.addEventListener(ev, retomarPreferencia, { passive: true }));
 
 const rnd = (a, b) => a + Math.random() * (b - a);
 
@@ -135,28 +151,28 @@ export function tocarFechamento(dur = 5, dir = 1) {
   }
 }
 
-// "tocando" = a preferência está ligada E o navegador já liberou o áudio.
-// Antes do primeiro gesto do visitante a preferência pode estar ligada sem
-// que nenhum som saia; o botão deve mostrar "Ativar som" nesse caso.
-export function somLigado() { return ligado && !!ctx && ctx.state === 'running'; }
+export function somLigado() { return ligado && !!ctx; }
 
-const ouvintes = new Set();
-export function aoMudarSom(fn) { ouvintes.add(fn); }
-function avisar() { ouvintes.forEach((fn) => { try { fn(somLigado()); } catch { /* ignora */ } }); }
-
-function gravar() { try { localStorage.setItem(CHAVE, ligado ? 'on' : 'off'); } catch { /* sem armazenamento */ } }
-
-// Um único clique no botão: se não está tocando, liga e libera o áudio na
-// hora (o clique é o gesto que o navegador exige); se está tocando, desliga.
-export async function alternarSom() {
-  if (somLigado()) {
-    ligado = false; gravar();
-    if (ctx) await ctx.suspend().catch(() => {});
+/** Um clique: se estiver mudo, liga e toca na hora; se estiver tocando, desliga. */
+export function alternarSom() {
+  if (!somLigado()) {
+    if (ligar()) confirmar();
   } else {
-    ligado = true; gravar();
-    const c = preparar();
-    if (c && c.state !== 'running') await c.resume().catch(() => {});
+    ligado = false;
+    if (ctx && ctx.state === 'running') ctx.suspend().catch(() => {});
+    avisar();
   }
-  avisar();
+  preferencia = somLigado();
+  try { localStorage.setItem(CHAVE, preferencia ? 'on' : 'off'); } catch { /* sem armazenamento */ }
   return somLigado();
 }
+
+// pequeno roçar de papel, para o visitante ouvir que o som foi ativado
+function confirmar() {
+  const tocar = () => {
+    const t0 = ctx.currentTime + 0.02;
+    camada(t0, 0.32, { tipo: 'bandpass', freq: 1400, freq2: 2400, q: 0.6, envelope: [[0.3, 0.2], [0.7, 0.08]] });
+  };
+  if (ctx.state === 'running') tocar(); else ctx.resume().then(tocar).catch(() => {});
+}
+window.__som = () => ({ ligado, estado: ctx ? ctx.state : 'sem-contexto' });
