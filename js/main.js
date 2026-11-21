@@ -26,7 +26,7 @@ header.addEventListener('click', (e) => {
 });
 
 /* ---------- Links para etapas dentro da abertura ---------- */
-const alvosCena = { '#apresentacao': 0.205, '#formacao': 0.77, '#topo': 0 };
+const alvosCena = { '#apresentacao': 0.23, '#areas-livro': 0.74, '#formacao': 0.83, '#topo': 0 };
 document.addEventListener('click', (e) => {
   const a = e.target.closest('a[href^="#"]');
   if (!a || !(a.getAttribute('href') in alvosCena) || !cena) return;

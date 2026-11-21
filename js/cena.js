@@ -131,7 +131,7 @@ async function iniciar() {
   // folhas
   const paginas = [];
   const pagW = W - 0.028, pagH = H - 0.03;
-  const conteudos = ['apresentacao', 'analise', 'estrategia', 'orientacao', 'formacao'];
+  const conteudos = ['apresentacao', 'analise', 'estrategia', 'orientacao', 'areas', 'formacao'];
   const NC = conteudos.length;
   const NFOLHAS = NC + 2;
   for (let i = 0; i < NFOLHAS; i++) {
@@ -257,7 +257,7 @@ async function iniciar() {
     g.fillStyle = goldC; g.fillText('ADVOGADO', M, 128);
     g.fillStyle = goldC; g.fillRect(M, 152, c.width - M * 2, 2);
     g.letterSpacing = '0px';
-    const titulo = { apresentacao: 'Apresentação', analise: 'Análise', estrategia: 'Estratégia', orientacao: 'Orientação', formacao: 'Formação' }[tipo] || '';
+    const titulo = { apresentacao: 'Apresentação', analise: 'Análise', estrategia: 'Estratégia', orientacao: 'Orientação', areas: 'Áreas de atuação', formacao: 'Formação' }[tipo] || '';
     g.fillStyle = ink + '.92)'; g.font = '500 92px CormorantCena, serif'; g.fillText(titulo, M, 262);
     const linha = (y, w, a = .16) => { g.fillStyle = ink + a + ')'; g.fillRect(M, y, w, 9); };
     if (tipo === 'analise') {
@@ -292,6 +292,15 @@ async function iniciar() {
       g.fillStyle = goldC; g.font = '500 24px BarlowCena, sans-serif'; g.letterSpacing = '5px'; g.fillText('ADVOGADO · OAB/PB 30.070', M, 404); g.letterSpacing = '0px';
       let y = 520; for (let i = 0; i < 11; i++) { linha(y, (c.width - M * 2) * (i % 5 === 4 ? .5 : .78 + ((i * 29) % 15) / 100)); y += 46; if (i === 5) y += 30; }
       linha(1110, 300, .3);
+    } else if (tipo === 'areas') {
+      let y = 330;
+      for (let i = 0; i < 6; i++) {
+        g.strokeStyle = goldC; g.lineWidth = 3; g.strokeRect(M, y - 24, 40, 40);
+        g.fillStyle = goldC; g.font = '500 24px BarlowCena, sans-serif'; g.fillText(String(i + 1).padStart(2, '0'), M + 6, y + 4);
+        g.fillStyle = ink + '.24)'; g.fillRect(M + 64, y - 16, (c.width - M * 2 - 64) * (.42 + (i % 3) * .07), 12);
+        g.fillStyle = ink + '.1)'; g.fillRect(M + 64, y + 12, (c.width - M * 2 - 64) * .72, 8);
+        y += 116;
+      }
     } else if (tipo === 'formacao') {
       let y = 340;
       for (let i = 0; i < 6; i++) {
@@ -370,7 +379,8 @@ async function iniciar() {
 
   // ---------- linha do tempo (0 → 1) ----------
   // capa 0–.06 · abre .06–.13 · páginas .13–.84 (cinco janelas) · fecha e pousa .84–.93 · contato .93–1
-  const J0 = 0.13, J1 = 0.84, JW = (J1 - J0) / NC;
+  // capa 0–.045 · gira .045–.09 · capa abre devagar .075–.17 · páginas .17–.86 · fecha e pousa .86–.945 · contato .93–1
+  const J0 = 0.17, J1 = 0.86, JW = (J1 - J0) / NC;
   const janelas = conteudos.map((_, k) => [J0 + k * JW, J0 + (k + 1) * JW]);
 
   function aplicar(p) {
@@ -378,16 +388,18 @@ async function iniciar() {
     const dist = Math.max(1.2, 0.40 / (2 * Math.tan(THREE.MathUtils.degToRad(15)) * asp));
     const dist0 = mob ? Math.max(dist, 1.9) : dist;
 
-    const f1 = eio(seg(p, 0.06, 0.13));   // capa se abre
+    const f1 = eio(seg(p, 0.045, 0.095));   // pasta gira de frente
+    const fAbre = seg(p, 0.075, 0.17);      // capa abre em ritmo lento
+    const abreSuave = fAbre * fAbre * (3 - 2 * fAbre);
     const fPag = seg(p, J0, J1);
-    const f3a = eio(seg(p, 0.835, 0.865)); // folhas voltam
-    const f3b = eio(seg(p, 0.855, 0.885)); // capa fecha
-    const f3c = eio(seg(p, 0.865, 0.93));  // pousa na mesa
-    const f4 = eio(seg(p, 0.965, 1.0));    // aproximação final
-    const fBranco = seg(p, 0.985, 1.0);
+    const f3a = eio(seg(p, 0.86, 0.89)); // folhas voltam
+    const f3b = eio(seg(p, 0.88, 0.91)); // capa fecha
+    const f3c = eio(seg(p, 0.89, 0.95));  // pousa na mesa
+    const f4 = eio(seg(p, 0.972, 1.0));    // aproximação final
+    const fBranco = seg(p, 0.988, 1.0);
 
     // no celular o objeto sobe para dar espaço ao painel de texto
-    const subirMob = mob ? eio(seg(p, 0.08, 0.15)) * (1 - f3c) : 0;
+    const subirMob = mob ? eio(seg(p, 0.12, 0.19)) * (1 - f3c) : 0;
     const yMob = mob ? lerp(-0.015, 0, f1) : 0;
 
     // --- pasta ---
@@ -402,7 +414,9 @@ async function iniciar() {
     rot = mix3(rot, [-Math.PI / 2, 0, 0.18], f3c);
     pos = mix3(pos, [0, -0.2 + T / 2 + 0.0005, 0], f3c);
     pasta.rotation.set(...rot); pasta.position.set(...pos);
-    dobradica.rotation.y = -f1 * (1 - f3b) * 2.75;
+    // a capa se ergue, faz uma breve pausa a meio caminho e termina de abrir
+    const curvaCapa = abreSuave < .5 ? eio(abreSuave * 2) * .45 : .45 + eio((abreSuave - .5) * 2) * .55;
+    dobradica.rotation.y = -curvaCapa * (1 - f3b) * 2.75;
 
     // --- folhas: cada uma sobe, permanece em leitura e recua para a sua camada ---
     const foco = mob ? [-0.065, 0.01, 0.17] : [-0.16, 0.0, 0.24];
@@ -454,8 +468,8 @@ async function iniciar() {
     sticky.style.setProperty('--saida', fBranco.toFixed(3));
 
     // --- textos (HTML): entram, ficam totalmente visíveis e saem ---
-    const vCapa = 1 - seg(p, 0.035, 0.075);
-    const vFim = seg(p, 0.915, 0.94) * (1 - seg(p, 0.99, 1.0));
+    const vCapa = 1 - seg(p, 0.03, 0.06);
+    const vFim = seg(p, 0.935, 0.955) * (1 - seg(p, 0.992, 1.0));
     caps[0].style.opacity = vCapa.toFixed(3); caps[0].style.setProperty('--v', vCapa.toFixed(3));
     caps[0].classList.toggle('is-on', vCapa > 0.5);
     caps[1].style.opacity = vFim.toFixed(3); caps[1].style.setProperty('--v', vFim.toFixed(3));
@@ -464,16 +478,16 @@ async function iniciar() {
     passos.forEach((el, k) => {
       const [a, b] = janelas[k];
       const entra = seg(p, a + JW * 0.08, a + JW * 0.24);
-      const saiT = k < NC - 1 ? seg(p, b - JW * 0.06, b + JW * 0.06) : seg(p, 0.826, 0.842);
+      const saiT = k < NC - 1 ? seg(p, b - JW * 0.06, b + JW * 0.06) : seg(p, J1 - 0.012, J1 + 0.004);
       const v = entra * (1 - saiT);
       el.style.opacity = v.toFixed(3);
       el.style.setProperty('--v', v.toFixed(3));
       el.classList.toggle('is-on', v > 0.5);
       if (p >= a) ativa = k + 1;
     });
-    if (p > 0.865) ativa = NC + 1;
+    if (p > 0.89) ativa = NC + 1;
     marcas.forEach((li, i) => li.classList.toggle('is-on', i === ativa));
-    if (marcas[0]) marcas[0].parentElement.style.opacity = (seg(p, 0.05, 0.09) * (1 - seg(p, 0.9, 0.93))).toFixed(3);
+    if (marcas[0]) marcas[0].parentElement.style.opacity = (seg(p, 0.04, 0.08) * (1 - seg(p, 0.92, 0.95))).toFixed(3);
     barra.style.transform = `scaleX(${p.toFixed(4)})`;
   }
 
