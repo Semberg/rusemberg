@@ -514,13 +514,13 @@ async function iniciar() {
     paginas.forEach((m) => {
       const k = m.userData.idx; const piv = m.userData.piv;
       let vira = 0;
-      if (k >= 0 && k < NC - 1) vira = eio(seg(p, janelas[k][1] - JW * 0.306, janelas[k][1] - JW * 0.02));
+      if (k >= 0 && k < NC - 1) vira = eio(seg(p, janelas[k][1] - JW * 0.335, janelas[k][1] - JW * 0.02));
       vira *= 1 - f3a; // no fechamento, as folhas voltam antes de a capa fechar
       piv.rotation.y = -vira * (2.64 - Math.max(k, 0) * 0.014);
       curvar(m, Math.sin(vira * Math.PI) * 1.7 + Math.sin(f3a * Math.PI) * (k >= 0 && k < NC - 1 ? 0.6 : 0));
       if (m.userData.uP) {
         const [a, b] = janelas[k];
-        m.userData.uP.value = k < NC - 1 ? seg(p, a + JW * 0.10, b - JW * 0.37) : seg(p, a + JW * 0.10, J1 - 0.03);
+        m.userData.uP.value = k < NC - 1 ? seg(p, a + JW * 0.10, b - JW * 0.40) : seg(p, a + JW * 0.10, J1 - 0.03);
       }
     });
 
@@ -571,7 +571,7 @@ async function iniciar() {
     passos.forEach((el, k) => {
       const [a, b] = janelas[k];
       const entra = k === 0 ? seg(p, a - JW * 0.06, a + JW * 0.08) : seg(p, a + JW * 0.0, a + JW * 0.12);
-      const saiT = k < NC - 1 ? seg(p, b - JW * 0.33, b - JW * 0.23) : seg(p, J1 - 0.012, J1 + 0.004);
+      const saiT = k < NC - 1 ? seg(p, b - JW * 0.36, b - JW * 0.26) : seg(p, J1 - 0.012, J1 + 0.004);
       const v = entra * (1 - saiT);
       el.style.opacity = v.toFixed(3);
       el.style.setProperty('--v', v.toFixed(3));
