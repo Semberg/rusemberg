@@ -35,10 +35,12 @@ function preparar() {
 }
 
 // libera o áudio no primeiro gesto do visitante
-function desbloquear() {
+function desbloquear(ev) {
   if (!ligado) return;
+  // o clique no próprio botão de som é tratado por alternarSom()
+  if (ev && ev.target && ev.target.closest && ev.target.closest('#cenaSom')) return;
   const c = preparar();
-  if (c && c.state === 'suspended') c.resume().catch(() => {});
+  if (c && c.state === 'suspended') c.resume().then(avisar).catch(() => {});
 }
 ['pointerdown', 'keydown', 'touchend'].forEach((ev) => window.addEventListener(ev, desbloquear, { passive: true }));
 
@@ -133,12 +135,28 @@ export function tocarFechamento(dur = 5, dir = 1) {
   }
 }
 
-export function somLigado() { return ligado; }
+// "tocando" = a preferência está ligada E o navegador já liberou o áudio.
+// Antes do primeiro gesto do visitante a preferência pode estar ligada sem
+// que nenhum som saia; o botão deve mostrar "Ativar som" nesse caso.
+export function somLigado() { return ligado && !!ctx && ctx.state === 'running'; }
 
-export function alternarSom(valor = !ligado) {
-  ligado = valor;
-  try { localStorage.setItem(CHAVE, ligado ? 'on' : 'off'); } catch { /* sem armazenamento */ }
-  if (ligado) desbloquear();
-  else if (ctx && ctx.state === 'running') ctx.suspend().catch(() => {});
-  return ligado;
+const ouvintes = new Set();
+export function aoMudarSom(fn) { ouvintes.add(fn); }
+function avisar() { ouvintes.forEach((fn) => { try { fn(somLigado()); } catch { /* ignora */ } }); }
+
+function gravar() { try { localStorage.setItem(CHAVE, ligado ? 'on' : 'off'); } catch { /* sem armazenamento */ } }
+
+// Um único clique no botão: se não está tocando, liga e libera o áudio na
+// hora (o clique é o gesto que o navegador exige); se está tocando, desliga.
+export async function alternarSom() {
+  if (somLigado()) {
+    ligado = false; gravar();
+    if (ctx) await ctx.suspend().catch(() => {});
+  } else {
+    ligado = true; gravar();
+    const c = preparar();
+    if (c && c.state !== 'running') await c.resume().catch(() => {});
+  }
+  avisar();
+  return somLigado();
 }

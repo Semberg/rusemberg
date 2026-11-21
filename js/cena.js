@@ -10,7 +10,7 @@ import { RoomEnvironment } from '../assets/vendor/three/addons/environments/Room
 import { RoundedBoxGeometry } from '../assets/vendor/three/addons/geometries/RoundedBoxGeometry.js';
 import { GLTFLoader } from '../assets/vendor/three/addons/loaders/GLTFLoader.js';
 import { MeshoptDecoder } from '../assets/vendor/three/addons/meshopt_decoder.module.js';
-import { tocarVirada, tocarCapa, tocarFechamento, alternarSom, somLigado } from './som-folha.js';
+import { tocarVirada, tocarCapa, tocarFechamento, alternarSom, somLigado, aoMudarSom } from './som-folha.js';
 
 const cena = document.querySelector('.cena');
 const sticky = document.getElementById('cenaSticky');
@@ -504,7 +504,7 @@ async function iniciar() {
   // (ou fechado); o gesto em si tem duração fixa e acontece devagar.
   const DUR_ABRE = mobile() ? 3.6 : 4.3;     // capa se erguendo, pausa e abrindo
   const DUR_FECHA = mobile() ? 4.8 : 5.6;    // folhas voltam, capa fecha, livro pousa
-  const P_ABRE = 0.09, P_FECHA = 0.862;
+  const P_ABRE = 0.09, P_FECHA = 0.862, P_FECHA_FIM = 0.93; // antes da mensagem final (.935)
   const gesto = (ini) => ({ v: ini, de: ini, para: ini, t0: 0, dur: 1 });
   const abertura = gesto(0), fechamento = gesto(0);
   let gestoIniciado = false;
@@ -534,6 +534,19 @@ async function iniciar() {
     conduzir(abertura, querAberto, DUR_ABRE, (d, dir) => tocarCapa(d, dir));
     const querFechado = p >= P_FECHA && abertura.v > 0.98 ? 1 : (p < P_FECHA ? 0 : fechamento.para);
     conduzir(fechamento, querFechado, DUR_FECHA, (d, dir) => tocarFechamento(d, dir));
+    // O fechamento também acompanha a rolagem: descendo, o livro nunca fica
+    // mais aberto do que a posição da página pede, então a sequência inteira
+    // (folhas voltando, capa fechando, livro pousando) aparece antes da saída
+    // da cena, mesmo rolando depressa. O tempo próprio completa o gesto
+    // quando o visitante para; subindo, a reabertura segue suave, sem saltos.
+    if (fechamento.para === 1) {
+      const pelaRolagem = seg(p, P_FECHA, P_FECHA_FIM);
+      const v = Math.max(fechamento.v, pelaRolagem);
+      if (v !== fechamento.v) {
+        fechamento.v = fechamento.de = v; fechamento.t0 = tempo;
+        fechamento.dur = Math.max(0.5, DUR_FECHA * Math.abs(fechamento.para - v));
+      }
+    }
   }
 
   // ---------- botão de som ----------
@@ -545,7 +558,8 @@ async function iniciar() {
       botaoSom.setAttribute('aria-label', on ? 'Desativar som das páginas' : 'Ativar som das páginas');
       botaoSom.classList.toggle('is-mudo', !on);
     };
-    botaoSom.addEventListener('click', () => { alternarSom(); pintar(); });
+    botaoSom.addEventListener('click', () => { alternarSom().then(pintar); });
+    aoMudarSom(pintar);
     pintar();
   }
 
