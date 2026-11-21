@@ -488,7 +488,7 @@ async function iniciar() {
     tempo += dt;
     mouse.x += (mouse.tx - mouse.x) * 0.05; mouse.y += (mouse.ty - mouse.y) * 0.05;
     const alvo = window.__forceP !== undefined ? window.__forceP : (forcado !== null ? +forcado : progresso());
-    pSuave += (alvo - pSuave) * (forcado !== null || window.__forceP !== undefined ? 1 : 0.12);
+    pSuave += (alvo - pSuave) * (forcado !== null || window.__forceP !== undefined ? 1 : 0.2);
     aplicar(pSuave);
     renderer.render(scene, camera);
     if (primeiro) {
