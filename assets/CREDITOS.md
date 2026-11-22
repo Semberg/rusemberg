@@ -1,6 +1,6 @@
 # Créditos e licenças dos materiais visuais
 
-Nenhuma imagem retrata clientes, processos ou pessoas reais do escritório.
+Nenhuma imagem retrata clientes ou processos. As únicas fotos de pessoa são do próprio advogado, extraídas das publicações do perfil @rusembergadv, sem os textos.
 
 ## Fotografias (Unsplash License: uso comercial livre, sem atribuição obrigatória)
 - assets/img/hero.webp: Matthew Michael (@matthew_michael), biblioteca. unsplash.com/photos/LmcjRvuMgnU
@@ -28,3 +28,7 @@ Nenhuma imagem retrata clientes, processos ou pessoas reais do escritório.
 
 ## Fontes
 - Cormorant Garamond e Barlow: SIL Open Font License, servidas localmente.
+
+## Fotos do advogado
+- assets/img/rusemberg-retrato.webp: retrato publicado no Instagram @rusembergadv, recortado sem os textos da arte e com ajuste de cor.
+- assets/img/rusemberg-palestra.webp: foto do workshop "A arte da gestão", publicada no Instagram @rusembergadv.
