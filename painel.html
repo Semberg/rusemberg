@@ -269,7 +269,7 @@
     barras(d.paginas, 'paginas', function (n) { return n === '/' ? 'Página inicial' : n.replace(/^\//, ''); });
     barras(d.ebooks_baixados, 'ebooksTop');
     barras(d.areas_interesse, 'interesse');
-    barras([{ nome: 'WhatsApp', n: c.whatsapp }, { nome: 'Formulário', n: c.formulario }, { nome: 'Telefone', n: c.telefone }, { nome: 'E-mail', n: c.email }], 'contatos');
+    barras([{ nome: 'WhatsApp', n: c.whatsapp }, { nome: 'Formulário', n: c.formulario }, { nome: 'Telefone', n: c.telefone }, { nome: 'E-mail', n: c.email }, { nome: 'Instagram (clique no perfil)', n: c.instagram }], 'contatos');
     var l = d.livro || {};
     var etapas = [['Visitaram o site', d.visitas], ['Abriram o livro', l.inicio], ['Chegaram à metade', l.meio], ['Folhearam até o fim', l.fim], ['Iniciaram contato', totC]];
     $('funil').innerHTML = etapas.map(function (e) { return '<div><span>' + e[0] + '</span><strong>' + fmt(e[1]) + (d.visitas ? ' <small style="color:#6b6a66;font-weight:400">(' + Math.round(100 * (e[1] || 0) / d.visitas) + '%)</small>' : '') + '</strong></div>'; }).join('');

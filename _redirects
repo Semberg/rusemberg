@@ -1,0 +1,9 @@
+# Links rastreáveis: cada canal leva ao site com a origem marcada, para o painel saber por onde a visita chegou
+/ig            /?utm_source=instagram           302
+/instagram     /?utm_source=instagram           302
+/google        /?utm_source=google-perfil       302
+/maps          /?utm_source=google-perfil       302
+/wa            /?utm_source=whatsapp            302
+/whatsapp      /?utm_source=whatsapp            302
+/cartao        /?utm_source=cartao-visita       302
+/qr            /?utm_source=qrcode              302

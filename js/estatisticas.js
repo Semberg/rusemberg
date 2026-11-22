@@ -76,6 +76,7 @@
     var href = a.getAttribute('href') || '';
     var sec = a.closest('section[id], header, footer'); var onde = sec ? (sec.id || sec.tagName.toLowerCase()) : '';
     if (href.indexOf('wa.me') >= 0) enviar('whatsapp', onde);
+    else if (href.indexOf('instagram.com') >= 0) enviar('instagram', onde);
     else if (href.indexOf('tel:') === 0) enviar('telefone', onde);
     else if (href.indexOf('mailto:') === 0) enviar('email', onde);
   }, true);
