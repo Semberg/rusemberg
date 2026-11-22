@@ -90,8 +90,8 @@
 <link rel="preload" href="assets/img/cena-poster.webp" as="image" media="(min-width: 761px)">
 <link rel="preload" href="assets/img/cena-poster-mobile.webp" as="image" media="(max-width: 760px)">
 
-<link rel="stylesheet" href="css/style.css?v=20261122b">
-<link rel="stylesheet" href="css/ebooks.css?v=20261122b">
+<link rel="stylesheet" href="css/style.css?v=20261122c">
+<link rel="stylesheet" href="css/ebooks.css?v=20261122c">
 
 <script type="importmap">
 { "imports": { "three": "./assets/vendor/three/three.module.min.js" } }
@@ -529,6 +529,32 @@
           <span class="contato-valor"><span>Segunda a sexta, 9h às 18h · presencial e online</span> <span class="status-atend" id="statusAtend" hidden></span></span>
         </li>
       </ul>
+
+      <form class="contato-form reveal" id="contatoForm" novalidate>
+        <p class="cf-titulo">Envie sua mensagem</p>
+        <p class="cf-sub">A mensagem fica registrada no escritório e o WhatsApp abre com o texto pronto; basta tocar em enviar.</p>
+        <div class="cf-linha">
+          <label class="cf-campo"><span>Nome *</span><input type="text" name="nome" autocomplete="name" maxlength="120" required></label>
+          <label class="cf-campo"><span>WhatsApp ou telefone</span><input type="tel" name="telefone" autocomplete="tel" inputmode="tel" maxlength="20" placeholder="(83) 9 0000-0000"></label>
+        </div>
+        <div class="cf-linha">
+          <label class="cf-campo"><span>E-mail</span><input type="email" name="email" autocomplete="email" maxlength="254"></label>
+          <label class="cf-campo"><span>Assunto</span>
+            <select name="assunto">
+              <option value="">Selecione, se quiser</option>
+              <option>Direito Civil</option><option>Direito Trabalhista</option><option>Direito Empresarial</option>
+              <option>Direito Imobiliário</option><option>Direito Previdenciário</option><option>Execução Civil</option>
+              <option>Direito Penal e Execução Penal</option><option>Família e Sucessões</option><option>Direito do Consumidor</option>
+              <option>Outro assunto</option>
+            </select>
+          </label>
+        </div>
+        <label class="cf-campo"><span>Mensagem *</span><textarea name="mensagem" rows="5" maxlength="3000" required placeholder="Conte brevemente o que aconteceu e o que você precisa."></textarea></label>
+        <label class="cf-consent"><input type="checkbox" name="consentimento" id="cfConsent"> <span id="cfConsentTexto">Autorizo o uso dos meus dados apenas para que o escritório responda a esta mensagem, conforme a <a href="politica-de-privacidade.html">Política de Privacidade</a>.</span></label>
+        <p class="cf-erro" id="cfErro" role="alert" hidden></p>
+        <button type="submit" class="btn btn-gold cf-enviar"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.4-.7-2.9-1.1-4.7-4.1-4.8-4.3-.1-.2-1.2-1.6-1.2-3s.7-2.1 1-2.4c.3-.3.6-.3.8-.3h.6c.2 0 .4 0 .6.5l.9 2.1c.1.2.1.4 0 .6l-.4.6-.4.4c-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.3 2.4 1.5.3.1.5.1.6-.1l.9-1c.2-.3.4-.2.6-.1l2 .9c.3.1.5.2.5.3.1.2.1.7-.1 1.3Z"/></svg> Enviar e abrir o WhatsApp</button>
+        <p class="cf-ok" id="cfOk" role="status" hidden>Mensagem registrada. Se o WhatsApp não abriu, <a href="#" id="cfAbrirWa" target="_blank" rel="noopener">toque aqui para abrir</a>.</p>
+      </form>
     </div>
 
     <div class="contato-visual">
@@ -593,8 +619,8 @@
   <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20 11.6A8.4 8.4 0 017.6 19L4 20l1-3.5A8.4 8.4 0 1120 11.6z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M9.2 8.6c.2-.4.5-.4.7-.4h.5c.2 0 .4.1.5.4l.6 1.4c.1.2 0 .4-.1.6l-.4.5c.5.9 1.3 1.7 2.2 2.2l.5-.4c.2-.1.4-.2.6-.1l1.4.6c.3.1.4.3.4.5v.5c0 .2 0 .5-.4.7-.5.3-1.3.5-2.2.2a8 8 0 01-4.6-4.6c-.3-.9-.1-1.7.2-2.2z" fill="currentColor"/></svg>
 </a>
 
-<script src="js/main.js?v=20261122b"></script>
-<script type="module" src="js/cena.js?v=20261122b"></script>
-<script src="js/estatisticas.js?v=20261122b" defer></script>
+<script src="js/main.js?v=20261122c"></script>
+<script type="module" src="js/cena.js?v=20261122c"></script>
+<script src="js/estatisticas.js?v=20261122c" defer></script>
 </body>
 </html>

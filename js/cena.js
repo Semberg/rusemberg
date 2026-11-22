@@ -10,7 +10,7 @@ import { RoomEnvironment } from '../assets/vendor/three/addons/environments/Room
 import { RoundedBoxGeometry } from '../assets/vendor/three/addons/geometries/RoundedBoxGeometry.js';
 import { GLTFLoader } from '../assets/vendor/three/addons/loaders/GLTFLoader.js';
 import { MeshoptDecoder } from '../assets/vendor/three/addons/meshopt_decoder.module.js';
-import { tocarVirada, tocarCapa, tocarFechamento, tocarAssinatura, alternarSom, somLigado, aoMudarSom } from './som-folha.js?v=20261122b';
+import { tocarVirada, tocarCapa, tocarFechamento, tocarAssinatura, alternarSom, somLigado, aoMudarSom } from './som-folha.js?v=20261122c';
 
 const cena = document.querySelector('.cena');
 const sticky = document.getElementById('cenaSticky');

@@ -757,3 +757,30 @@ ul, ol { list-style: none; margin: 0; padding: 0; }
   .cartao { padding: 26px 22px 22px; transform: translate(0, calc((1 - var(--v, 0)) * 60vh)) rotate(calc((1 - var(--v, 0)) * -8deg)); }
   .cartao-nome { font-size: 1.45rem; }
 }
+
+/* ==========================================================
+   CONTATO: formulário de mensagem
+   ========================================================== */
+.contato-form { margin-top: 44px; padding: 34px 32px 30px; background: #f6f3ec; border-top: 2px solid var(--gold); }
+.cf-titulo { font-family: var(--serif); font-size: 1.7rem; color: #16181b; margin: 0 0 6px; }
+.cf-sub { font-size: .86rem; color: #6b6a66; margin: 0 0 22px; }
+.cf-linha { display: grid; grid-template-columns: 1fr 1fr; gap: 0 18px; }
+.cf-campo { display: block; margin-bottom: 16px; }
+.cf-campo > span { display: block; font-size: .62rem; letter-spacing: .18em; text-transform: uppercase; color: var(--gold-dark); font-weight: 600; margin-bottom: 7px; }
+.cf-campo input, .cf-campo select, .cf-campo textarea { width: 100%; box-sizing: border-box; font: inherit; font-size: .95rem; color: #16181b; background: #fff; border: 1px solid rgba(0,0,0,.14); border-radius: 0; padding: 12px 13px; transition: border-color .25s, box-shadow .25s; }
+.cf-campo input, .cf-campo select { height: 50px; }
+.cf-campo textarea { resize: vertical; min-height: 120px; }
+.cf-campo input:focus, .cf-campo select:focus, .cf-campo textarea:focus { outline: none; border-color: var(--gold); box-shadow: 0 0 0 3px rgba(201,162,77,.18); }
+.cf-campo .is-erro { border-color: #b3402f; }
+.cf-consent { display: flex; gap: 10px; align-items: flex-start; font-size: .82rem; color: #4a4a47; line-height: 1.5; margin: 4px 0 16px; cursor: pointer; }
+.cf-consent input { margin-top: 3px; accent-color: var(--gold-dark); flex: none; }
+.cf-consent a { color: var(--gold-dark); text-decoration: underline; }
+.cf-erro { color: #b3402f; font-size: .85rem; margin: 0 0 14px; }
+.cf-enviar { display: inline-flex; align-items: center; justify-content: center; gap: 10px; width: 100%; }
+.cf-enviar[disabled] { opacity: .6; cursor: wait; }
+.cf-ok { margin: 14px 0 0; font-size: .88rem; color: #2f6b3a; }
+.cf-ok a { color: inherit; text-decoration: underline; }
+@media (max-width: 760px) {
+  .contato-form { padding: 26px 20px 22px; margin-top: 34px; }
+  .cf-linha { grid-template-columns: 1fr; }
+}

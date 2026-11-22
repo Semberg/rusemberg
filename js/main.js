@@ -371,3 +371,60 @@ if (!reduceMotion && window.matchMedia('(hover: hover)').matches) {
     b.style.setProperty('--mx', `${e.clientX - r.left}px`); b.style.setProperty('--my', `${e.clientY - r.top}px`);
   }, { passive: true });
 }
+
+
+/* ---------- Formulário de contato: registra a mensagem e abre o WhatsApp ---------- */
+(function () {
+  const form = document.getElementById('contatoForm');
+  if (!form) return;
+  const RPC = 'https://nbhgumvxbjaosdupxzph.supabase.co/rest/v1/rpc/registrar_mensagem_contato';
+  const CHAVE = 'sb_publishable_T2tLyvBffPszI9rSGF-FfA_kPJTzpGn'; // chave pública: só permite registrar a mensagem
+  const erro = document.getElementById('cfErro'), ok = document.getElementById('cfOk'), linkWa = document.getElementById('cfAbrirWa');
+  const botao = form.querySelector('.cf-enviar');
+  const campo = (n) => form.elements[n];
+  form.addEventListener('input', (e) => e.target.classList && e.target.classList.remove('is-erro'));
+  form.addEventListener('submit', (ev) => {
+    ev.preventDefault();
+    const nome = campo('nome').value.trim(), tel = campo('telefone').value.trim(), email = campo('email').value.trim();
+    const assunto = campo('assunto').value, msg = campo('mensagem').value.trim(), consent = campo('consentimento').checked;
+    let falha = '', alvo = null;
+    if (nome.length < 2) { falha = 'Informe o seu nome.'; alvo = campo('nome'); }
+    else if (email && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { falha = 'O e-mail informado não parece válido.'; alvo = campo('email'); }
+    else if (!email && tel.replace(/\D/g, '').length < 8) { falha = 'Informe um telefone ou um e-mail para o retorno.'; alvo = campo('telefone'); }
+    else if (msg.length < 5) { falha = 'Escreva a sua mensagem.'; alvo = campo('mensagem'); }
+    else if (!consent) { falha = 'Para enviar, é preciso autorizar o uso dos dados para a resposta.'; }
+    if (falha) { erro.textContent = falha; erro.hidden = false; if (alvo) { alvo.classList.add('is-erro'); alvo.focus(); } return; }
+    erro.hidden = true;
+
+    // texto que já chega pronto no WhatsApp
+    const linhas = ['Olá, vim pelo site e gostaria de atendimento.', '', `*Nome:* ${nome}`];
+    if (tel) linhas.push(`*Telefone:* ${tel}`);
+    if (email) linhas.push(`*E-mail:* ${email}`);
+    if (assunto) linhas.push(`*Assunto:* ${assunto}`);
+    linhas.push('', msg);
+    const urlWa = 'https://wa.me/5583996069271?text=' + encodeURIComponent(linhas.join('\n'));
+
+    // registra no escritório (continua mesmo se a página mudar para o WhatsApp)
+    try {
+      fetch(RPC, {
+        method: 'POST', keepalive: true,
+        headers: { apikey: CHAVE, Authorization: `Bearer ${CHAVE}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          p_nome: nome, p_mensagem: msg, p_consentimento: true,
+          p_consentimento_texto: document.getElementById('cfConsentTexto').textContent.trim(),
+          p_telefone: tel || null, p_email: email || null, p_assunto: assunto || null,
+          p_pagina: location.href.slice(0, 300), p_user_agent: navigator.userAgent.slice(0, 300),
+        }),
+      }).catch(() => {});
+    } catch { /* o WhatsApp abre de qualquer forma */ }
+    if (window.rfEvento) window.rfEvento('formulario_contato', assunto || '');
+
+    // abre o WhatsApp no mesmo clique (evita bloqueio de janela)
+    const janela = window.open(urlWa, '_blank');
+    if (janela) { try { janela.opener = null; } catch { /* sem acesso */ } }
+    if (!janela && /Android|iPhone|iPad/i.test(navigator.userAgent)) location.href = urlWa;
+    linkWa.href = urlWa; ok.hidden = false;
+    botao.disabled = true; setTimeout(() => { botao.disabled = false; }, 4000);
+    form.reset();
+  });
+})();
