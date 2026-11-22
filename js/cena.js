@@ -581,7 +581,7 @@ async function iniciar() {
   // A capa e o fechamento seguem a barra de rolagem quadro a quadro (param
   // quando ela para e voltam quando ela volta), mas com velocidade máxima:
   // mesmo numa rolagem rápida, nunca andam mais depressa que o ritmo das folhas.
-  const DUR_ABRE = mobile() ? 2.6 : 3.0;     // tempo mínimo da abertura completa
+  const DUR_ABRE = mobile() ? 3.1 : 3.6;     // tempo mínimo da abertura completa
   const DUR_FECHA = mobile() ? 2.8 : 3.2;    // tempo mínimo do fechamento completo
   const A0 = 0.075, A1 = 0.17, C0 = 0.79, C1 = 0.915;
   const abertura = { v: 0 }, fechamento = { v: 0 };
@@ -815,7 +815,9 @@ async function iniciar() {
     atualizarGestos(p, forcado !== null || window.__forceP !== undefined);
     const fAbre = abertura.v;               // capa abre em tempo próprio
     const fF = fechamento.v;
-    const abreSuave = fAbre * fAbre * (3 - 2 * fAbre);
+    // a capa só começa a se erguer depois que o selo se rompe
+    const fCapa = seg(fAbre, 0.22, 1);
+    const abreSuave = fCapa * fCapa * (3 - 2 * fCapa);
     const fPag = seg(p, J0, J1);
     const f3a = eio(seg(fF, 0.0, 0.34));  // folhas voltam juntas
     const f3b = eio(seg(fF, 0.26, 0.62)); // capa fecha
@@ -960,14 +962,16 @@ async function iniciar() {
     if (marcas[0]) marcas[0].parentElement.style.opacity = seg(p, 0.04, 0.08).toFixed(3);
     // selo de cera: parte-se ao meio quando a capa começa a se erguer
     {
-      const sq = seg(abertura.v, 0, 0.16);
+      // 1) racha ao meio, as metades se afastam um pouco; 2) caem e somem; 3) a capa abre
+      const sq = seg(abertura.v, 0, 0.22);
+      const racha = eio(seg(sq, 0, 0.4)), cai = seg(sq, 0.4, 1);
       selo.visible = sq < 0.999;
       metades.forEach((g, lado) => {
         const sd = lado ? -1 : 1;
-        g.position.set(sd * sq * 0.022, -sq * sq * 0.09, sq * 0.03);
-        g.rotation.set(sq * 0.9, sd * sq * 0.5, -sd * sq * 0.8);
+        g.position.set(sd * (racha * 0.0035 + cai * 0.006), -cai * cai * 0.1, racha * 0.002);
+        g.rotation.set(0, sd * racha * 0.22, -sd * cai * 0.35);
       });
-      cera.opacity = 1 - seg(sq, 0.55, 1); ouroSelo.opacity = cera.opacity;
+      cera.opacity = 1 - seg(cai, 0.35, 1); ouroSelo.opacity = cera.opacity;
     }
     barra.style.transform = `scaleX(${p.toFixed(4)})`;
   }
