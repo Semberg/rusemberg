@@ -71,7 +71,7 @@
 <header>
   <img src="assets/icon-on-dark-transparent.png" alt="">
   <div><h1>Painel de visitas do site</h1><span id="periodoTxt">rusemberg.adv.br</span></div>
-  <div class="acoes"><a href="/">Ver o site</a><button type="button" id="sair" hidden>Sair</button></div>
+  <div class="acoes"><button type="button" id="contarAparelho" hidden title="Define se as visitas feitas neste aparelho entram nas estatísticas"></button><a href="/">Ver o site</a><button type="button" id="sair" hidden>Sair</button></div>
 </header>
 
 <div class="filtros" id="filtros" hidden>
@@ -285,6 +285,8 @@
       .then(function (d) {
         try { sessionStorage.setItem('rf-painel', senha); } catch (e) {}
         $('login').hidden = true; $('painel').hidden = false; $('filtros').hidden = false; $('sair').hidden = false;
+        if (!marcado) { marcado = true; try { if (localStorage.getItem('rf-sem-estatistica') === null) localStorage.setItem('rf-sem-estatistica', '1'); } catch (e) {} }
+        pintarAparelho();
         render(d);
       })
       .finally(function () { document.body.classList.remove('carregando'); });
@@ -387,6 +389,16 @@
   $('sair').addEventListener('click', function () {
     try { sessionStorage.removeItem('rf-painel'); } catch (e) {}
     senha = ''; $('painel').hidden = true; $('filtros').hidden = true; $('sair').hidden = true; $('login').hidden = false; $('senha').value = '';
+  });
+  var marcado = false;
+  function pintarAparelho() {
+    var ignorado = false; try { ignorado = localStorage.getItem('rf-sem-estatistica') === '1'; } catch (e) {}
+    var b = $('contarAparelho'); b.hidden = false;
+    b.textContent = ignorado ? 'Este aparelho: não é contado' : 'Este aparelho: é contado';
+  }
+  $('contarAparelho').addEventListener('click', function () {
+    try { var ig = localStorage.getItem('rf-sem-estatistica') === '1'; localStorage.setItem('rf-sem-estatistica', ig ? '0' : '1'); } catch (e) {}
+    pintarAparelho();
   });
   definir('30');
   if (senha) carregar().catch(function () { senha = ''; });

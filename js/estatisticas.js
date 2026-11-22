@@ -4,6 +4,8 @@
 (function () {
   if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') return;
   if (navigator.doNotTrack === '1' || navigator.globalPrivacyControl) return;
+  // aparelhos do próprio escritório (marcados ao entrar no painel) não contam como visitantes
+  try { if (localStorage.getItem('rf-sem-estatistica') === '1') return; } catch (e) {}
   var visita = Math.random().toString(36).slice(2) + Date.now().toString(36);
   var w = window.innerWidth;
   var disp = w < 700 ? 'celular' : (w < 1100 ? 'tablet' : 'computador');
