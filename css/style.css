@@ -433,6 +433,8 @@ ul, ol { list-style: none; margin: 0; padding: 0; }
 .footer-meta { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; font-size: .78rem; padding-top: 20px; }
 .footer-meta p { margin: 0; }
 .footer-meta a { color: inherit; text-decoration: underline; text-underline-offset: 3px; }
+.footer-restrito { display: inline-flex; align-items: center; gap: 6px; text-decoration: none !important; opacity: .75; }
+.footer-restrito:hover { opacity: 1; color: var(--gold-light); }
 .footer-meta .footer-aviso { flex-basis: 100%; opacity: .7; font-size: .72rem; }
 .texto-sumario { font-size: .88rem; padding: 16px 20px; background: #f6f3ec; border-left: 2px solid var(--gold); margin-bottom: 28px; }
 
