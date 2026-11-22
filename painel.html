@@ -7,46 +7,63 @@
 <meta name="robots" content="noindex, nofollow">
 <meta name="theme-color" content="#17191c">
 <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+<link rel="stylesheet" href="assets/vendor/painel/leaflet.css">
 <style>
-  :root { --gold: #c9a24d; --gold-d: #8a6d2f; --ink: #16181b; --muted: #6b6a66; --line: rgba(0,0,0,.09); --bg: #f6f3ec; }
+  :root { --gold: #c9a24d; --gold-d: #8a6d2f; --ink: #16181b; --muted: #6b6a66; --line: rgba(0,0,0,.09); --bg: #f6f3ec; --up: #2f7a45; --down: #b3402f; }
   * { box-sizing: border-box; }
   body { margin: 0; font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif; color: var(--ink); background: var(--bg); }
-  header { background: #17191c; color: #fff; padding: 18px clamp(16px, 4vw, 40px); display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+  header { background: #17191c; color: #fff; padding: 16px clamp(16px, 4vw, 40px); display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
   header img { width: 36px; height: auto; }
-  header h1 { font-size: 1.05rem; margin: 0; font-weight: 600; letter-spacing: .02em; }
-  header span { color: rgba(255,255,255,.55); font-size: .8rem; }
+  header h1 { font-size: 1.05rem; margin: 0; font-weight: 600; }
+  header span { color: rgba(255,255,255,.6); font-size: .8rem; }
   header .acoes { margin-left: auto; display: flex; gap: 8px; align-items: center; }
-  select, button, input { font: inherit; }
-  header select, header button { background: transparent; color: #fff; border: 1px solid rgba(255,255,255,.3); padding: 7px 12px; cursor: pointer; }
-  main { max-width: 1180px; margin: 0 auto; padding: 26px clamp(14px, 3vw, 32px) 60px; }
+  header .acoes a, header .acoes button { color: #fff; background: transparent; border: 1px solid rgba(255,255,255,.3); padding: 7px 12px; font: inherit; font-size: .85rem; cursor: pointer; text-decoration: none; }
+  .filtros { background: #fff; border-bottom: 1px solid var(--line); padding: 12px clamp(16px, 4vw, 40px); display: flex; flex-wrap: wrap; gap: 6px; align-items: center; position: sticky; top: 0; z-index: 1000; }
+  .filtros button { font: inherit; font-size: .82rem; padding: 7px 12px; border: 1px solid rgba(0,0,0,.15); background: #fff; cursor: pointer; }
+  .filtros button.on { background: var(--ink); color: #fff; border-color: var(--ink); }
+  .filtros .datas { display: inline-flex; gap: 6px; align-items: center; margin-left: 6px; font-size: .82rem; color: var(--muted); flex-wrap: wrap; }
+  .filtros input { font: inherit; font-size: .85rem; padding: 6px 8px; width: 118px; border: 1px solid rgba(0,0,0,.18); }
+  main { max-width: 1240px; margin: 0 auto; padding: 22px clamp(14px, 3vw, 32px) 60px; }
   .login { max-width: 380px; margin: 10vh auto; background: #fff; padding: 32px 28px; border-top: 2px solid var(--gold); }
   .login h2 { margin: 0 0 6px; font-size: 1.3rem; }
   .login p { color: var(--muted); font-size: .88rem; margin: 0 0 18px; }
-  .login input { width: 100%; padding: 12px; border: 1px solid rgba(0,0,0,.18); margin-bottom: 12px; }
-  .login button { width: 100%; padding: 12px; background: var(--gold); border: 0; font-weight: 600; letter-spacing: .06em; cursor: pointer; }
-  .erro { color: #b3402f; font-size: .85rem; min-height: 1.2em; margin: 0 0 8px; }
-  .kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 18px; }
-  .kpi { background: #fff; padding: 16px 18px; border-left: 2px solid var(--gold); }
-  .kpi b { display: block; font-size: 1.8rem; font-weight: 600; font-variant-numeric: tabular-nums; }
-  .kpi small { color: var(--muted); font-size: .72rem; letter-spacing: .12em; text-transform: uppercase; }
+  .login input { width: 100%; padding: 12px; border: 1px solid rgba(0,0,0,.18); margin-bottom: 12px; font: inherit; }
+  .login button { width: 100%; padding: 12px; background: var(--gold); border: 0; font-weight: 600; letter-spacing: .06em; cursor: pointer; font: inherit; }
+  .erro { color: var(--down); font-size: .85rem; min-height: 1.2em; margin: 0 0 8px; }
+  .kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; margin-bottom: 16px; }
+  .kpi { background: #fff; padding: 14px 16px; border-left: 2px solid var(--gold); }
+  .kpi b { display: block; font-size: 1.7rem; font-weight: 600; font-variant-numeric: tabular-nums; }
+  .kpi small { color: var(--muted); font-size: .7rem; letter-spacing: .1em; text-transform: uppercase; }
+  .kpi em { font-style: normal; font-size: .74rem; margin-left: 6px; }
+  .kpi em.up { color: var(--up); } .kpi em.down { color: var(--down); }
   .grade { display: grid; grid-template-columns: repeat(auto-fit, minmax(330px, 1fr)); gap: 14px; }
-  .card { background: #fff; padding: 18px 20px; }
-  .card h3 { margin: 0 0 12px; font-size: .74rem; letter-spacing: .16em; text-transform: uppercase; color: var(--gold-d); }
-  .barra { display: grid; grid-template-columns: minmax(90px, 40%) 1fr 34px; gap: 10px; align-items: center; font-size: .86rem; margin: 6px 0; }
+  .card { background: #fff; padding: 18px 20px; min-width: 0; }
+  .card h3 { margin: 0 0 12px; font-size: .72rem; letter-spacing: .16em; text-transform: uppercase; color: var(--gold-d); }
+  .larga { grid-column: 1 / -1; }
+  #mapa { height: 460px; background: #e9e5dc; }
+  .barra { display: grid; grid-template-columns: minmax(90px, 42%) 1fr 40px; gap: 10px; align-items: center; font-size: .85rem; margin: 6px 0; }
   .barra .nome { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .barra .trilho { height: 9px; background: #eee9dd; }
   .barra .trilho i { display: block; height: 100%; background: var(--gold); }
   .barra .n { text-align: right; font-variant-numeric: tabular-nums; color: var(--muted); }
-  .colunas { display: flex; align-items: flex-end; gap: 3px; height: 130px; padding-top: 6px; }
+  .colunas { display: flex; align-items: flex-end; gap: 2px; height: 140px; }
   .colunas div { flex: 1; background: var(--gold); min-height: 2px; position: relative; }
-  .colunas div:hover::after { content: attr(data-t); position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%); background: #17191c; color: #fff; font-size: .72rem; padding: 3px 6px; white-space: nowrap; }
+  .colunas div:hover { background: var(--gold-d); }
+  .colunas div:hover::after { content: attr(data-t); position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%); background: #17191c; color: #fff; font-size: .72rem; padding: 3px 6px; white-space: nowrap; z-index: 2; }
   .eixo { display: flex; justify-content: space-between; font-size: .7rem; color: var(--muted); margin-top: 6px; }
-  table { width: 100%; border-collapse: collapse; font-size: .84rem; }
-  th, td { text-align: left; padding: 8px 6px; border-bottom: 1px solid var(--line); }
-  th { font-size: .66rem; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
-  .larga { grid-column: 1 / -1; }
-  .vazio { color: var(--muted); font-size: .86rem; }
-  .nota { color: var(--muted); font-size: .76rem; margin-top: 22px; }
+  .funil div { display: flex; justify-content: space-between; padding: 8px 12px; margin: 4px 0; background: #f3eee2; font-size: .86rem; }
+  table { width: 100%; border-collapse: collapse; font-size: .82rem; }
+  th, td { text-align: left; padding: 7px 6px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+  th { font-size: .64rem; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+  .vazio { color: var(--muted); font-size: .85rem; }
+  .export { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 12px; }
+  .export div { border: 1px solid var(--line); padding: 14px; }
+  .export p { margin: 0 0 10px; font-weight: 600; font-size: .9rem; }
+  .export small { display: block; color: var(--muted); margin: -6px 0 10px; font-size: .76rem; }
+  .export button { font: inherit; font-size: .8rem; padding: 6px 10px; margin: 0 4px 4px 0; border: 1px solid var(--gold); background: #fff; cursor: pointer; }
+  .export button:hover { background: var(--gold); }
+  .nota { color: var(--muted); font-size: .76rem; margin-top: 20px; line-height: 1.5; }
+  .carregando main { opacity: .5; pointer-events: none; }
   [hidden] { display: none !important; }
 </style>
 </head>
@@ -54,16 +71,18 @@
 <header>
   <img src="assets/icon-on-dark-transparent.png" alt="">
   <div><h1>Painel de visitas do site</h1><span id="periodoTxt">rusemberg.adv.br</span></div>
-  <div class="acoes" id="acoes" hidden>
-    <select id="dias" aria-label="Período">
-      <option value="7">Últimos 7 dias</option>
-      <option value="30" selected>Últimos 30 dias</option>
-      <option value="90">Últimos 90 dias</option>
-      <option value="365">Último ano</option>
-    </select>
-    <button type="button" id="sair">Sair</button>
-  </div>
+  <div class="acoes"><a href="/">Ver o site</a><button type="button" id="sair" hidden>Sair</button></div>
 </header>
+
+<div class="filtros" id="filtros" hidden>
+  <button data-p="hoje">Hoje</button>
+  <button data-p="7">Últimos 7 dias</button>
+  <button data-p="30" class="on">Últimos 30 dias</button>
+  <button data-p="mes">Mês passado</button>
+  <button data-p="ano">Último ano</button>
+  <button data-p="tudo">Desde o início</button>
+  <span class="datas">de <input id="de" placeholder="dd/mm/aaaa" inputmode="numeric" maxlength="10"> até <input id="ate" placeholder="dd/mm/aaaa" inputmode="numeric" maxlength="10"> <button data-p="datas">Aplicar</button></span>
+</div>
 
 <main>
   <form class="login" id="login">
@@ -78,105 +97,293 @@
   <section id="painel" hidden>
     <div class="kpis" id="kpis"></div>
     <div class="grade">
+      <div class="card larga"><h3>Mapa dos acessos (localização aproximada da conexão)</h3><div id="mapa"></div></div>
       <div class="card larga"><h3>Visitas por dia</h3><div class="colunas" id="porDia"></div><div class="eixo" id="porDiaEixo"></div></div>
       <div class="card"><h3>De onde vieram (origem)</h3><div id="origens"></div></div>
-      <div class="card"><h3>Cidades (aproximadas)</h3><div id="cidades"></div></div>
-      <div class="card"><h3>Horário das visitas</h3><div class="colunas" id="porHora"></div><div class="eixo"><span>0h</span><span>6h</span><span>12h</span><span>18h</span><span>23h</span></div></div>
-      <div class="card"><h3>Aparelhos</h3><div id="aparelhos"></div><h3 style="margin-top:20px">Páginas de entrada</h3><div id="paginas"></div></div>
-      <div class="card"><h3>Livro de abertura</h3><div id="livro"></div></div>
-      <div class="card"><h3>Contatos pelo site</h3><div id="contatos"></div></div>
-      <div class="card larga"><h3>Últimas visitas</h3><div style="overflow-x:auto"><table><thead><tr><th>Quando</th><th>Origem</th><th>Local aproximado</th><th>Aparelho</th><th>Página</th></tr></thead><tbody id="ultimas"></tbody></table></div></div>
+      <div class="card"><h3>Cidades</h3><div id="cidades"></div></div>
+      <div class="card"><h3>Estados e países</h3><div id="estados"></div></div>
+      <div class="card"><h3>Horário das visitas</h3><div class="colunas" id="porHora"></div><div class="eixo"><span>0h</span><span>6h</span><span>12h</span><span>18h</span><span>23h</span></div>
+        <h3 style="margin-top:20px">Dia da semana</h3><div id="porSemana"></div></div>
+      <div class="card"><h3>Caminho até o contato</h3><div class="funil" id="funil"></div></div>
+      <div class="card"><h3>Seções mais lidas</h3><div id="secoes"></div></div>
+      <div class="card"><h3>Contatos pelo site</h3><div id="contatos"></div><h3 style="margin-top:20px">Assuntos de interesse</h3><div id="interesse"></div></div>
+      <div class="card"><h3>E-books mais baixados</h3><div id="ebooksTop"></div></div>
+      <div class="card"><h3>Aparelhos</h3><div id="aparelhos"></div><h3 style="margin-top:20px">Sistemas</h3><div id="sistemas"></div></div>
+      <div class="card"><h3>Navegadores</h3><div id="navegadores"></div><h3 style="margin-top:20px">Idiomas</h3><div id="idiomas"></div></div>
+      <div class="card"><h3>Operadoras e provedores</h3><div id="operadoras"></div></div>
+      <div class="card"><h3>Páginas de entrada</h3><div id="paginas"></div></div>
+      <div class="card larga"><h3>Últimas visitas do período</h3><div style="overflow-x:auto"><table><thead><tr><th>Quando</th><th>Origem</th><th>Local aproximado</th><th>Operadora</th><th>Aparelho</th><th>Sistema</th><th>Navegador</th><th>Tempo</th><th>Página</th></tr></thead><tbody id="ultimas"></tbody></table></div></div>
+      <div class="card larga"><h3>Baixar o banco de dados do período</h3>
+        <div class="export">
+          <div><p>Visitas</p><small>Uma linha por visita, com local, origem, aparelho, tempo e contatos.</small><button data-t="visitas" data-f="xlsx">Excel</button><button data-t="visitas" data-f="csv">CSV</button><button data-t="visitas" data-f="pdf">PDF</button><button data-t="visitas" data-f="json">JSON</button></div>
+          <div><p>Todos os eventos</p><small>Cada clique, seção lida e etapa do livro.</small><button data-t="eventos" data-f="xlsx">Excel</button><button data-t="eventos" data-f="csv">CSV</button><button data-t="eventos" data-f="pdf">PDF</button><button data-t="eventos" data-f="json">JSON</button></div>
+          <div><p>Cadastros de e-books</p><small>E-mail, nome, perfil e e-book baixado.</small><button data-t="ebooks" data-f="xlsx">Excel</button><button data-t="ebooks" data-f="csv">CSV</button><button data-t="ebooks" data-f="pdf">PDF</button><button data-t="ebooks" data-f="json">JSON</button></div>
+          <div><p>Mensagens do formulário</p><small>Nome, contato, assunto e mensagem.</small><button data-t="mensagens" data-f="xlsx">Excel</button><button data-t="mensagens" data-f="csv">CSV</button><button data-t="mensagens" data-f="pdf">PDF</button><button data-t="mensagens" data-f="json">JSON</button></div>
+          <div><p>Relatório deste painel</p><small>Resumo do período com todos os quadros.</small><button id="relPdf">PDF</button><button id="relXlsx">Excel</button></div>
+        </div>
+      </div>
     </div>
-    <p class="nota">Estatísticas anônimas: sem cookies, sem endereço IP e sem identificação dos visitantes. A cidade é estimada pela rede e pode não ser exata. Visitas de quem ativa "Não rastrear" no navegador não são contadas.</p>
+    <p class="nota">Estatísticas anônimas: sem cookies e sem endereço IP. A localização é estimada pela rede a partir da conexão e aponta para a cidade ou a central da operadora, não para o endereço da pessoa; em redes móveis, pode indicar uma cidade vizinha ou a capital. Visitas de quem ativa "Não rastrear" no navegador não são contadas. Cadastros e mensagens contêm dados pessoais: guarde os arquivos baixados com cuidado e use-os conforme a Política de Privacidade.</p>
   </section>
 </main>
 
+<script src="assets/vendor/painel/leaflet.js"></script>
 <script>
 (function () {
-  var RPC = 'https://nbhgumvxbjaosdupxzph.supabase.co/rest/v1/rpc/painel_site';
+  var API = 'https://nbhgumvxbjaosdupxzph.supabase.co/rest/v1/rpc/';
   var CHAVE = 'sb_publishable_T2tLyvBffPszI9rSGF-FfA_kPJTzpGn';
   var $ = function (id) { return document.getElementById(id); };
-  var senha = '';
-  try { senha = sessionStorage.getItem('rf-painel') || ''; } catch (e) {}
+  var senha = ''; try { senha = sessionStorage.getItem('rf-painel') || ''; } catch (e) {}
   var esc = function (s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); };
   var fmt = function (n) { return Number(n || 0).toLocaleString('pt-BR'); };
+  var dur = function (s) { if (s == null) return '—'; s = Math.round(s); return s < 60 ? s + ' s' : Math.floor(s / 60) + ' min ' + (s % 60) + ' s'; };
+  var periodo = { ini: null, fim: null, rotulo: '' }, dados = null, mapa = null, camada = null;
 
-  function barras(lista, alvo) {
+  function rpc(nome, corpo) {
+    return fetch(API + nome, { method: 'POST', headers: { apikey: CHAVE, Authorization: 'Bearer ' + CHAVE, 'Content-Type': 'application/json' }, body: JSON.stringify(corpo) })
+      .then(function (r) { return r.json().then(function (j) { if (!r.ok) throw new Error((j && j.message) || 'Falha'); return j; }); });
+  }
+
+  // ---------- períodos ----------
+  function inicioDoDia(d) { var x = new Date(d); x.setHours(0, 0, 0, 0); return x; }
+  function definir(p) {
+    var agora = new Date(), hoje = inicioDoDia(agora), ini, fim = agora, rot;
+    if (p === 'hoje') { ini = hoje; rot = 'Hoje'; }
+    else if (p === '7') { ini = new Date(hoje); ini.setDate(ini.getDate() - 6); rot = 'Últimos 7 dias'; }
+    else if (p === '30') { ini = new Date(hoje); ini.setDate(ini.getDate() - 29); rot = 'Últimos 30 dias'; }
+    else if (p === 'mes') { ini = new Date(hoje.getFullYear(), hoje.getMonth() - 1, 1); fim = new Date(hoje.getFullYear(), hoje.getMonth(), 1); rot = 'Mês passado'; }
+    else if (p === 'ano') { ini = new Date(hoje); ini.setFullYear(ini.getFullYear() - 1); rot = 'Último ano'; }
+    else if (p === 'tudo') { ini = null; rot = 'Desde o início'; }
+    else if (p === 'datas') {
+      var a = lerData($('de').value), b = lerData($('ate').value);
+      if (!a || !b) { alert('Informe as duas datas no formato dd/mm/aaaa.'); return false; }
+      if (b < a) { var t = a; a = b; b = t; }
+      ini = a; fim = new Date(b); fim.setDate(fim.getDate() + 1); rot = 'Período escolhido';
+    }
+    periodo = { ini: ini, fim: fim, rotulo: rot, chave: p };
+    return true;
+  }
+  function lerData(s) {
+    var m = /^(\d{2})\/(\d{2})\/(\d{4})$/.exec((s || '').trim()); if (!m) return null;
+    var d = new Date(+m[3], +m[2] - 1, +m[1]); return d.getDate() === +m[1] ? d : null;
+  }
+  ['de', 'ate'].forEach(function (id) {
+    $(id).addEventListener('input', function (e) {
+      var v = e.target.value.replace(/\D/g, '').slice(0, 8);
+      e.target.value = v.length > 4 ? v.slice(0, 2) + '/' + v.slice(2, 4) + '/' + v.slice(4) : v.length > 2 ? v.slice(0, 2) + '/' + v.slice(2) : v;
+    });
+  });
+
+  // ---------- desenho ----------
+  function barras(lista, alvo, mapNome) {
     var el = $(alvo);
     if (!lista || !lista.length) { el.innerHTML = '<p class="vazio">Sem registros no período.</p>'; return; }
     var max = Math.max.apply(null, lista.map(function (x) { return x.n; })) || 1;
     el.innerHTML = lista.map(function (x) {
-      return '<div class="barra"><span class="nome" title="' + esc(x.nome) + '">' + esc(x.nome) + '</span><span class="trilho"><i style="width:' + (100 * x.n / max).toFixed(1) + '%"></i></span><span class="n">' + fmt(x.n) + '</span></div>';
+      var nome = mapNome ? mapNome(x.nome) : x.nome;
+      return '<div class="barra"><span class="nome" title="' + esc(nome) + '">' + esc(nome) + '</span><span class="trilho"><i style="width:' + (100 * x.n / max).toFixed(1) + '%"></i></span><span class="n">' + fmt(x.n) + '</span></div>';
     }).join('');
   }
+  function variacao(atual, ant) {
+    if (!ant) return '';
+    var p = Math.round(100 * (atual - ant) / ant);
+    return '<em class="' + (p >= 0 ? 'up' : 'down') + '">' + (p >= 0 ? '▲ ' : '▼ ') + Math.abs(p) + '%</em>';
+  }
+  var PAISES = { BR: 'Brasil', US: 'Estados Unidos', PT: 'Portugal', AR: 'Argentina', ES: 'Espanha', FR: 'França', DE: 'Alemanha', GB: 'Reino Unido', IT: 'Itália', CA: 'Canadá', JP: 'Japão', NL: 'Holanda', IE: 'Irlanda', SG: 'Singapura' };
 
-  function render(d, dias) {
-    var ini = new Date(d.inicio), fim = new Date(d.fim);
-    $('periodoTxt').textContent = ini.toLocaleDateString('pt-BR') + ' a ' + fim.toLocaleDateString('pt-BR');
-    var c = d.contatos || {};
-    var totContatos = (c.whatsapp || 0) + (c.telefone || 0) + (c.email || 0) + (c.formulario || 0);
-    $('kpis').innerHTML = [
-      ['Visitas', d.visitas], ['Contatos iniciados', totContatos], ['Downloads de e-books', d.ebooks && d.ebooks.downloads],
-      ['Mensagens do formulário', d.mensagens], ['Cadastros de e-books (total)', d.ebooks && d.ebooks.total_cadastros]
-    ].map(function (k) { return '<div class="kpi"><b>' + fmt(k[1]) + '</b><small>' + k[0] + '</small></div>'; }).join('');
-
-    // visitas por dia, com os dias sem visita preenchidos
-    var mapa = {}; (d.por_dia || []).forEach(function (x) { mapa[x.dia] = x.n; });
-    var diasLista = [];
-    for (var t = new Date(fim); diasLista.length < Math.min(dias, 92); t.setDate(t.getDate() - 1)) {
-      var k = t.toLocaleDateString('sv-SE', { timeZone: 'America/Fortaleza' }); diasLista.unshift([k, mapa[k] || 0]);
+  function desenharMapa(pontos) {
+    if (!window.L) { $('mapa').innerHTML = '<p class="vazio" style="padding:16px">Não foi possível carregar o mapa.</p>'; return; }
+    if (!mapa) {
+      mapa = L.map('mapa', { worldCopyJump: true }).setView([-7.23, -35.88], 4);
+      L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19, attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+      }).addTo(mapa);
     }
-    var maxD = Math.max.apply(null, diasLista.map(function (x) { return x[1]; })) || 1;
-    $('porDia').innerHTML = diasLista.map(function (x) {
-      var br = x[0].split('-').reverse().slice(0, 2).join('/');
-      return '<div style="height:' + (100 * x[1] / maxD) + '%" data-t="' + br + ': ' + x[1] + '"></div>';
-    }).join('');
-    var p = function (x) { return x[0].split('-').reverse().slice(0, 2).join('/'); };
-    $('porDiaEixo').innerHTML = '<span>' + p(diasLista[0]) + '</span><span>' + p(diasLista[diasLista.length - 1]) + '</span>';
+    if (camada) camada.remove();
+    camada = L.layerGroup().addTo(mapa);
+    if (!pontos.length) { mapa.setView([-7.23, -35.88], 4); return; }
+    var max = Math.max.apply(null, pontos.map(function (p) { return p.n; })) || 1, limites = [];
+    pontos.forEach(function (p) {
+      var raio = 6 + 18 * Math.sqrt(p.n / max);
+      L.circleMarker([p.lat, p.lon], { radius: raio, color: '#8a6d2f', weight: 1.5, fillColor: '#c9a24d', fillOpacity: .55 })
+        .bindPopup('<strong>' + esc(p.local || 'Local aproximado') + '</strong><br>' + fmt(p.n) + ' visita(s)')
+        .bindTooltip(esc(p.local || '') + ': ' + p.n)
+        .addTo(camada);
+      limites.push([p.lat, p.lon]);
+    });
+    if (limites.length === 1) mapa.setView(limites[0], 9); else mapa.fitBounds(limites, { padding: [30, 30], maxZoom: 10 });
+    setTimeout(function () { mapa.invalidateSize(); }, 50);
+  }
+
+  function render(d) {
+    dados = d;
+    var ini = new Date(d.inicio), fim = new Date(new Date(d.fim) - 1);
+    $('periodoTxt').textContent = periodo.rotulo + ' · ' + ini.toLocaleDateString('pt-BR') + ' a ' + fim.toLocaleDateString('pt-BR');
+    var c = d.contatos || {}, ant = d.anterior || {};
+    var totC = (c.whatsapp || 0) + (c.telefone || 0) + (c.email || 0) + (c.formulario || 0);
+    var conv = d.visitas ? Math.round(1000 * totC / d.visitas) / 10 : 0;
+    var k = [
+      ['Visitas', fmt(d.visitas) + variacao(d.visitas, ant.visitas)],
+      ['Sessões', fmt(d.sessoes)],
+      ['Tempo médio no site', dur(d.tempo_medio)],
+      ['Contatos iniciados', fmt(totC) + variacao(totC, ant.contatos)],
+      ['Taxa de contato', conv.toLocaleString('pt-BR') + '%'],
+      ['Downloads de e-books', fmt(d.ebooks && d.ebooks.downloads)],
+      ['Mensagens do formulário', fmt(d.mensagens)],
+      ['Cadastros (total)', fmt(d.ebooks && d.ebooks.total_cadastros)]
+    ];
+    $('kpis').innerHTML = k.map(function (x) { return '<div class="kpi"><b>' + x[1] + '</b><small>' + x[0] + '</small></div>'; }).join('');
+
+    desenharMapa(d.mapa || []);
+
+    var mapaDia = {}; (d.por_dia || []).forEach(function (x) { mapaDia[x.dia] = x.n; });
+    var lista = [], t = new Date(ini), lim = 0;
+    while (t <= fim && lim++ < 400) { var key = t.toLocaleDateString('sv-SE'); lista.push([key, mapaDia[key] || 0]); t.setDate(t.getDate() + 1); }
+    if (!lista.length) lista = [[ini.toLocaleDateString('sv-SE'), 0]];
+    var maxD = Math.max.apply(null, lista.map(function (x) { return x[1]; })) || 1;
+    var br = function (s) { return s.split('-').reverse().join('/'); };
+    $('porDia').innerHTML = lista.map(function (x) { return '<div style="height:' + (100 * x[1] / maxD) + '%" data-t="' + br(x[0]) + ': ' + x[1] + '"></div>'; }).join('');
+    $('porDiaEixo').innerHTML = '<span>' + br(lista[0][0]) + '</span><span>' + br(lista[lista.length - 1][0]) + '</span>';
 
     var horas = new Array(24).fill(0); (d.por_hora || []).forEach(function (x) { horas[x.hora] = x.n; });
     var maxH = Math.max.apply(null, horas) || 1;
     $('porHora').innerHTML = horas.map(function (n, h) { return '<div style="height:' + (100 * n / maxH) + '%" data-t="' + h + 'h: ' + n + '"></div>'; }).join('');
+    var DS = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
+    barras([0, 1, 2, 3, 4, 5, 6].map(function (i) { var f = (d.por_semana || []).filter(function (x) { return x.dia === i; })[0]; return { nome: DS[i], n: f ? f.n : 0 }; }), 'porSemana');
 
     barras(d.origens, 'origens');
     barras(d.cidades, 'cidades');
+    var est = (d.estados || []).slice(); (d.paises || []).filter(function (p) { return p.nome !== 'BR' && p.nome !== '?'; }).forEach(function (p) { est.push({ nome: (PAISES[p.nome] || p.nome) + ' (país)', n: p.n }); });
+    barras(est, 'estados');
+    barras(d.secoes, 'secoes');
     barras(d.aparelhos, 'aparelhos');
-    barras((d.paginas || []).map(function (x) { return { nome: x.nome === '/' ? 'Página inicial' : x.nome.replace(/^\//, ''), n: x.n }; }), 'paginas');
-    var l = d.livro || {};
-    barras([{ nome: 'Abriram o livro', n: l.inicio }, { nome: 'Chegaram à metade', n: l.meio }, { nome: 'Folhearam até o fim', n: l.fim }], 'livro');
+    barras(d.sistemas, 'sistemas');
+    barras(d.navegadores, 'navegadores');
+    barras(d.idiomas, 'idiomas');
+    barras(d.operadoras, 'operadoras');
+    barras(d.paginas, 'paginas', function (n) { return n === '/' ? 'Página inicial' : n.replace(/^\//, ''); });
+    barras(d.ebooks_baixados, 'ebooksTop');
+    barras(d.areas_interesse, 'interesse');
     barras([{ nome: 'WhatsApp', n: c.whatsapp }, { nome: 'Formulário', n: c.formulario }, { nome: 'Telefone', n: c.telefone }, { nome: 'E-mail', n: c.email }], 'contatos');
+    var l = d.livro || {};
+    var etapas = [['Visitaram o site', d.visitas], ['Abriram o livro', l.inicio], ['Chegaram à metade', l.meio], ['Folhearam até o fim', l.fim], ['Iniciaram contato', totC]];
+    $('funil').innerHTML = etapas.map(function (e) { return '<div><span>' + e[0] + '</span><strong>' + fmt(e[1]) + (d.visitas ? ' <small style="color:#6b6a66;font-weight:400">(' + Math.round(100 * (e[1] || 0) / d.visitas) + '%)</small>' : '') + '</strong></div>'; }).join('');
 
     $('ultimas').innerHTML = (d.ultimas || []).map(function (u) {
-      return '<tr><td>' + esc(u.quando) + '</td><td>' + esc(u.origem) + '</td><td>' + esc(u.local) + '</td><td>' + esc(u.aparelho || '') + '</td><td>' + esc(u.pagina === '/' ? 'inicial' : (u.pagina || '').replace(/^\//, '')) + '</td></tr>';
-    }).join('') || '<tr><td colspan="5" class="vazio">Sem visitas registradas.</td></tr>';
+      return '<tr><td>' + esc(u.quando) + '</td><td>' + esc(u.origem) + '</td><td>' + esc(u.local) + '</td><td>' + esc(u.operadora || '—') + '</td><td>' + esc(u.aparelho || '') + '</td><td>' + esc(u.sistema || '') + '</td><td>' + esc(u.navegador || '') + '</td><td>' + dur(u.duracao) + '</td><td>' + esc(u.pagina === '/' ? 'inicial' : (u.pagina || '').replace(/^\//, '')) + '</td></tr>';
+    }).join('') || '<tr><td colspan="9" class="vazio">Sem visitas no período.</td></tr>';
   }
 
   function carregar() {
-    var dias = +$('dias').value;
-    return fetch(RPC, {
-      method: 'POST',
-      headers: { apikey: CHAVE, Authorization: 'Bearer ' + CHAVE, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ p_senha: senha, p_dias: dias })
-    }).then(function (r) {
-      return r.json().then(function (j) { if (!r.ok) throw new Error((j && j.message) || 'Falha ao carregar'); return j; });
-    }).then(function (d) {
-      try { sessionStorage.setItem('rf-painel', senha); } catch (e) {}
-      $('login').hidden = true; $('painel').hidden = false; $('acoes').hidden = false;
-      render(d, dias);
-    });
+    document.body.classList.add('carregando');
+    return rpc('painel_site', { p_senha: senha, p_inicio: periodo.ini ? periodo.ini.toISOString() : null, p_fim: periodo.fim ? periodo.fim.toISOString() : null })
+      .then(function (d) {
+        try { sessionStorage.setItem('rf-painel', senha); } catch (e) {}
+        $('login').hidden = true; $('painel').hidden = false; $('filtros').hidden = false; $('sair').hidden = false;
+        render(d);
+      })
+      .finally(function () { document.body.classList.remove('carregando'); });
   }
 
+  // ---------- exportação ----------
+  var hojeStr = function () { return new Date().toLocaleDateString('sv-SE'); };
+  function baixar(nome, conteudo, tipo) {
+    var a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([conteudo], { type: tipo })); a.download = nome;
+    document.body.appendChild(a); a.click(); setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 500);
+  }
+  function carregarScript(src) {
+    return new Promise(function (ok, erro) { var s = document.createElement('script'); s.src = src; s.onload = ok; s.onerror = erro; document.head.appendChild(s); });
+  }
+  var libXlsx = function () { return window.XLSX ? Promise.resolve() : carregarScript('assets/vendor/painel/xlsx.full.min.js'); };
+  var libPdf = function () { return window.jspdf ? Promise.resolve() : carregarScript('assets/vendor/painel/jspdf.umd.min.js').then(function () { return carregarScript('assets/vendor/painel/jspdf.plugin.autotable.min.js'); }); };
+  var TITULOS = { visitas: 'Visitas', eventos: 'Eventos', ebooks: 'Cadastros de e-books', mensagens: 'Mensagens do formulário' };
+
+  function exportarTabela(tabela, formato) {
+    return rpc('painel_exportar', { p_senha: senha, p_tabela: tabela, p_inicio: periodo.ini ? periodo.ini.toISOString() : null, p_fim: periodo.fim ? periodo.fim.toISOString() : null })
+      .then(function (linhas) {
+        var base = 'site-' + tabela + '-' + hojeStr();
+        if (!linhas.length) { alert('Não há registros desse tipo no período escolhido.'); return; }
+        var cols = Object.keys(linhas[0]);
+        if (formato === 'json') return baixar(base + '.json', JSON.stringify(linhas, null, 2), 'application/json');
+        if (formato === 'csv') {
+          var cel = function (v) { return '"' + String(v == null ? '' : v).replace(/"/g, '""') + '"'; };
+          var csv = '﻿' + [cols.map(cel).join(';')].concat(linhas.map(function (l) { return cols.map(function (c) { return cel(l[c]); }).join(';'); })).join('\r\n');
+          return baixar(base + '.csv', csv, 'text/csv;charset=utf-8');
+        }
+        if (formato === 'xlsx') return libXlsx().then(function () {
+          var wb = XLSX.utils.book_new(), ws = XLSX.utils.json_to_sheet(linhas, { header: cols });
+          ws['!cols'] = cols.map(function (c) { return { wch: Math.min(48, Math.max(c.length, 12)) }; });
+          XLSX.utils.book_append_sheet(wb, ws, TITULOS[tabela].slice(0, 31));
+          XLSX.writeFile(wb, base + '.xlsx');
+        });
+        if (formato === 'pdf') return libPdf().then(function () {
+          var doc = new jspdf.jsPDF({ orientation: 'landscape', unit: 'pt', format: 'a4' });
+          doc.setFontSize(13); doc.text(TITULOS[tabela] + ' · rusemberg.adv.br', 40, 36);
+          doc.setFontSize(9); doc.setTextColor(110); doc.text('Período: ' + $('periodoTxt').textContent + ' · gerado em ' + new Date().toLocaleString('pt-BR') + ' · ' + linhas.length + ' registro(s)', 40, 52);
+          doc.autoTable({ head: [cols], body: linhas.map(function (l) { return cols.map(function (c) { var v = l[c]; return v == null ? '' : String(v); }); }), startY: 64,
+            styles: { fontSize: 6.5, cellPadding: 3, overflow: 'linebreak' }, headStyles: { fillColor: [23, 25, 28], textColor: 255 }, alternateRowStyles: { fillColor: [246, 243, 236] } });
+          doc.save(base + '.pdf');
+        });
+      })
+      .catch(function (e) { alert('Não foi possível gerar o arquivo: ' + e.message); });
+  }
+
+  function quadrosRelatorio() {
+    var d = dados, q = [];
+    var add = function (titulo, lista) { q.push([titulo, (lista || []).map(function (x) { return [x.nome, x.n]; })]); };
+    add('Origens', d.origens); add('Cidades', d.cidades); add('Estados', d.estados); add('Seções mais lidas', d.secoes);
+    add('Aparelhos', d.aparelhos); add('Sistemas', d.sistemas); add('Navegadores', d.navegadores); add('Operadoras', d.operadoras);
+    add('Páginas de entrada', d.paginas); add('E-books baixados', d.ebooks_baixados);
+    return q;
+  }
+  $('relPdf').addEventListener('click', function () {
+    if (!dados) return;
+    libPdf().then(function () {
+      var doc = new jspdf.jsPDF({ unit: 'pt', format: 'a4' }), y = 40, c = dados.contatos || {}, l = dados.livro || {};
+      doc.setFontSize(15); doc.text('Relatório de visitas · rusemberg.adv.br', 40, y); y += 18;
+      doc.setFontSize(9); doc.setTextColor(110); doc.text('Período: ' + $('periodoTxt').textContent + ' · gerado em ' + new Date().toLocaleString('pt-BR'), 40, y); y += 12;
+      doc.autoTable({ startY: y + 6, head: [['Indicador', 'Valor']], body: [
+        ['Visitas', fmt(dados.visitas)], ['Sessões', fmt(dados.sessoes)], ['Tempo médio no site', dur(dados.tempo_medio)],
+        ['Contatos pelo WhatsApp', fmt(c.whatsapp)], ['Mensagens do formulário', fmt(c.formulario)], ['Cliques em telefone', fmt(c.telefone)], ['Cliques em e-mail', fmt(c.email)],
+        ['Downloads de e-books', fmt(dados.ebooks && dados.ebooks.downloads)], ['Livro: abriram / metade / fim', [l.inicio, l.meio, l.fim].join(' / ')]],
+        headStyles: { fillColor: [23, 25, 28] }, styles: { fontSize: 9 } });
+      quadrosRelatorio().forEach(function (qd) {
+        if (!qd[1].length) return;
+        doc.autoTable({ startY: doc.lastAutoTable.finalY + 16, head: [[qd[0], 'Visitas']], body: qd[1], headStyles: { fillColor: [138, 109, 47] }, styles: { fontSize: 8.5 } });
+      });
+      doc.save('relatorio-site-' + hojeStr() + '.pdf');
+    });
+  });
+  $('relXlsx').addEventListener('click', function () {
+    if (!dados) return;
+    libXlsx().then(function () {
+      var wb = XLSX.utils.book_new(), c = dados.contatos || {};
+      XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet([['Período', $('periodoTxt').textContent], ['Visitas', dados.visitas], ['Sessões', dados.sessoes], ['Tempo médio (s)', dados.tempo_medio], ['WhatsApp', c.whatsapp], ['Formulário', c.formulario], ['Telefone', c.telefone], ['E-mail', c.email], ['Downloads de e-books', dados.ebooks && dados.ebooks.downloads]]), 'Resumo');
+      quadrosRelatorio().forEach(function (qd) { XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet([[qd[0], 'Visitas']].concat(qd[1])), qd[0].slice(0, 31)); });
+      XLSX.writeFile(wb, 'relatorio-site-' + hojeStr() + '.xlsx');
+    });
+  });
+  document.querySelectorAll('.export button[data-t]').forEach(function (b) { b.addEventListener('click', function () { exportarTabela(b.dataset.t, b.dataset.f); }); });
+
+  // ---------- eventos ----------
+  document.querySelectorAll('.filtros button[data-p]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      if (!definir(b.dataset.p)) return;
+      document.querySelectorAll('.filtros button[data-p]').forEach(function (x) { x.classList.toggle('on', x === b); });
+      carregar().catch(function (e) { alert(e.message); });
+    });
+  });
   $('login').addEventListener('submit', function (e) {
     e.preventDefault(); senha = $('senha').value; $('erro').textContent = '';
     carregar().catch(function (err) {
       $('erro').textContent = /senha/.test(err.message) ? 'Senha incorreta.' : (/tentativas/.test(err.message) ? 'Muitas tentativas. Aguarde alguns minutos.' : 'Não foi possível carregar. Tente de novo.');
     });
   });
-  $('dias').addEventListener('change', function () { carregar().catch(function () {}); });
   $('sair').addEventListener('click', function () {
     try { sessionStorage.removeItem('rf-painel'); } catch (e) {}
-    senha = ''; $('painel').hidden = true; $('acoes').hidden = true; $('login').hidden = false; $('senha').value = '';
+    senha = ''; $('painel').hidden = true; $('filtros').hidden = true; $('sair').hidden = true; $('login').hidden = false; $('senha').value = '';
   });
+  definir('30');
   if (senha) carregar().catch(function () { senha = ''; });
 })();
 </script>

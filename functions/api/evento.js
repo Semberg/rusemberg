@@ -16,6 +16,12 @@ export async function onRequestPost({ request, waitUntil }) {
     p_cidade: cf.city || null,
     p_estado: pais === 'BR' ? (cf.regionCode || cf.region || null) : (cf.region || null),
     p_pais: pais,
+    // coordenadas aproximadas da cidade (duas casas decimais, cerca de 1 km), nunca do aparelho
+    p_lat: cf.latitude ? Math.round(parseFloat(cf.latitude) * 100) / 100 : null,
+    p_lon: cf.longitude ? Math.round(parseFloat(cf.longitude) * 100) / 100 : null,
+    p_operadora: cf.asOrganization || null,
+    p_navegador: d.p_navegador ?? null, p_sistema: d.p_sistema ?? null, p_idioma: d.p_idioma ?? null,
+    p_tela: d.p_tela ?? null, p_duracao: Number.isFinite(d.p_duracao) ? Math.round(d.p_duracao) : null,
   };
   waitUntil(fetch(RPC, {
     method: 'POST',
