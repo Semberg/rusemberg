@@ -5,14 +5,17 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Painel de visitas | Rusemberg Fernandes</title>
 <meta name="robots" content="noindex, nofollow">
-<meta name="theme-color" content="#17191c">
+<meta name="theme-color" content="#1E2227">
+<link rel="icon" href="/favicon.ico" sizes="48x48">
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
 <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+<link rel="apple-touch-icon" href="assets/favicon-180.png">
 <link rel="stylesheet" href="assets/vendor/painel/leaflet.css">
 <style>
-  :root { --gold: #c9a24d; --gold-d: #8a6d2f; --ink: #16181b; --muted: #6b6a66; --line: rgba(0,0,0,.09); --bg: #f6f3ec; --up: #2f7a45; --down: #b3402f; }
+  :root { --gold: #DCB651; --gold-d: #B8923A; --ink: #1E2227; --muted: #6b6a66; --line: rgba(0,0,0,.09); --bg: #f6f3ec; --up: #2f7a45; --down: #b3402f; }
   * { box-sizing: border-box; }
   body { margin: 0; font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif; color: var(--ink); background: var(--bg); }
-  header { background: #17191c; color: #fff; padding: 16px clamp(16px, 4vw, 40px); display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+  header { background: #1E2227; color: #fff; padding: 16px clamp(16px, 4vw, 40px); display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
   header img { width: 36px; height: auto; }
   header h1 { font-size: 1.05rem; margin: 0; font-weight: 600; }
   header span { color: rgba(255,255,255,.6); font-size: .8rem; }
@@ -49,7 +52,7 @@
   .colunas { display: flex; align-items: flex-end; gap: 2px; height: 140px; }
   .colunas div { flex: 1; background: var(--gold); min-height: 2px; position: relative; }
   .colunas div:hover { background: var(--gold-d); }
-  .colunas div:hover::after { content: attr(data-t); position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%); background: #17191c; color: #fff; font-size: .72rem; padding: 3px 6px; white-space: nowrap; z-index: 2; }
+  .colunas div:hover::after { content: attr(data-t); position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%); background: #1E2227; color: #fff; font-size: .72rem; padding: 3px 6px; white-space: nowrap; z-index: 2; }
   .eixo { display: flex; justify-content: space-between; font-size: .7rem; color: var(--muted); margin-top: 6px; }
   .funil div { display: flex; justify-content: space-between; padding: 8px 12px; margin: 4px 0; background: #f3eee2; font-size: .86rem; }
   table { width: 100%; border-collapse: collapse; font-size: .82rem; }
@@ -328,7 +331,7 @@
           doc.setFontSize(13); doc.text(TITULOS[tabela] + ' · rusemberg.adv.br', 40, 36);
           doc.setFontSize(9); doc.setTextColor(110); doc.text('Período: ' + $('periodoTxt').textContent + ' · gerado em ' + new Date().toLocaleString('pt-BR') + ' · ' + linhas.length + ' registro(s)', 40, 52);
           doc.autoTable({ head: [cols], body: linhas.map(function (l) { return cols.map(function (c) { var v = l[c]; return v == null ? '' : String(v); }); }), startY: 64,
-            styles: { fontSize: 6.5, cellPadding: 3, overflow: 'linebreak' }, headStyles: { fillColor: [23, 25, 28], textColor: 255 }, alternateRowStyles: { fillColor: [246, 243, 236] } });
+            styles: { fontSize: 6.5, cellPadding: 3, overflow: 'linebreak' }, headStyles: { fillColor: [30,34,39], textColor: 255 }, alternateRowStyles: { fillColor: [246, 243, 236] } });
           doc.save(base + '.pdf');
         });
       })
@@ -353,7 +356,7 @@
         ['Visitas', fmt(dados.visitas)], ['Sessões', fmt(dados.sessoes)], ['Tempo médio no site', dur(dados.tempo_medio)],
         ['Contatos pelo WhatsApp', fmt(c.whatsapp)], ['Mensagens do formulário', fmt(c.formulario)], ['Cliques em telefone', fmt(c.telefone)], ['Cliques em e-mail', fmt(c.email)],
         ['Downloads de e-books', fmt(dados.ebooks && dados.ebooks.downloads)], ['Livro: abriram / metade / fim', [l.inicio, l.meio, l.fim].join(' / ')]],
-        headStyles: { fillColor: [23, 25, 28] }, styles: { fontSize: 9 } });
+        headStyles: { fillColor: [30,34,39] }, styles: { fontSize: 9 } });
       quadrosRelatorio().forEach(function (qd) {
         if (!qd[1].length) return;
         doc.autoTable({ startY: doc.lastAutoTable.finalY + 16, head: [[qd[0], 'Visitas']], body: qd[1], headStyles: { fillColor: [138, 109, 47] }, styles: { fontSize: 8.5 } });

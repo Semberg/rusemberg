@@ -4,7 +4,7 @@
 .pagina-ebooks { background: var(--paper); }
 .pagina-ebooks .site-header { background: var(--graphite); }
 .eb-hero { background: var(--graphite); color: #fff; padding: 170px 0 70px; position: relative; overflow: hidden; }
-.eb-hero::after { content: ""; position: absolute; right: -8%; top: -30%; width: 60vw; height: 160%; background: radial-gradient(closest-side, rgba(201,162,74,.16), transparent); pointer-events: none; }
+.eb-hero::after { content: ""; position: absolute; right: -8%; top: -30%; width: 60vw; height: 160%; background: radial-gradient(closest-side, rgba(220,182,81,.16), transparent); pointer-events: none; }
 .eb-hero .eyebrow { color: var(--gold-light); display: inline-flex; align-items: center; gap: 12px; }
 .eb-hero .eyebrow::before { content: ""; width: 34px; height: 1px; background: currentColor; }
 .eb-hero h1 { color: #fff; font-family: var(--serif); font-weight: 500; font-size: clamp(2.4rem, 5vw, 4.2rem); line-height: 1.04; margin: 0 0 .4em; max-width: 820px; text-wrap: balance; }
@@ -46,7 +46,7 @@
 .eb-lombada::before { top: 14px; } .eb-lombada::after { bottom: 14px; }
 .eb-folhas { right: 0; top: 4px; width: var(--esp); height: calc(100% - 8px); transform-origin: right center; transform: translateZ(calc(var(--esp) / -2)) rotateY(90deg);
   background: repeating-linear-gradient(90deg, #f4efe4 0 2px, #ddd5c4 2px 3px); box-shadow: inset 0 0 10px rgba(0,0,0,.18); }
-.eb-sombra { position: absolute; left: -10%; right: 4%; bottom: -16px; height: 22px; background: radial-gradient(closest-side, rgba(23,25,28,.38), transparent); filter: blur(4px); transition: transform .7s var(--ease), opacity .7s; }
+.eb-sombra { position: absolute; left: -10%; right: 4%; bottom: -16px; height: 22px; background: radial-gradient(closest-side, rgba(30,34,39,.38), transparent); filter: blur(4px); transition: transform .7s var(--ease), opacity .7s; }
 .eb-livro:hover .eb-sombra { transform: scale(1.08) translateY(4px); opacity: .7; }
 .eb-livro:focus-visible { outline: none; }
 .eb-livro:focus-visible .eb-capa { outline: 2px solid var(--gold); outline-offset: 4px; }
