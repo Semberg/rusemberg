@@ -151,6 +151,19 @@ export function tocarFechamento(dur = 5, dir = 1) {
   }
 }
 
+/** Pena riscando o papel enquanto a assinatura é escrita. */
+export function tocarAssinatura(dur = 3) {
+  if (!ligado || !ctx || ctx.state !== 'running') return;
+  const t0 = ctx.currentTime + 0.02;
+  // vários traços curtos, com pequenas pausas, como a mão escrevendo
+  let t = 0;
+  while (t < dur) {
+    const d = rnd(0.12, 0.38);
+    camada(t0 + t, d, { tipo: 'bandpass', freq: rnd(3800, 5600), freq2: rnd(2600, 4200), q: rnd(1.4, 2.6), envelope: [[0.15, rnd(0.05, 0.09)], [0.7, 0.05]] });
+    t += d + rnd(0.03, 0.12);
+  }
+}
+
 export function somLigado() { return ligado && !!ctx; }
 
 /** Um clique: se estiver mudo, liga e toca na hora; se estiver tocando, desliga. */

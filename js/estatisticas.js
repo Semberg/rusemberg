@@ -30,12 +30,11 @@
   // quanto do livro de abertura foi percorrido
   var cena = document.querySelector('.cena');
   if (cena) {
-    var marcos = [[0.25, 'livro_25'], [0.5, 'livro_50'], [0.9, 'livro_fim']], feitos = {};
-    window.addEventListener('scroll', function () {
-      var r = cena.getBoundingClientRect(), total = cena.offsetHeight - window.innerHeight;
-      var p = total > 0 ? -r.top / total : 0;
-      marcos.forEach(function (m) { if (p >= m[0] && !feitos[m[1]]) { feitos[m[1]] = 1; enviar(m[1]); } });
-    }, { passive: true });
+    var feitos = {};
+    window.addEventListener('livro:etapa', function (e) {
+      var n = e.detail && e.detail.etapa;
+      [[2, 'livro_25'], [4, 'livro_50'], [7, 'livro_fim']].forEach(function (m) { if (n >= m[0] && !feitos[m[1]]) { feitos[m[1]] = 1; enviar(m[1]); } });
+    });
   }
 
   // cliques de contato, com a seção de onde partiram

@@ -26,15 +26,16 @@ header.addEventListener('click', (e) => {
 });
 
 /* ---------- Links para etapas dentro da abertura ---------- */
-const alvosCena = { '#apresentacao': 0.2, '#areas-livro': 0.6, '#formacao': 0.7, '#topo': 0 };
+// No livro paginado cada âncora interna corresponde a uma etapa (0 = capa).
+const alvosCena = { '#apresentacao': 1, '#areas-livro': 5, '#formacao': 6, '#topo': 0 };
 document.addEventListener('click', (e) => {
   const a = e.target.closest('a[href^="#"]');
   if (!a || !(a.getAttribute('href') in alvosCena) || !cena) return;
   const estatica = document.documentElement.classList.contains('cena-estatica');
   if (estatica && a.getAttribute('href') !== '#topo') return;
   e.preventDefault();
-  const total = cena.offsetHeight - window.innerHeight;
-  window.scrollTo({ top: cena.offsetTop + total * alvosCena[a.getAttribute('href')], behavior: reduceMotion ? 'auto' : 'smooth' });
+  window.scrollTo({ top: cena.offsetTop, behavior: 'instant' });
+  window.__livro?.irPara(alvosCena[a.getAttribute('href')]);
 });
 
 /* ---------- Links para seções depois da abertura ----------

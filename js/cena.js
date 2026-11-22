@@ -10,7 +10,7 @@ import { RoomEnvironment } from '../assets/vendor/three/addons/environments/Room
 import { RoundedBoxGeometry } from '../assets/vendor/three/addons/geometries/RoundedBoxGeometry.js';
 import { GLTFLoader } from '../assets/vendor/three/addons/loaders/GLTFLoader.js';
 import { MeshoptDecoder } from '../assets/vendor/three/addons/meshopt_decoder.module.js';
-import { tocarVirada, tocarCapa, tocarFechamento, alternarSom, somLigado, aoMudarSom } from './som-folha.js';
+import { tocarVirada, tocarCapa, tocarFechamento, tocarAssinatura, alternarSom, somLigado, aoMudarSom } from './som-folha.js';
 
 const cena = document.querySelector('.cena');
 const sticky = document.getElementById('cenaSticky');
@@ -20,7 +20,7 @@ const ambiente = document.getElementById('cenaAmbiente');
 const barra = document.getElementById('cenaBarra');
 const caps = [...document.querySelectorAll('.cap')];
 const passos = [...document.querySelectorAll('.passo')];
-const marcas = [...document.querySelectorAll('.cena-etapas li')];
+const marcas = [...document.querySelectorAll('.cena-abas [data-etapa]')];
 const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 function webglOk() {
@@ -137,10 +137,24 @@ async function iniciar() {
   lombada.position.set(-W / 2 + 0.002, 0, 0.011); lombada.castShadow = true;
   pasta.add(lombada);
 
+  // foto do advogado, presa com um clipe na página de apresentação
+  const fotoAdv = await new Promise((res) => { const im = new Image(); im.onload = () => res(im); im.onerror = () => res(null); im.src = 'assets/img/rusemberg-retrato-sm.webp'; });
+  // rubrica (o emblema) convertida em máscara dourada para ser "escrita" na página
+  const rubrica = (() => {
+    if (!emblema || !emblema.image) return null;
+    const n = 320, c = document.createElement('canvas'); c.width = c.height = n; const g = c.getContext('2d');
+    g.drawImage(emblema.image, 0, 0, n, n);
+    const d = g.getImageData(0, 0, n, n), a = d.data;
+    for (let i = 0; i < a.length; i += 4) { const l = a[i + 1]; a[i] = 184; a[i + 1] = 145; a[i + 2] = 63; a[i + 3] = l; }
+    g.putImageData(d, 0, 0); return c;
+  })();
+  const ASS = { x: 600, y: 975, w: 190, h: 190 }; // posição da rubrica na folha (pixels da textura)
+
   // folhas
   const paginas = [];
   const matVerso = new THREE.MeshStandardMaterial({ color: 0xdcd7ce, map: papelCor, roughness: 0.95, side: THREE.BackSide });
   const pagW = W - 0.028, pagH = H - 0.03;
+  const HcPag = Math.round(1024 * pagH / pagW);
   const conteudos = ['apresentacao', 'analise', 'estrategia', 'orientacao', 'areas', 'formacao'];
   const NC = conteudos.length;
   const NFOLHAS = NC + 2;
@@ -207,6 +221,24 @@ async function iniciar() {
   assin.position.set(W / 2 - 0.004, -0.1, T / 2 + 0.0006);
   dobradica.add(assin);
 
+  // ---------- selo de cera sobre a borda da capa: rompe-se ao abrir ----------
+  const selo = new THREE.Group();
+  const cera = new THREE.MeshPhysicalMaterial({ color: 0x5c1a1f, roughness: 0.42, clearcoat: 0.5, clearcoatRoughness: 0.35, transparent: true });
+  const RS = 0.026, HS = 0.0045;
+  const ouroSelo = ouro.clone(); ouroSelo.transparent = true;
+  const metades = [0, 1].map((lado) => {
+    const g = new THREE.Group();
+    const corpo = new THREE.Mesh(new THREE.CylinderGeometry(RS, RS * 1.04, HS, 40, 1, false, lado ? Math.PI : 0, Math.PI), cera);
+    corpo.rotation.x = Math.PI / 2; corpo.castShadow = true; g.add(corpo);
+    // emblema dourado gravado, dividido ao meio junto com a cera
+    const pg2 = new THREE.PlaneGeometry(RS * 1.5, RS * 1.5 * 2, 1, 1);
+    const uv = pg2.attributes.uv; for (let i = 0; i < uv.count; i++) uv.setX(i, lado ? uv.getX(i) * 0.5 : 0.5 + uv.getX(i) * 0.5);
+    const emb2 = new THREE.Mesh(pg2, ouroSelo); emb2.scale.y = 0.5; emb2.position.set(lado ? -RS * 0.375 : RS * 0.375, 0, HS / 2 + 0.0003); g.add(emb2);
+    selo.add(g); return g;
+  });
+  selo.position.set(W / 2 - 0.006, -0.0, 0.022 + T / 2 + HS / 2 + 0.0004);
+  pasta.add(selo);
+
   // ---------- a mesa (capítulo 3) ----------
   const mesaAlpha = mascaraRadial();
   const mesa = new THREE.Mesh(new THREE.PlaneGeometry(2.4, 1.6), new THREE.MeshStandardMaterial({
@@ -221,6 +253,8 @@ async function iniciar() {
   sombraMesa.rotation.x = -Math.PI / 2; sombraMesa.position.set(0, -0.1995, 0); sombraMesa.receiveShadow = true;
   scene.add(sombraMesa);
 
+  const canetaPag = { grupo: new THREE.Group(), pronta: false, comprimento: 0.2 };
+  canetaPag.grupo.visible = false;
   const acessorios = new THREE.Group();
   scene.add(acessorios);
   const gl = new GLTFLoader(); gl.setMeshoptDecoder(MeshoptDecoder);
@@ -246,6 +280,18 @@ async function iniciar() {
       const g = new THREE.Group(); caneta.position.set(-(b2.min.x + b2.max.x) / 2, -(b2.min.y + b2.max.y) / 2, -(b2.min.z + b2.max.z) / 2);
       g.add(caneta); g.rotation.set(-Math.PI / 2, 0, 0.95); g.position.set(0.25, -0.19, 0.04);
       acessorios.add(g);
+      // segunda caneta, apoiada na folha de apresentação para escrever a rubrica
+      const c2 = caneta.clone(true);
+      c2.traverse((o) => { if (o.isMesh) { o.material = o.material.clone(); o.castShadow = true; } });
+      const b3 = new THREE.Box3().setFromObject(c2);
+      canetaPag.comprimento = b3.max.x - b3.min.x;
+      // a ponta fica na origem do grupo; o corpo sobe inclinado para fora da folha
+      const inner = new THREE.Group(); inner.add(c2); inner.scale.setScalar(0.72);
+      const PONTA = window.__pontaCaneta ?? 1; // lado do eixo x onde está a ponta
+      c2.position.x += -PONTA * canetaPag.comprimento / 2 + c2.position.x * 0; // desloca a ponta para a origem
+      const eixo = new THREE.Vector3(-PONTA, 0, 0), dirCorpo = new THREE.Vector3(0.55, 0.5, 0.67).normalize();
+      inner.quaternion.setFromUnitVectors(eixo, dirCorpo);
+      canetaPag.grupo.add(inner); canetaPag.pronta = true;
     }
   });
 
@@ -324,8 +370,32 @@ async function iniciar() {
       g.strokeStyle = 'rgba(184,145,63,.35)'; g.lineWidth = 3; g.beginPath(); g.arc(c.width - M - 70, 300, 52, 0, Math.PI * 2); g.stroke();
       g.fillStyle = ink + '.88)'; g.font = '500 58px CormorantCena, serif'; g.fillText('Rusemberg Tavares Fernandes', M, 360);
       g.fillStyle = goldC; g.font = '500 24px BarlowCena, sans-serif'; g.letterSpacing = '5px'; g.fillText('ADVOGADO · OAB/PB 30.070', M, 404); g.letterSpacing = '0px';
-      let y = 520; for (let i = 0; i < 11; i++) { linha(y, (c.width - M * 2) * (i % 5 === 4 ? .5 : .78 + ((i * 29) % 15) / 100)); y += 46; if (i === 5) y += 30; }
-      linha(1110, 300, .3);
+      // texto à esquerda da foto, depois em largura total
+      let y = 510; for (let i = 0; i < 7; i++) { linha(y, 470 * (i % 4 === 3 ? .6 : .86 + ((i * 29) % 13) / 100)); y += 46; }
+      y = 880; for (let i = 0; i < 2; i++) { linha(y, (c.width - M * 2) * (i ? .55 : .9)); y += 46; }
+      // foto impressa, levemente inclinada, presa por um clipe
+      if (fotoAdv) {
+        const fw = 290, fh = 370, cx = 790, cy = 655;
+        g.save(); g.translate(cx, cy); g.rotate(0.045);
+        g.shadowColor = 'rgba(0,0,0,.28)'; g.shadowBlur = 26; g.shadowOffsetY = 10;
+        g.fillStyle = '#fbfaf6'; g.fillRect(-fw / 2, -fh / 2, fw, fh);
+        g.shadowColor = 'transparent';
+        const b = 14, iw = fw - b * 2, ih = fh - b * 2 - 34;
+        const sr = Math.max(iw / fotoAdv.width, ih / fotoAdv.height), sw = iw / sr, sh = ih / sr;
+        g.drawImage(fotoAdv, (fotoAdv.width - sw) / 2, 0, sw, sh, -fw / 2 + b, -fh / 2 + b, iw, ih);
+        g.fillStyle = 'rgba(34,36,40,.55)'; g.font = 'italic 500 20px CormorantCena, serif'; g.textAlign = 'center';
+        g.fillText('Rusemberg Tavares Fernandes', 0, fh / 2 - 18); g.textAlign = 'left';
+        // clipe metálico
+        const clipe = (dx) => { g.beginPath(); g.moveTo(dx, -fh / 2 + 58); g.lineTo(dx, -fh / 2 - 16); g.arc(dx + 13, -fh / 2 - 16, 13, Math.PI, 0); g.lineTo(dx + 26, -fh / 2 + 44); g.arc(dx + 17, -fh / 2 + 44, 9, 0, Math.PI); g.lineTo(dx + 8, -fh / 2 - 6); };
+        g.lineWidth = 5; g.lineCap = 'round'; g.lineJoin = 'round';
+        g.strokeStyle = 'rgba(0,0,0,.25)'; g.save(); g.translate(3, 3); clipe(-60); g.stroke(); g.restore();
+        const gr = g.createLinearGradient(-60, -fh / 2 - 30, -34, -fh / 2 + 60); gr.addColorStop(0, '#f3f3f1'); gr.addColorStop(.5, '#8d9196'); gr.addColorStop(1, '#d9dadc');
+        g.strokeStyle = gr; clipe(-60); g.stroke();
+        g.restore();
+      }
+      // linha de assinatura sob a rubrica
+      g.fillStyle = ink + '.35)'; g.fillRect(ASS.x - 30, ASS.y + ASS.h + 4, ASS.w + 120, 2);
+      g.fillStyle = ink + '.55)'; g.font = '500 19px BarlowCena, sans-serif'; g.letterSpacing = '4px'; g.fillText('RUSEMBERG FERNANDES', ASS.x - 30, ASS.y + ASS.h + 36); g.letterSpacing = '0px';
     } else if (tipo === 'areas') {
       let y = 330;
       for (let i = 0; i < 6; i++) {
@@ -384,9 +454,16 @@ async function iniciar() {
     const arco = (x, y, r, a0, a1, n = 48) => Array.from({ length: n + 1 }, (_, i) => { const a = a0 + (a1 - a0) * i / n; return [x + Math.cos(a) * r, y + Math.sin(a) * r]; });
 
     if (tipo === 'apresentacao') {
-      traco([[M, 430], [M + 520, 430]], 0.05, 0.45, 4);
-      traco(arco(Wc - M - 70, 300, 52, -Math.PI / 2, Math.PI * 1.5), 0.35, 0.8, 5);
-      disco(Wc - M - 70, 300, 10, 0.85);
+      traco([[M, 430], [M + 520, 430]], 0.02, 0.3, 4);
+      if (rubrica) {
+        g.drawImage(rubrica, ASS.x, ASS.y, ASS.w, ASS.h);
+        // ordem de surgimento: da esquerda para a direita, como a mão escrevendo
+        const t = document.createElement('canvas'); t.width = ASS.w; t.height = ASS.h; const tg = t.getContext('2d');
+        const gr = tg.createLinearGradient(0, 0, ASS.w, 0); gr.addColorStop(0, cinza(0.4)); gr.addColorStop(1, cinza(0.95));
+        tg.fillStyle = gr; tg.fillRect(0, 0, ASS.w, ASS.h);
+        tg.globalCompositeOperation = 'destination-in'; tg.drawImage(rubrica, 0, 0, ASS.w, ASS.h);
+        o.drawImage(t, ASS.x, ASS.y);
+      }
     } else if (tipo === 'analise') {
       // marca-texto passando pelos trechos importantes, linha a linha
       const ys = [330 + 3 * 44, 330 + 4 * 44, 330 + 9 * 44 + 26];
@@ -485,6 +562,7 @@ async function iniciar() {
     const folga = atraso > 1 ? 0.3 : 0.42;
     ordem.forEach((i, n) => {
       const st = viradas[i];
+      if (arrasto.ativo && arrasto.i === i) { st.v = st.de = st.para = arrasto.v; st.dir = arrasto.dir; return; }
       let alvo = desejado[n];
       // folhas viram uma de cada vez, como num maço de papel
       if (alvo === 1 && n > 0 && viradas[ordem[n - 1]].v < folga) alvo = st.para;
@@ -551,7 +629,7 @@ async function iniciar() {
   const forcado = new URLSearchParams(location.search).get('p');
   const camPos = new THREE.Vector3(), camAlvo = new THREE.Vector3();
   let tAnt = performance.now(), tempo = 0;
-  let pSuave = 0;
+  let pSuave = 0, dtQuadro = 0.016;
 
   function layout() {
     const r = sticky.getBoundingClientRect();
@@ -562,17 +640,171 @@ async function iniciar() {
   layout();
   window.addEventListener('resize', layout);
 
-  function progresso() {
-    const r = cena.getBoundingClientRect();
-    const total = cena.offsetHeight - sticky.offsetHeight;
-    return clamp(-r.top / (total || 1));
-  }
+  function progresso() { return P_ETAPAS[etapa]; }
 
   // ---------- linha do tempo (0 → 1) ----------
   // capa 0–.06 · abre .06–.13 · páginas .13–.84 (cinco janelas) · fecha e pousa .84–.93 · contato .93–1
   // capa 0–.045 · gira .045–.09 · capa abre devagar .075–.17 · páginas .17–.86 · fecha e pousa .86–.945 · contato .93–1
   const J0 = 0.17, J1 = 0.78, JW = (J1 - J0) / NC;
   const janelas = conteudos.map((_, k) => [J0 + k * JW, J0 + (k + 1) * JW]);
+
+  // ==========================================================
+  // Livro paginado: uma rolada, uma página
+  // ==========================================================
+  // Cada gesto (roda do mouse, toque deslizando, seta do teclado, aba ou
+  // arrasto da folha) avança ou volta exatamente uma etapa. As etapas são
+  // pontos fixos da linha do tempo; as viradas continuam com tempo próprio.
+  const P_ETAPAS = [0, ...conteudos.map((_, k) => (k < NC - 1 ? J0 + (k + 0.5) * JW : J1 - 0.012)), 0.975];
+  const ULTIMA = P_ETAPAS.length - 1;
+  let etapa = 0, mudouEm = -1e9, chegouTopoEm = 0, gestoInicio = 0, ultimoGesto = 0;
+  const naCena = () => { const r = cena.getBoundingClientRect(); return Math.abs(r.top) < 6; };
+  const avisar = () => { sticky.dataset.etapa = etapa; window.dispatchEvent(new CustomEvent('livro:etapa', { detail: { etapa, ultima: ULTIMA } })); };
+  sticky.dataset.etapa = 0;
+  function irPara(n, { manual = true } = {}) {
+    n = clamp(Math.round(n), 0, ULTIMA);
+    if (manual) pararFolhear();
+    if (n === etapa) return;
+    etapa = n; mudouEm = performance.now(); avisar();
+    if (etapa === ULTIMA) { try { localStorage.setItem('rf-livro-visto', '1'); } catch { /* sem armazenamento */ } }
+  }
+  window.__livro = { irPara: (n) => { irPara(n); }, etapa: () => etapa, ULTIMA };
+  window.addEventListener('scroll', () => { if (window.scrollY <= 4 && !chegouTopoEm) chegouTopoEm = performance.now(); if (window.scrollY > 4) chegouTopoEm = 0; sticky.classList.toggle('is-fora', window.scrollY > 4); }, { passive: true });
+  chegouTopoEm = window.scrollY <= 4 ? 1 : 0;
+
+  // roda do mouse e trackpad: um gesto contínuo (inclusive a inércia) conta uma vez só
+  window.addEventListener('wheel', (e) => {
+    // usa a hora do próprio evento: num quadro lento vários eventos chegam juntos
+    const agora = e.timeStamp || performance.now();
+    if (agora - ultimoGesto > 170) gestoInicio = agora;
+    ultimoGesto = agora;
+    if (!naCena() || Math.abs(e.deltaY) < Math.abs(e.deltaX)) return;
+    const prox = e.deltaY > 0;
+    if ((prox && etapa === ULTIMA) || (!prox && etapa === 0)) return; // segue a página normalmente
+    e.preventDefault();
+    if (Math.abs(e.deltaY) < 2) return;
+    const gestoNovo = gestoInicio > mudouEm && gestoInicio >= chegouTopoEm;
+    if ((gestoNovo && agora - mudouEm > 450) || agora - mudouEm > 1500) { irPara(etapa + (prox ? 1 : -1)); gestoInicio = 0; }
+  }, { passive: false });
+
+  // toque: deslizar na vertical vira a página; na horizontal, arrasta a folha
+  let tY = null, tX = null, tDir = null;
+  sticky.addEventListener('touchstart', (e) => { tY = e.touches[0].clientY; tX = e.touches[0].clientX; tDir = null; }, { passive: true });
+  sticky.addEventListener('touchmove', (e) => {
+    if (tY === null) return;
+    const dy = e.touches[0].clientY - tY, dx = e.touches[0].clientX - tX;
+    if (!tDir && Math.hypot(dx, dy) > 8) tDir = Math.abs(dy) > Math.abs(dx) ? 'v' : 'h';
+    if (tDir !== 'v' || !naCena()) return;
+    const prox = dy < 0;
+    if ((prox && etapa === ULTIMA) || (!prox && etapa === 0)) return;
+    if (e.cancelable) e.preventDefault();
+  }, { passive: false });
+  sticky.addEventListener('touchend', (e) => {
+    if (tDir === 'v' && naCena() && tY !== null) {
+      const dy = e.changedTouches[0].clientY - tY;
+      if (Math.abs(dy) > 36) { const prox = dy < 0; if (!(prox && etapa === ULTIMA) && !(!prox && etapa === 0)) irPara(etapa + (prox ? 1 : -1)); }
+    }
+    tY = null;
+  }, { passive: true });
+
+  // teclado: setas, espaço e Page Up/Down viram; Esc pula para o conteúdo
+  const pular = () => { pararFolhear(); const alvo = document.getElementById('sobre'); if (alvo) window.scrollTo({ top: alvo.getBoundingClientRect().top + window.scrollY, behavior: 'instant' }); };
+  window.addEventListener('keydown', (e) => {
+    if (e.altKey || e.ctrlKey || e.metaKey) return;
+    const el = e.target;
+    if (el && el.closest && el.closest('input, textarea, select, [contenteditable="true"]')) return;
+    if (e.key === 'Escape' && naCena()) { pular(); return; }
+    if (!naCena()) return;
+    if (e.key === ' ' && el && el.closest && el.closest('button, a')) return;
+    const prox = ['ArrowDown', 'PageDown', ' ', 'ArrowRight'].includes(e.key), ant = ['ArrowUp', 'PageUp', 'ArrowLeft'].includes(e.key);
+    if (prox && etapa < ULTIMA) { e.preventDefault(); if (performance.now() - mudouEm > 350) irPara(etapa + 1); }
+    else if (ant && etapa > 0) { e.preventDefault(); if (performance.now() - mudouEm > 350) irPara(etapa - 1); }
+  });
+
+  // abas do índice
+  marcas.forEach((b) => b.addEventListener('click', () => { if (window.scrollY > 4) window.scrollTo({ top: 0, behavior: 'instant' }); irPara(+b.dataset.etapa); }));
+
+  // folhear sozinho: o livro avança com uma pausa proporcional ao texto da página
+  const botaoFolhear = document.getElementById('cenaFolhear');
+  let folheando = false, proximaEm = 0;
+  function pausaDaEtapa(n) {
+    if (n === 0) return 2.6;
+    const el = passos[n - 1]; const palavras = el ? el.textContent.trim().split(/\s+/).length : 40;
+    return clamp(palavras / 3.3, 5, 14) + (n === 1 ? 4 : 0) + 2.3; // +4 s para a rubrica, +2,3 s da virada
+  }
+  function pararFolhear() { if (!folheando) return; folheando = false; botaoFolhear?.setAttribute('aria-pressed', 'false'); }
+  botaoFolhear?.addEventListener('click', () => {
+    folheando = !folheando; botaoFolhear.setAttribute('aria-pressed', String(folheando));
+    if (folheando) { if (etapa === ULTIMA) irPara(0, { manual: false }); proximaEm = tempo + (etapa === 0 ? 0.4 : pausaDaEtapa(etapa)); }
+  });
+  ['pointerdown', 'touchstart'].forEach((ev) => window.addEventListener(ev, (e) => { if (folheando && !(e.target.closest && e.target.closest('#cenaFolhear'))) pararFolhear(); }, { passive: true }));
+  window.addEventListener('wheel', () => { if (folheando) pararFolhear(); }, { passive: true });
+
+  // quem já viu o livro recebe um atalho para o conteúdo
+  const retorno = document.getElementById('cenaRetorno');
+  let visto = false; try { visto = localStorage.getItem('rf-livro-visto') === '1'; } catch { /* sem armazenamento */ }
+  if (retorno && visto && window.scrollY < 10) {
+    retorno.hidden = false;
+    document.getElementById('cenaPular')?.addEventListener('click', (e) => { e.preventDefault(); retorno.hidden = true; irPara(ULTIMA); pular(); });
+    document.getElementById('cenaRetornoFechar')?.addEventListener('click', () => { retorno.hidden = true; });
+    setTimeout(() => { retorno.hidden = true; }, 20000);
+  }
+
+  // arrastar a folha pelo canto (mouse ou dedo)
+  const ray = new THREE.Raycaster(), ptr = new THREE.Vector2();
+  const arrasto = { ativo: false, i: -1, dir: 1, x0: 0, v: 0, largura: 300 };
+  let hoverCanto = 0, hoverAlvo = 0, alvoHover = -1;
+  function folhaAtual(dir) { // dir 1: a próxima a virar; -1: a última virada
+    const n = etapa - 1; // índice da página de conteúdo aberta
+    if (etapa < 1 || etapa > NC) return -1;
+    if (dir > 0) return n < NC - 1 ? ordemViraveis[n] : -1;
+    return n > 0 ? ordemViraveis[n - 1] : -1;
+  }
+  function tocaFolha(cx, cy) {
+    const r = canvas.getBoundingClientRect();
+    ptr.set(((cx - r.left) / r.width) * 2 - 1, -((cy - r.top) / r.height) * 2 + 1);
+    ray.setFromCamera(ptr, camera);
+    for (const dir of [1, -1]) {
+      const i = folhaAtual(dir); if (i < 0) continue;
+      const hit = ray.intersectObject(paginas[i], false)[0];
+      if (hit && hit.uv && hit.uv.x > 0.55) return { i, dir };
+    }
+    return null;
+  }
+  canvas.addEventListener('pointermove', (e) => {
+    if (arrasto.ativo) {
+      const dx = e.clientX - arrasto.x0;
+      arrasto.v = arrasto.dir > 0 ? clamp(-dx / arrasto.largura) : clamp(1 - dx / arrasto.largura);
+      return;
+    }
+    if (e.pointerType !== 'mouse') return;
+    const t = abertura.v > 0.98 && fechamento.v < 0.01 ? tocaFolha(e.clientX, e.clientY) : null;
+    hoverAlvo = t && t.dir > 0 ? 1 : 0; alvoHover = t && t.dir > 0 ? t.i : -1;
+    canvas.classList.toggle('is-arrastavel', !!t);
+  });
+  canvas.addEventListener('pointerleave', () => { hoverAlvo = 0; });
+  canvas.addEventListener('pointerdown', (e) => {
+    if (abertura.v < 0.98 || fechamento.v > 0.01) return;
+    const t = tocaFolha(e.clientX, e.clientY); if (!t) return;
+    const st = viradas[t.i]; if (Math.abs(st.v - st.para) > 0.02) return; // espera a virada em curso terminar
+    pararFolhear();
+    Object.assign(arrasto, { ativo: true, i: t.i, dir: t.dir, x0: e.clientX, v: st.v, largura: Math.max(160, canvas.getBoundingClientRect().width * (mob0() ? 0.7 : 0.32)) });
+    canvas.setPointerCapture(e.pointerId); canvas.classList.add('is-arrastando');
+  });
+  const soltar = () => {
+    if (!arrasto.ativo) return;
+    const st = viradas[arrasto.i]; arrasto.ativo = false; canvas.classList.remove('is-arrastando');
+    st.de = st.v; st.t0 = tempo; st.para = st.v; // a partir daqui, o tempo próprio assume
+    const vai = arrasto.dir > 0 ? arrasto.v > 0.35 : arrasto.v < 0.65;
+    if (vai) irPara(etapa + arrasto.dir);
+  };
+  canvas.addEventListener('pointerup', soltar); canvas.addEventListener('pointercancel', soltar);
+  const mob0 = () => camera.aspect < 0.8;
+
+  // tinta das páginas: escreve-se em tempo próprio enquanto a página está aberta
+  const tinta = conteudos.map(() => 0);
+  const DUR_TINTA = conteudos.map((c) => (c === 'apresentacao' ? 6.5 : 3.2));
+  let somAssinatura = false;
+  if (folhasConteudo[0]) folhasConteudo[0].add(canetaPag.grupo);
 
   function aplicar(p) {
     const asp = camera.aspect, mob = asp < 0.8;
@@ -614,6 +846,8 @@ async function iniciar() {
 
     // --- folhas: cada página permanece para leitura e depois vira pela lombada ---
     atualizarViradas(p);
+    const forcadoQ = forcado !== null || window.__forceP !== undefined;
+    hoverCanto += (hoverAlvo - hoverCanto) * Math.min(1, dtQuadro * 7);
     paginas.forEach((m, i) => {
       const k = m.userData.idx; const piv = m.userData.piv;
       const viraveis = k >= 0 && k < NC - 1;
@@ -631,8 +865,10 @@ async function iniciar() {
       curvar(m, dobraGiro + dobraFecha, torcao);
       if (m.userData.uP) {
         const [a, b] = janelas[k];
-        m.userData.uP.value = k < NC - 1 ? seg(p, a + JW * 0.02, b - JW * 0.58) : seg(p, a + JW * 0.10, J1 - 0.03);
+        m.userData.uP.value = forcadoQ ? (k < NC - 1 ? seg(p, a + JW * 0.02, b - JW * 0.58) : seg(p, a + JW * 0.10, J1 - 0.03)) : tinta[k];
       }
+      // leve ondulação do canto quando o mouse passa por cima
+      if (i === alvoHover && st.v < 0.01 && hoverCanto > 0.001) { piv.rotation.y -= hoverCanto * 0.05; curvar(m, -hoverCanto * 0.5, hoverCanto * 0.35); }
     });
 
     // --- câmera ---
@@ -688,6 +924,25 @@ async function iniciar() {
       atual = Math.min(atual, NC - 1);
     }
     const passoDt = Math.min(0.1, Math.max(0, tempo - tTextos)); tTextos = tempo;
+    if (atual >= 0 && !forcadoQ) {
+      const antes = tinta[atual];
+      tinta[atual] = Math.min(1, tinta[atual] + passoDt / DUR_TINTA[atual]);
+      if (atual === 0 && antes < 0.4 && tinta[0] >= 0.4 && !somAssinatura) { somAssinatura = true; tocarAssinatura(DUR_TINTA[0] * 0.55); }
+    }
+    if (forcadoQ && atual >= 0) tinta[atual] = folhasConteudo[atual].userData.uP ? folhasConteudo[atual].userData.uP.value : 1;
+    // caneta que escreve a rubrica na página de apresentação
+    {
+      const t0 = tinta[0], fl = folhasConteudo[0] ? viradas[paginas.indexOf(folhasConteudo[0])].v : 1;
+      const mostra = canetaPag.pronta && atual === 0 && fl < 0.01 && t0 > 0.34 && t0 < 0.995;
+      canetaPag.grupo.visible = mostra;
+      if (mostra) {
+        const u = clamp((t0 - 0.4) / 0.55);
+        const cx = ASS.x + ASS.w * (0.04 + u * 0.92);
+        const cy = ASS.y + ASS.h * (0.52 - 0.22 * Math.sin(u * Math.PI * 5.5) * Math.sin(u * Math.PI));
+        const levanta = 1 - seg(t0, 0.34, 0.4) * (1 - seg(t0, 0.95, 0.995));
+        canetaPag.grupo.position.set((cx / 1024 - 0.5) * pagW, (0.5 - cy / HcPag) * pagH, 0.0012 + levanta * 0.035);
+      }
+    }
     const forcadoT = forcado !== null || window.__forceP !== undefined;
     passos.forEach((el, k) => {
       const alvoV = k === atual ? 1 : 0;
@@ -702,8 +957,38 @@ async function iniciar() {
     let ativa = atual + 1;
     if (fechamento.v > 0.04) ativa = NC + 1;
     marcas.forEach((li, i) => li.classList.toggle('is-on', i === ativa));
-    if (marcas[0]) marcas[0].parentElement.style.opacity = (seg(p, 0.04, 0.08) * (1 - seg(p, 0.91, 0.94))).toFixed(3);
+    if (marcas[0]) marcas[0].parentElement.style.opacity = seg(p, 0.04, 0.08).toFixed(3);
+    // selo de cera: parte-se ao meio quando a capa começa a se erguer
+    {
+      const sq = seg(abertura.v, 0, 0.16);
+      selo.visible = sq < 0.999;
+      metades.forEach((g, lado) => {
+        const sd = lado ? -1 : 1;
+        g.position.set(sd * sq * 0.022, -sq * sq * 0.09, sq * 0.03);
+        g.rotation.set(sq * 0.9, sd * sq * 0.5, -sd * sq * 0.8);
+      });
+      cera.opacity = 1 - seg(sq, 0.55, 1); ouroSelo.opacity = cera.opacity;
+    }
     barra.style.transform = `scaleX(${p.toFixed(4)})`;
+  }
+
+  // ---------- qualidade adaptativa: aparelhos lentos recebem uma cena mais leve ----------
+  let amostras = 0, somaDt = 0, qualidadeDefinida = false;
+  function medirQualidade(dt) {
+    if (qualidadeDefinida || !visivel || dt <= 0) return;
+    if (tempo < 1.2) return; // ignora o arranque
+    amostras++; somaDt += dt;
+    if (somaDt < 3.5) return;
+    qualidadeDefinida = true;
+    const fps = amostras / somaDt;
+    if (fps < 35 && !window.__dtMax) {
+      renderer.setPixelRatio(1);
+      renderer.shadowMap.enabled = false;
+      scene.traverse((o) => { if (o.material) [].concat(o.material).forEach((m) => { m.needsUpdate = true; }); });
+      if (poeira) poeira.visible = false;
+      layout();
+      document.documentElement.classList.add('cena-leve');
+    }
   }
 
   // ---------- laço ----------
@@ -716,7 +1001,14 @@ async function iniciar() {
     tempo += dt;
     mouse.x += (mouse.tx - mouse.x) * 0.05; mouse.y += (mouse.ty - mouse.y) * 0.05;
     const alvo = window.__forceP !== undefined ? window.__forceP : (forcado !== null ? +forcado : progresso());
-    pSuave += (alvo - pSuave) * (forcado !== null || window.__forceP !== undefined ? 1 : 0.13);
+    dtQuadro = dt;
+    if (forcado !== null || window.__forceP !== undefined) pSuave = alvo;
+    else { const d = alvo - pSuave; pSuave += Math.sign(d) * Math.min(Math.abs(d), Math.max(0.05, Math.abs(d) * 2.4) * dt); }
+    if (folheando && tempo >= proximaEm) {
+      if (etapa < ULTIMA) { irPara(etapa + 1, { manual: false }); proximaEm = tempo + pausaDaEtapa(etapa); }
+      if (etapa >= ULTIMA) pararFolhear();
+    }
+    medirQualidade(dt);
     aplicar(pSuave);
     renderer.render(scene, camera);
     if (primeiro) {
@@ -726,5 +1018,5 @@ async function iniciar() {
     }
   }
   requestAnimationFrame(laco);
-  window.__cena = { modelosProntos };
+  window.__cena = { modelosProntos, irPara, etapa: () => etapa };
 }
