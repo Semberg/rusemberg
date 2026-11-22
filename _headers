@@ -11,3 +11,7 @@ https://:version.:project.pages.dev/*
   Cache-Control: public, max-age=0, must-revalidate
 /js/*
   Cache-Control: public, max-age=0, must-revalidate
+
+/painel*
+  X-Robots-Tag: noindex, nofollow
+  Cache-Control: no-store

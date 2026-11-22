@@ -4,8 +4,6 @@
 (function () {
   if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') return;
   if (navigator.doNotTrack === '1' || navigator.globalPrivacyControl) return;
-  var URL_RPC = 'https://nbhgumvxbjaosdupxzph.supabase.co/rest/v1/rpc/registrar_evento_site';
-  var CHAVE = 'sb_publishable_T2tLyvBffPszI9rSGF-FfA_kPJTzpGn';
   var visita = Math.random().toString(36).slice(2) + Date.now().toString(36);
   var w = window.innerWidth;
   var disp = w < 700 ? 'celular' : (w < 1100 ? 'tablet' : 'computador');
@@ -16,9 +14,10 @@
 
   function enviar(tipo, detalhe) {
     try {
-      fetch(URL_RPC, {
+      // passa pelo próprio site, que acrescenta cidade e estado aproximados (sem guardar o IP)
+      fetch('/api/evento', {
         method: 'POST', keepalive: true,
-        headers: { apikey: CHAVE, Authorization: 'Bearer ' + CHAVE, 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'text/plain' },
         body: JSON.stringify({ p_tipo: tipo, p_pagina: pagina, p_detalhe: detalhe || null, p_origem: origem || null, p_dispositivo: disp, p_visita: visita })
       }).catch(function () {});
     } catch (e) {}

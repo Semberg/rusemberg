@@ -1,4 +1,5 @@
 User-agent: *
+Disallow: /painel
 Allow: /
 
 Sitemap: https://www.rusemberg.adv.br/sitemap.xml

@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Painel de visitas | Rusemberg Fernandes</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#17191c">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+<style>
+  :root { --gold: #c9a24d; --gold-d: #8a6d2f; --ink: #16181b; --muted: #6b6a66; --line: rgba(0,0,0,.09); --bg: #f6f3ec; }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif; color: var(--ink); background: var(--bg); }
+  header { background: #17191c; color: #fff; padding: 18px clamp(16px, 4vw, 40px); display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+  header img { width: 36px; height: auto; }
+  header h1 { font-size: 1.05rem; margin: 0; font-weight: 600; letter-spacing: .02em; }
+  header span { color: rgba(255,255,255,.55); font-size: .8rem; }
+  header .acoes { margin-left: auto; display: flex; gap: 8px; align-items: center; }
+  select, button, input { font: inherit; }
+  header select, header button { background: transparent; color: #fff; border: 1px solid rgba(255,255,255,.3); padding: 7px 12px; cursor: pointer; }
+  main { max-width: 1180px; margin: 0 auto; padding: 26px clamp(14px, 3vw, 32px) 60px; }
+  .login { max-width: 380px; margin: 10vh auto; background: #fff; padding: 32px 28px; border-top: 2px solid var(--gold); }
+  .login h2 { margin: 0 0 6px; font-size: 1.3rem; }
+  .login p { color: var(--muted); font-size: .88rem; margin: 0 0 18px; }
+  .login input { width: 100%; padding: 12px; border: 1px solid rgba(0,0,0,.18); margin-bottom: 12px; }
+  .login button { width: 100%; padding: 12px; background: var(--gold); border: 0; font-weight: 600; letter-spacing: .06em; cursor: pointer; }
+  .erro { color: #b3402f; font-size: .85rem; min-height: 1.2em; margin: 0 0 8px; }
+  .kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 18px; }
+  .kpi { background: #fff; padding: 16px 18px; border-left: 2px solid var(--gold); }
+  .kpi b { display: block; font-size: 1.8rem; font-weight: 600; font-variant-numeric: tabular-nums; }
+  .kpi small { color: var(--muted); font-size: .72rem; letter-spacing: .12em; text-transform: uppercase; }
+  .grade { display: grid; grid-template-columns: repeat(auto-fit, minmax(330px, 1fr)); gap: 14px; }
+  .card { background: #fff; padding: 18px 20px; }
+  .card h3 { margin: 0 0 12px; font-size: .74rem; letter-spacing: .16em; text-transform: uppercase; color: var(--gold-d); }
+  .barra { display: grid; grid-template-columns: minmax(90px, 40%) 1fr 34px; gap: 10px; align-items: center; font-size: .86rem; margin: 6px 0; }
+  .barra .nome { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .barra .trilho { height: 9px; background: #eee9dd; }
+  .barra .trilho i { display: block; height: 100%; background: var(--gold); }
+  .barra .n { text-align: right; font-variant-numeric: tabular-nums; color: var(--muted); }
+  .colunas { display: flex; align-items: flex-end; gap: 3px; height: 130px; padding-top: 6px; }
+  .colunas div { flex: 1; background: var(--gold); min-height: 2px; position: relative; }
+  .colunas div:hover::after { content: attr(data-t); position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%); background: #17191c; color: #fff; font-size: .72rem; padding: 3px 6px; white-space: nowrap; }
+  .eixo { display: flex; justify-content: space-between; font-size: .7rem; color: var(--muted); margin-top: 6px; }
+  table { width: 100%; border-collapse: collapse; font-size: .84rem; }
+  th, td { text-align: left; padding: 8px 6px; border-bottom: 1px solid var(--line); }
+  th { font-size: .66rem; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+  .larga { grid-column: 1 / -1; }
+  .vazio { color: var(--muted); font-size: .86rem; }
+  .nota { color: var(--muted); font-size: .76rem; margin-top: 22px; }
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<header>
+  <img src="assets/icon-on-dark-transparent.png" alt="">
+  <div><h1>Painel de visitas do site</h1><span id="periodoTxt">rusemberg.adv.br</span></div>
+  <div class="acoes" id="acoes" hidden>
+    <select id="dias" aria-label="Período">
+      <option value="7">Últimos 7 dias</option>
+      <option value="30" selected>Últimos 30 dias</option>
+      <option value="90">Últimos 90 dias</option>
+      <option value="365">Último ano</option>
+    </select>
+    <button type="button" id="sair">Sair</button>
+  </div>
+</header>
+
+<main>
+  <form class="login" id="login">
+    <h2>Acesso restrito</h2>
+    <p>Informe a senha do painel para ver as estatísticas de visitas.</p>
+    <input type="password" id="senha" autocomplete="current-password" placeholder="Senha" required>
+    <p class="erro" id="erro" role="alert"></p>
+    <button type="submit">Entrar</button>
+  </form>
+
+  <section id="painel" hidden>
+    <div class="kpis" id="kpis"></div>
+    <div class="grade">
+      <div class="card larga"><h3>Visitas por dia</h3><div class="colunas" id="porDia"></div><div class="eixo" id="porDiaEixo"></div></div>
+      <div class="card"><h3>De onde vieram (origem)</h3><div id="origens"></div></div>
+      <div class="card"><h3>Cidades (aproximadas)</h3><div id="cidades"></div></div>
+      <div class="card"><h3>Horário das visitas</h3><div class="colunas" id="porHora"></div><div class="eixo"><span>0h</span><span>6h</span><span>12h</span><span>18h</span><span>23h</span></div></div>
+      <div class="card"><h3>Aparelhos</h3><div id="aparelhos"></div><h3 style="margin-top:20px">Páginas de entrada</h3><div id="paginas"></div></div>
+      <div class="card"><h3>Livro de abertura</h3><div id="livro"></div></div>
+      <div class="card"><h3>Contatos pelo site</h3><div id="contatos"></div></div>
+      <div class="card larga"><h3>Últimas visitas</h3><div style="overflow-x:auto"><table><thead><tr><th>Quando</th><th>Origem</th><th>Local aproximado</th><th>Aparelho</th><th>Página</th></tr></thead><tbody id="ultimas"></tbody></table></div></div>
+    </div>
+    <p class="nota">Estatísticas anônimas: sem cookies, sem endereço IP e sem identificação dos visitantes. A cidade é estimada pela rede e pode não ser exata. Visitas de quem ativa "Não rastrear" no navegador não são contadas.</p>
+  </section>
+</main>
+
+<script>
+(function () {
+  var RPC = 'https://nbhgumvxbjaosdupxzph.supabase.co/rest/v1/rpc/painel_site';
+  var CHAVE = 'sb_publishable_T2tLyvBffPszI9rSGF-FfA_kPJTzpGn';
+  var $ = function (id) { return document.getElementById(id); };
+  var senha = '';
+  try { senha = sessionStorage.getItem('rf-painel') || ''; } catch (e) {}
+  var esc = function (s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); };
+  var fmt = function (n) { return Number(n || 0).toLocaleString('pt-BR'); };
+
+  function barras(lista, alvo) {
+    var el = $(alvo);
+    if (!lista || !lista.length) { el.innerHTML = '<p class="vazio">Sem registros no período.</p>'; return; }
+    var max = Math.max.apply(null, lista.map(function (x) { return x.n; })) || 1;
+    el.innerHTML = lista.map(function (x) {
+      return '<div class="barra"><span class="nome" title="' + esc(x.nome) + '">' + esc(x.nome) + '</span><span class="trilho"><i style="width:' + (100 * x.n / max).toFixed(1) + '%"></i></span><span class="n">' + fmt(x.n) + '</span></div>';
+    }).join('');
+  }
+
+  function render(d, dias) {
+    var ini = new Date(d.inicio), fim = new Date(d.fim);
+    $('periodoTxt').textContent = ini.toLocaleDateString('pt-BR') + ' a ' + fim.toLocaleDateString('pt-BR');
+    var c = d.contatos || {};
+    var totContatos = (c.whatsapp || 0) + (c.telefone || 0) + (c.email || 0) + (c.formulario || 0);
+    $('kpis').innerHTML = [
+      ['Visitas', d.visitas], ['Contatos iniciados', totContatos], ['Downloads de e-books', d.ebooks && d.ebooks.downloads],
+      ['Mensagens do formulário', d.mensagens], ['Cadastros de e-books (total)', d.ebooks && d.ebooks.total_cadastros]
+    ].map(function (k) { return '<div class="kpi"><b>' + fmt(k[1]) + '</b><small>' + k[0] + '</small></div>'; }).join('');
+
+    // visitas por dia, com os dias sem visita preenchidos
+    var mapa = {}; (d.por_dia || []).forEach(function (x) { mapa[x.dia] = x.n; });
+    var diasLista = [];
+    for (var t = new Date(fim); diasLista.length < Math.min(dias, 92); t.setDate(t.getDate() - 1)) {
+      var k = t.toLocaleDateString('sv-SE', { timeZone: 'America/Fortaleza' }); diasLista.unshift([k, mapa[k] || 0]);
+    }
+    var maxD = Math.max.apply(null, diasLista.map(function (x) { return x[1]; })) || 1;
+    $('porDia').innerHTML = diasLista.map(function (x) {
+      var br = x[0].split('-').reverse().slice(0, 2).join('/');
+      return '<div style="height:' + (100 * x[1] / maxD) + '%" data-t="' + br + ': ' + x[1] + '"></div>';
+    }).join('');
+    var p = function (x) { return x[0].split('-').reverse().slice(0, 2).join('/'); };
+    $('porDiaEixo').innerHTML = '<span>' + p(diasLista[0]) + '</span><span>' + p(diasLista[diasLista.length - 1]) + '</span>';
+
+    var horas = new Array(24).fill(0); (d.por_hora || []).forEach(function (x) { horas[x.hora] = x.n; });
+    var maxH = Math.max.apply(null, horas) || 1;
+    $('porHora').innerHTML = horas.map(function (n, h) { return '<div style="height:' + (100 * n / maxH) + '%" data-t="' + h + 'h: ' + n + '"></div>'; }).join('');
+
+    barras(d.origens, 'origens');
+    barras(d.cidades, 'cidades');
+    barras(d.aparelhos, 'aparelhos');
+    barras((d.paginas || []).map(function (x) { return { nome: x.nome === '/' ? 'Página inicial' : x.nome.replace(/^\//, ''), n: x.n }; }), 'paginas');
+    var l = d.livro || {};
+    barras([{ nome: 'Abriram o livro', n: l.inicio }, { nome: 'Chegaram à metade', n: l.meio }, { nome: 'Folhearam até o fim', n: l.fim }], 'livro');
+    barras([{ nome: 'WhatsApp', n: c.whatsapp }, { nome: 'Formulário', n: c.formulario }, { nome: 'Telefone', n: c.telefone }, { nome: 'E-mail', n: c.email }], 'contatos');
+
+    $('ultimas').innerHTML = (d.ultimas || []).map(function (u) {
+      return '<tr><td>' + esc(u.quando) + '</td><td>' + esc(u.origem) + '</td><td>' + esc(u.local) + '</td><td>' + esc(u.aparelho || '') + '</td><td>' + esc(u.pagina === '/' ? 'inicial' : (u.pagina || '').replace(/^\//, '')) + '</td></tr>';
+    }).join('') || '<tr><td colspan="5" class="vazio">Sem visitas registradas.</td></tr>';
+  }
+
+  function carregar() {
+    var dias = +$('dias').value;
+    return fetch(RPC, {
+      method: 'POST',
+      headers: { apikey: CHAVE, Authorization: 'Bearer ' + CHAVE, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ p_senha: senha, p_dias: dias })
+    }).then(function (r) {
+      return r.json().then(function (j) { if (!r.ok) throw new Error((j && j.message) || 'Falha ao carregar'); return j; });
+    }).then(function (d) {
+      try { sessionStorage.setItem('rf-painel', senha); } catch (e) {}
+      $('login').hidden = true; $('painel').hidden = false; $('acoes').hidden = false;
+      render(d, dias);
+    });
+  }
+
+  $('login').addEventListener('submit', function (e) {
+    e.preventDefault(); senha = $('senha').value; $('erro').textContent = '';
+    carregar().catch(function (err) {
+      $('erro').textContent = /senha/.test(err.message) ? 'Senha incorreta.' : (/tentativas/.test(err.message) ? 'Muitas tentativas. Aguarde alguns minutos.' : 'Não foi possível carregar. Tente de novo.');
+    });
+  });
+  $('dias').addEventListener('change', function () { carregar().catch(function () {}); });
+  $('sair').addEventListener('click', function () {
+    try { sessionStorage.removeItem('rf-painel'); } catch (e) {}
+    senha = ''; $('painel').hidden = true; $('acoes').hidden = true; $('login').hidden = false; $('senha').value = '';
+  });
+  if (senha) carregar().catch(function () { senha = ''; });
+})();
+</script>
+</body>
+</html>
