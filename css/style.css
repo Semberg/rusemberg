@@ -190,11 +190,11 @@ ul, ol { list-style: none; margin: 0; padding: 0; }
 .passo-sub { color: var(--gold-light); font-size: .82rem; letter-spacing: .08em; margin-top: -6px; }
 .passo p { font-size: .96rem; line-height: 1.6; margin-bottom: .8em; }
 .passo p:last-child { margin-bottom: 0; }
-.areas-livro { display: flex; flex-direction: column; gap: 2px; }
-.areas-livro a { display: block; padding: 9px 0 9px 14px; border-left: 1px solid rgba(255,255,255,.18); transition: border-color .3s, background .3s; }
+.areas-livro { display: grid; grid-template-columns: 1fr 1fr; gap: 2px 14px; }
+.areas-livro a { display: block; height: 100%; padding: 7px 0 7px 12px; border-left: 1px solid rgba(255,255,255,.18); transition: border-color .3s, background .3s; }
 .areas-livro a:hover { border-color: var(--gold); background: rgba(255,255,255,.04); }
-.areas-livro strong { display: block; color: #fff; font-weight: 500; font-size: .95rem; }
-.areas-livro span { display: block; color: rgba(255,255,255,.66); font-size: .82rem; line-height: 1.4; }
+.areas-livro strong { display: block; color: #fff; font-weight: 500; font-size: .9rem; line-height: 1.25; }
+.areas-livro span { display: block; color: rgba(255,255,255,.62); font-size: .76rem; line-height: 1.35; margin-top: 2px; }
 .formacao-grupo { font-family: var(--sans); font-size: .64rem; letter-spacing: .22em; text-transform: uppercase; color: var(--gold-light); font-weight: 600; margin: 16px 0 8px; }
 .formacao { display: flex; flex-direction: column; gap: 10px; margin: 0; }
 .formacao li { padding-left: 16px; border-left: 1px solid rgba(255,255,255,.18); line-height: 1.35; }
@@ -507,7 +507,8 @@ ul, ol { list-style: none; margin: 0; padding: 0; }
   .formacao-grupo { margin: 10px 0 5px; }
   .areas-livro a { padding: 6px 0 6px 12px; }
   .areas-livro strong { font-size: .86rem; }
-  .areas-livro span { font-size: .74rem; }
+  .areas-livro span { display: none; }
+  .areas-livro { gap: 0 10px; }
   .passo-formacao h2 { font-size: 1.45rem; margin-bottom: .3em; }
   .formacao strong { font-size: .86rem; }
   .formacao span { font-size: .74rem; }

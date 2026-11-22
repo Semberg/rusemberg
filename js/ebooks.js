@@ -34,6 +34,7 @@ function livroHTML(e, i) {
     </button>
     <p class="eb-grupo">${esc(e.grupo)} · ${e.paginas} páginas</p>
     <h3 class="eb-nome">${esc(e.nome)}</h3>
+    ${e.descricao ? `<p class="eb-desc">${esc(e.descricao)}</p>` : ''}
     <button type="button" class="eb-baixar" data-id="${esc(e.id)}">Download <span aria-hidden="true">↓</span></button>
   </article>`;
 }
@@ -142,6 +143,7 @@ form.addEventListener('submit', async (ev) => {
   try { localStorage.setItem('rf-ebooks', JSON.stringify({ email, nome: campoNome.value.trim(), perfil })); } catch { /* sem armazenamento */ }
   Object.assign(salvo, { email, nome: campoNome.value.trim(), perfil });
   baixar(atual);
+  window.rfEvento?.('ebook_download', atual.nome);
   enviar.disabled = false; enviar.textContent = 'Baixar e-book';
   form.hidden = true; ok.hidden = false;
 });

@@ -9,7 +9,8 @@ export const EBOOKS = [
   "paginas": 12,
   "arquivo": "assets/ebooks/escala-5x2.pdf",
   "capa": "assets/ebooks/capas/escala-5x2.webp",
-  "mb": 0.8
+  "mb": 0.8,
+  "descricao": "O guia prático do fim da escala 6x1 para empresas e trabalhadores."
  },
  {
   "id": "escala-5x2-em-2-minutos",
@@ -20,7 +21,8 @@ export const EBOOKS = [
   "paginas": 2,
   "arquivo": "assets/ebooks/escala-5x2-em-2-minutos.pdf",
   "capa": "assets/ebooks/capas/escala-5x2-em-2-minutos.webp",
-  "mb": 0.5
+  "mb": 0.5,
+  "descricao": "O fim da 6x1 sem complicação, em duas páginas."
  },
  {
   "id": "contratos-com-seguranca",
@@ -31,7 +33,8 @@ export const EBOOKS = [
   "paginas": 8,
   "arquivo": "assets/ebooks/contratos-com-seguranca.pdf",
   "capa": "assets/ebooks/capas/contratos-com-seguranca.webp",
-  "mb": 0.6
+  "mb": 0.6,
+  "descricao": "O que todo contrato precisa ter e os erros que custam caro."
  },
  {
   "id": "contrato-de-locacao",
@@ -42,7 +45,8 @@ export const EBOOKS = [
   "paginas": 10,
   "arquivo": "assets/ebooks/contrato-de-locacao.pdf",
   "capa": "assets/ebooks/capas/contrato-de-locacao.webp",
-  "mb": 0.7
+  "mb": 0.7,
+  "descricao": "O manual para alugar um imóvel com segurança, dos dois lados."
  },
  {
   "id": "marcas-e-patentes",
@@ -53,7 +57,8 @@ export const EBOOKS = [
   "paginas": 8,
   "arquivo": "assets/ebooks/marcas-e-patentes.pdf",
   "capa": "assets/ebooks/capas/marcas-e-patentes.webp",
-  "mb": 0.6
+  "mb": 0.6,
+  "descricao": "Como proteger o nome, a logo e as criações da sua empresa."
  },
  {
   "id": "lgpd-para-empresas",
@@ -64,7 +69,8 @@ export const EBOOKS = [
   "paginas": 9,
   "arquivo": "assets/ebooks/lgpd-para-empresas.pdf",
   "capa": "assets/ebooks/capas/lgpd-para-empresas.webp",
-  "mb": 0.7
+  "mb": 0.7,
+  "descricao": "O que a Lei Geral de Proteção de Dados exige do seu negócio, sem complicação."
  },
  {
   "id": "pis-e-cofins-monofasico-no-simples-nacional",
@@ -75,7 +81,8 @@ export const EBOOKS = [
   "paginas": 7,
   "arquivo": "assets/ebooks/pis-e-cofins-monofasico-no-simples-nacional.pdf",
   "capa": "assets/ebooks/capas/pis-e-cofins-monofasico-no-simples-nacional.webp",
-  "mb": 0.6
+  "mb": 0.6,
+  "descricao": "Como empresas do Simples Nacional podem recuperar tributos pagos em dobro."
  },
  {
   "id": "consultoria-juridica-preventiva",
@@ -86,7 +93,8 @@ export const EBOOKS = [
   "paginas": 7,
   "arquivo": "assets/ebooks/consultoria-juridica-preventiva.pdf",
   "capa": "assets/ebooks/capas/consultoria-juridica-preventiva.webp",
-  "mb": 0.6
+  "mb": 0.6,
+  "descricao": "Como o acompanhamento contínuo reduz riscos e ajuda o empresário a decidir melhor."
  },
  {
   "id": "usucapiao",
@@ -97,7 +105,8 @@ export const EBOOKS = [
   "paginas": 11,
   "arquivo": "assets/ebooks/usucapiao.pdf",
   "capa": "assets/ebooks/capas/usucapiao.webp",
-  "mb": 0.6
+  "mb": 0.6,
+  "descricao": "Como transformar anos de posse em propriedade registrada."
  },
  {
   "id": "demissao-sem-dor-de-cabeca",
@@ -108,7 +117,8 @@ export const EBOOKS = [
   "paginas": 10,
   "arquivo": "assets/ebooks/demissao-sem-dor-de-cabeca.pdf",
   "capa": "assets/ebooks/capas/demissao-sem-dor-de-cabeca.webp",
-  "mb": 0.7
+  "mb": 0.7,
+  "descricao": "Guia da rescisão do contrato de trabalho para o empregador fazer certo da primeira vez."
  },
  {
   "id": "recebi-uma-reclamacao-trabalhista",
@@ -119,7 +129,8 @@ export const EBOOKS = [
   "paginas": 10,
   "arquivo": "assets/ebooks/recebi-uma-reclamacao-trabalhista.pdf",
   "capa": "assets/ebooks/capas/recebi-uma-reclamacao-trabalhista.webp",
-  "mb": 0.7
+  "mb": 0.7,
+  "descricao": "O guia do empresário para responder ao processo sem perder prazos nem oportunidades."
  },
  {
   "id": "horas-extras-banco-de-horas-e-ponto",
@@ -130,7 +141,8 @@ export const EBOOKS = [
   "paginas": 10,
   "arquivo": "assets/ebooks/horas-extras-banco-de-horas-e-ponto.pdf",
   "capa": "assets/ebooks/capas/horas-extras-banco-de-horas-e-ponto.webp",
-  "mb": 0.7
+  "mb": 0.7,
+  "descricao": "Como controlar a jornada e evitar a condenação trabalhista mais comum."
  },
  {
   "id": "insalubridade-e-periculosidade",
@@ -141,7 +153,8 @@ export const EBOOKS = [
   "paginas": 9,
   "arquivo": "assets/ebooks/insalubridade-e-periculosidade.pdf",
   "capa": "assets/ebooks/capas/insalubridade-e-periculosidade.webp",
-  "mb": 0.6
+  "mb": 0.6,
+  "descricao": "Quando os adicionais são devidos e como a empresa se protege."
  },
  {
   "id": "bpc-loas",
@@ -152,7 +165,8 @@ export const EBOOKS = [
   "paginas": 10,
   "arquivo": "assets/ebooks/bpc-loas.pdf",
   "capa": "assets/ebooks/capas/bpc-loas.webp",
-  "mb": 0.6
+  "mb": 0.6,
+  "descricao": "Quem tem direito, como pedir e o que fazer se o INSS negar."
  },
  {
   "id": "pensao-por-morte",
@@ -163,7 +177,8 @@ export const EBOOKS = [
   "paginas": 8,
   "arquivo": "assets/ebooks/pensao-por-morte.pdf",
   "capa": "assets/ebooks/capas/pensao-por-morte.webp",
-  "mb": 0.6
+  "mb": 0.6,
+  "descricao": "Quem recebe, quanto recebe e por quanto tempo."
  },
  {
   "id": "aposentadoria-depois-da-reforma",
@@ -174,7 +189,8 @@ export const EBOOKS = [
   "paginas": 9,
   "arquivo": "assets/ebooks/aposentadoria-depois-da-reforma.pdf",
   "capa": "assets/ebooks/capas/aposentadoria-depois-da-reforma.webp",
-  "mb": 0.7
+  "mb": 0.7,
+  "descricao": "As regras de 2026 explicadas de forma simples, com exemplos."
  },
  {
   "id": "beneficio-negado-pelo-inss",
@@ -185,7 +201,8 @@ export const EBOOKS = [
   "paginas": 9,
   "arquivo": "assets/ebooks/beneficio-negado-pelo-inss.pdf",
   "capa": "assets/ebooks/capas/beneficio-negado-pelo-inss.webp",
-  "mb": 0.6
+  "mb": 0.6,
+  "descricao": "O que fazer: recurso administrativo, novo pedido ou ação judicial."
  },
  {
   "id": "inventario-em-cartorio",
@@ -196,7 +213,8 @@ export const EBOOKS = [
   "paginas": 10,
   "arquivo": "assets/ebooks/inventario-em-cartorio.pdf",
   "capa": "assets/ebooks/capas/inventario-em-cartorio.webp",
-  "mb": 0.6
+  "mb": 0.6,
+  "descricao": "Como fazer a partilha da herança de forma rápida, segura e sem processo."
  },
  {
   "id": "divorcio-pensao-e-guarda",
@@ -207,7 +225,8 @@ export const EBOOKS = [
   "paginas": 11,
   "arquivo": "assets/ebooks/divorcio-pensao-e-guarda.pdf",
   "capa": "assets/ebooks/capas/divorcio-pensao-e-guarda.webp",
-  "mb": 0.7
+  "mb": 0.7,
+  "descricao": "Guia prático para atravessar a separação protegendo os filhos e o patrimônio."
  },
  {
   "id": "testamento-e-planejamento-sucessorio",
@@ -218,7 +237,8 @@ export const EBOOKS = [
   "paginas": 9,
   "arquivo": "assets/ebooks/testamento-e-planejamento-sucessorio.pdf",
   "capa": "assets/ebooks/capas/testamento-e-planejamento-sucessorio.webp",
-  "mb": 0.6
+  "mb": 0.6,
+  "descricao": "Como organizar a herança em vida e evitar conflitos na família."
  },
  {
   "id": "execucao-penal-guia-para-a-familia",
@@ -229,7 +249,8 @@ export const EBOOKS = [
   "paginas": 10,
   "arquivo": "assets/ebooks/execucao-penal-guia-para-a-familia.pdf",
   "capa": "assets/ebooks/capas/execucao-penal-guia-para-a-familia.webp",
-  "mb": 0.6
+  "mb": 0.6,
+  "descricao": "Progressão de regime, livramento, remição e os direitos de quem cumpre pena."
  },
  {
   "id": "fui-intimado-pela-policia",
@@ -240,7 +261,8 @@ export const EBOOKS = [
   "paginas": 9,
   "arquivo": "assets/ebooks/fui-intimado-pela-policia.pdf",
   "capa": "assets/ebooks/capas/fui-intimado-pela-policia.webp",
-  "mb": 0.6
+  "mb": 0.6,
+  "descricao": "Seus direitos na delegacia, na abordagem e em caso de prisão."
  },
  {
   "id": "juros-abusivos-e-seguros-embutidos",
@@ -251,7 +273,8 @@ export const EBOOKS = [
   "paginas": 9,
   "arquivo": "assets/ebooks/juros-abusivos-e-seguros-embutidos.pdf",
   "capa": "assets/ebooks/capas/juros-abusivos-e-seguros-embutidos.webp",
-  "mb": 0.7
+  "mb": 0.7,
+  "descricao": "Como identificar cobranças indevidas em financiamentos e empréstimos."
  },
  {
   "id": "nome-negativado-indevidamente",
@@ -262,7 +285,8 @@ export const EBOOKS = [
   "paginas": 9,
   "arquivo": "assets/ebooks/nome-negativado-indevidamente.pdf",
   "capa": "assets/ebooks/capas/nome-negativado-indevidamente.webp",
-  "mb": 0.6
+  "mb": 0.6,
+  "descricao": "Como limpar o nome e quando cabe indenização por inclusão indevida."
  },
  {
   "id": "compras-online-troca-e-garantia",
@@ -273,7 +297,8 @@ export const EBOOKS = [
   "paginas": 8,
   "arquivo": "assets/ebooks/compras-online-troca-e-garantia.pdf",
   "capa": "assets/ebooks/capas/compras-online-troca-e-garantia.webp",
-  "mb": 0.6
+  "mb": 0.6,
+  "descricao": "O que o Código de Defesa do Consumidor garante em cada situação."
  },
  {
   "id": "abrindo-sua-empresa",
@@ -284,7 +309,8 @@ export const EBOOKS = [
   "paginas": 8,
   "arquivo": "assets/ebooks/abrindo-sua-empresa.pdf",
   "capa": "assets/ebooks/capas/abrindo-sua-empresa.webp",
-  "mb": 0.6
+  "mb": 0.6,
+  "descricao": "MEI, ME, sócios e contrato social: como começar com o pé direito."
  },
  {
   "id": "reforma-tributaria-para-pequenos-negocios",
@@ -295,6 +321,7 @@ export const EBOOKS = [
   "paginas": 10,
   "arquivo": "assets/ebooks/reforma-tributaria-para-pequenos-negocios.pdf",
   "capa": "assets/ebooks/capas/reforma-tributaria-para-pequenos-negocios.webp",
-  "mb": 0.7
+  "mb": 0.7,
+  "descricao": "O que muda com a CBS e o IBS e como o seu negócio deve se preparar."
  }
 ];
