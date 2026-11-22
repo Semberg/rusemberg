@@ -432,6 +432,9 @@ ul, ol { list-style: none; margin: 0; padding: 0; }
 .contato-list .tel { margin-left: 12px; font-size: .72rem; letter-spacing: .12em; text-transform: uppercase; color: var(--gold-dark); border-bottom: 1px solid var(--gold); }
 .footer-meta { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; font-size: .78rem; padding-top: 20px; }
 .footer-meta p { margin: 0; }
+.footer-meta a { color: inherit; text-decoration: underline; text-underline-offset: 3px; }
+.footer-meta .footer-aviso { flex-basis: 100%; opacity: .7; font-size: .72rem; }
+.texto-sumario { font-size: .88rem; padding: 16px 20px; background: #f6f3ec; border-left: 2px solid var(--gold); margin-bottom: 28px; }
 
 /* ---------- WhatsApp flutuante ---------- */
 .whats-float {
