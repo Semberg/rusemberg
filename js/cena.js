@@ -10,7 +10,7 @@ import { RoomEnvironment } from '../assets/vendor/three/addons/environments/Room
 import { RoundedBoxGeometry } from '../assets/vendor/three/addons/geometries/RoundedBoxGeometry.js';
 import { GLTFLoader } from '../assets/vendor/three/addons/loaders/GLTFLoader.js';
 import { MeshoptDecoder } from '../assets/vendor/three/addons/meshopt_decoder.module.js';
-import { tocarVirada, tocarCapa, tocarFechamento, tocarAssinatura, alternarSom, somLigado, aoMudarSom } from './som-folha.js';
+import { tocarVirada, tocarCapa, tocarFechamento, tocarAssinatura, alternarSom, somLigado, aoMudarSom } from './som-folha.js?v=20261122b';
 
 const cena = document.querySelector('.cena');
 const sticky = document.getElementById('cenaSticky');
@@ -24,7 +24,11 @@ const marcas = [...document.querySelectorAll('.cena-abas [data-etapa]')];
 const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 function webglOk() {
-  try { const c = document.createElement('canvas'); return !!(c.getContext('webgl2') || c.getContext('webgl')); }
+  try {
+    const c = document.createElement('canvas'); const g = c.getContext('webgl2') || c.getContext('webgl');
+    if (g) g.getExtension('WEBGL_lose_context')?.loseContext(); // libera o contexto de teste
+    return !!g;
+  }
   catch { return false; }
 }
 if (reduce || !webglOk()) {
@@ -46,6 +50,8 @@ async function iniciar() {
 
   // ---------- renderizador ----------
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: !mobile(), alpha: true, powerPreference: 'high-performance' });
+  // se a placa de vídeo perder o contexto, mostra a versão estática em vez de uma tela parada
+  canvas.addEventListener('webglcontextlost', (e) => { e.preventDefault(); document.documentElement.classList.add('cena-estatica'); window.scrollTo(0, 0); }, { once: true });
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, mobile() ? 1.4 : 1.8));
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -657,7 +663,7 @@ async function iniciar() {
   const P_ETAPAS = [0, ...conteudos.map((_, k) => (k < NC - 1 ? J0 + (k + 0.5) * JW : J1 - 0.012)), 0.975];
   const ULTIMA = P_ETAPAS.length - 1;
   let etapa = 0, mudouEm = -1e9, chegouTopoEm = 0, gestoInicio = 0, ultimoGesto = 0;
-  const naCena = () => { const r = cena.getBoundingClientRect(); return Math.abs(r.top) < 6; };
+  const naCena = () => { if (document.documentElement.classList.contains('cena-estatica')) return false; const r = cena.getBoundingClientRect(); return Math.abs(r.top) < 6; };
   const avisar = () => { sticky.dataset.etapa = etapa; window.dispatchEvent(new CustomEvent('livro:etapa', { detail: { etapa, ultima: ULTIMA } })); };
   sticky.dataset.etapa = 0;
   function irPara(n, { manual = true } = {}) {

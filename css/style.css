@@ -236,6 +236,7 @@ ul, ol { list-style: none; margin: 0; padding: 0; }
 
 /* versão estática (movimento reduzido ou sem WebGL) */
 .cena-estatica .cena { height: auto; }
+.cena-estatica .cena-sticky { touch-action: pan-y !important; }
 .cena-estatica .cena-sticky { position: relative; height: auto; min-height: 100svh; }
 .cena-estatica .cena-canvas, .cena-estatica .cap-3, .cena-estatica .cena-progresso, .cena-estatica .cap-dica, .cena-estatica .cena-abas, .cena-estatica .cena-folhear, .cena-estatica .cena-retorno { display: none; }
 .cena-estatica .cap { position: relative; opacity: 1 !important; }
@@ -622,6 +623,8 @@ ul, ol { list-style: none; margin: 0; padding: 0; }
 
 /* ---------- Contato ---------- */
 .contato-valor { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 0; }
+.contato-emails { flex-direction: column; gap: 8px; }
+.contato-emails > span { display: flex; flex-wrap: wrap; align-items: baseline; }
 .copiar { font: inherit; margin-left: 12px; font-size: .72rem; letter-spacing: .12em; text-transform: uppercase; color: var(--text-muted); background: none; border: 0; border-bottom: 1px dotted var(--text-muted); padding: 0; cursor: pointer; }
 .copiar:hover { color: var(--gold-dark); border-color: var(--gold); }
 .status-atend { display: inline-flex; align-items: center; gap: 8px; margin-left: 12px; font-size: .74rem; color: var(--text-muted) !important; }

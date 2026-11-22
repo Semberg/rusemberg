@@ -6,3 +6,8 @@ https://:version.:project.pages.dev/*
 
 /assets/*
   Cache-Control: public, max-age=86400
+
+/css/*
+  Cache-Control: public, max-age=0, must-revalidate
+/js/*
+  Cache-Control: public, max-age=0, must-revalidate

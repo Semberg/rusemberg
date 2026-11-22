@@ -1,5 +1,5 @@
 // Biblioteca de e-books: estante, filtro por tema e download com cadastro
-import { EBOOKS } from './ebooks-dados.js';
+import { EBOOKS } from './ebooks-dados.js?v=20261122b';
 
 const SUPABASE_URL = 'https://nbhgumvxbjaosdupxzph.supabase.co';
 const SUPABASE_CHAVE = 'sb_publishable_T2tLyvBffPszI9rSGF-FfA_kPJTzpGn'; // chave pública: só permite chamar a função de registro
