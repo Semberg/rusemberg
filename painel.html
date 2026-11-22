@@ -202,15 +202,20 @@
     if (camada) camada.remove();
     camada = L.layerGroup().addTo(mapa);
     if (!pontos.length) { mapa.setView([-7.23, -35.88], 4); return; }
-    var max = Math.max.apply(null, pontos.map(function (p) { return p.n; })) || 1, limites = [];
+    var max = Math.max.apply(null, pontos.map(function (p) { return p.n; })) || 1, limites = [], marcas = [];
+    // ponto vermelho pequeno; cresce um pouco com o número de visitas e acompanha o zoom
+    var raio = function (n) { var z = mapa.getZoom(); return (2.5 + 3.5 * Math.sqrt(n / max)) * Math.min(1.8, Math.max(0.6, z / 8)); };
     pontos.forEach(function (p) {
-      var raio = 6 + 18 * Math.sqrt(p.n / max);
-      L.circleMarker([p.lat, p.lon], { radius: raio, color: '#8a6d2f', weight: 1.5, fillColor: '#c9a24d', fillOpacity: .55 })
+      var m = L.circleMarker([p.lat, p.lon], { radius: raio(p.n), color: '#9f1d1d', weight: 1, fillColor: '#e02424', fillOpacity: .85 })
         .bindPopup('<strong>' + esc(p.local || 'Local aproximado') + '</strong><br>' + fmt(p.n) + ' visita(s)')
         .bindTooltip(esc(p.local || '') + ': ' + p.n)
         .addTo(camada);
+      m._n = p.n; marcas.push(m);
       limites.push([p.lat, p.lon]);
     });
+    if (mapa._ajusteRaio) mapa.off('zoomend', mapa._ajusteRaio);
+    mapa._ajusteRaio = function () { marcas.forEach(function (m) { m.setRadius(raio(m._n)); }); };
+    mapa.on('zoomend', mapa._ajusteRaio);
     if (limites.length === 1) mapa.setView(limites[0], 9); else mapa.fitBounds(limites, { padding: [30, 30], maxZoom: 10 });
     setTimeout(function () { mapa.invalidateSize(); }, 50);
   }
