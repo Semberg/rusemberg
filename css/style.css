@@ -791,3 +791,58 @@ ul, ol { list-style: none; margin: 0; padding: 0; }
   .contato-form { padding: 26px 20px 22px; margin-top: 34px; }
   .cf-linha { grid-template-columns: 1fr; }
 }
+
+/* ==========================================================
+   CENA CLARA (nov/2026): fundo claro da identidade do escritório,
+   livro em carvão com a rubrica dourada. Sobrepõe as regras escuras acima.
+   ========================================================== */
+body:has(.cena) .site-header { background: rgba(250,248,243,.9); color: var(--heading); border-bottom-color: rgba(31,33,36,.08); }
+body:has(.cena) .site-header .brand-mark-dark { display: none; }
+body:has(.cena) .site-header .brand-mark-light { display: block; }
+body:has(.cena) .site-header .brand-text em { color: var(--gold-dark); }
+
+.cena { background: #FAF8F3; }
+.cena-sticky { color: var(--heading); }
+.cena-fundo { background: radial-gradient(120% 95% at 52% 44%, #ffffff 0%, #f8f5ee 46%, #ece6da 100%); }
+.cena-luz { background: radial-gradient(38% 44% at 52% 45%, rgba(255,255,255,.95), rgba(255,255,255,0) 70%); }
+.cena-vinheta {
+  background:
+    radial-gradient(125% 105% at 50% 48%, transparent 58%, rgba(196,186,166,.30) 100%),
+    linear-gradient(180deg, rgba(255,255,255, calc(var(--saida) * var(--saida) * .9)) 0%, rgba(255,255,255, calc(var(--saida) * var(--saida))) 100%);
+}
+.cap-eyebrow { color: var(--gold-dark); }
+.cap-titulo { color: #1F2124; }
+.cap-titulo em { color: var(--gold-dark); }
+.cap-lead { color: var(--text-muted); }
+.cap-dica { color: rgba(31,33,36,.5); }
+.cena .btn-ghost { border-color: rgba(31,33,36,.35); color: var(--heading); }
+.cena .btn-ghost::before { background: var(--graphite); }
+.cena .btn-ghost:hover { color: #fff; border-color: var(--graphite); }
+
+.passo { background: rgba(255,255,255,.9); color: var(--text); border-left-color: var(--gold); box-shadow: 0 24px 50px rgba(60,50,30,.14); }
+.passo-num, .passo-sub, .formacao-grupo { color: var(--gold-dark); }
+.passo h2 { color: #1F2124; }
+.areas-livro a { border-left-color: rgba(31,33,36,.16); }
+.areas-livro a:hover { background: rgba(215,177,46,.08); }
+.areas-livro strong, .formacao strong { color: #1F2124; }
+.areas-livro span, .formacao span { color: var(--text-muted); }
+.formacao li { border-left-color: rgba(31,33,36,.16); }
+.cena-etapas { color: rgba(31,33,36,.38); }
+.cena-etapas li.is-on { color: var(--gold-dark); }
+.cena-progresso { background: rgba(31,33,36,.08); }
+
+.cena-abas button { color: rgba(31,33,36,.6); background: rgba(31,33,36,.05); border-color: rgba(31,33,36,.1); }
+.cena-abas button:hover, .cena-abas button:focus-visible { color: #1F2124; background: rgba(31,33,36,.09); }
+.cena-abas button.is-on { color: #16181b; background: var(--gold); border-color: var(--gold); box-shadow: 0 -6px 18px rgba(60,50,30,.15); }
+.cena-folhear, .cena-som { color: rgba(31,33,36,.78); background: rgba(255,255,255,.6); border-color: rgba(31,33,36,.18); }
+.cena-folhear:hover, .cena-som:hover { color: #1F2124; background: rgba(255,255,255,.9); border-color: var(--gold); }
+.cena-folhear[aria-pressed="true"] { color: var(--gold-dark); border-color: var(--gold); }
+.cena-som.is-mudo { color: rgba(31,33,36,.5); border-color: rgba(31,33,36,.16); }
+.cena-retorno { box-shadow: 0 10px 30px rgba(60,50,30,.18); }
+.cena-estatica .passos { background: #FAF8F3; }
+@media (max-width: 760px) {
+  .cap-titulo { text-shadow: none; }
+  .cap-rodape::before { background: linear-gradient(rgba(250,248,243,0), rgba(250,248,243,.86) 34%, rgba(250,248,243,.96)); }
+  .cena-abas button { border-color: rgba(31,33,36,.35); background: transparent; }
+  .cena-abas button.is-on { background: var(--gold); }
+}

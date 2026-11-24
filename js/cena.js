@@ -228,18 +228,23 @@ async function iniciar() {
   dobradica.add(assin);
 
   // ---------- selo de cera sobre a borda da capa: rompe-se ao abrir ----------
+  // selo pequeno e discreto, em cera dourada acetinada (paleta do escritório),
+  // com a rubrica gravada em tom de bronze e um filete fino na borda
   const selo = new THREE.Group();
-  const cera = new THREE.MeshPhysicalMaterial({ color: 0x5c1a1f, roughness: 0.42, clearcoat: 0.5, clearcoatRoughness: 0.35, transparent: true });
-  const RS = 0.026, HS = 0.0045;
-  const ouroSelo = ouro.clone(); ouroSelo.transparent = true;
+  const cera = new THREE.MeshPhysicalMaterial({ color: 0xc9a24a, metalness: 0.55, roughness: 0.36, clearcoat: 0.6, clearcoatRoughness: 0.3, transparent: true });
+  const RS = 0.0165, HS = 0.0028;
+  const ouroSelo = new THREE.MeshPhysicalMaterial({ color: 0x7a5f22, metalness: 0.85, roughness: 0.5, alphaMap: emblema, transparent: true, alphaTest: 0.35 });
   const metades = [0, 1].map((lado) => {
     const g = new THREE.Group();
-    const corpo = new THREE.Mesh(new THREE.CylinderGeometry(RS, RS * 1.04, HS, 40, 1, false, lado ? Math.PI : 0, Math.PI), cera);
+    const corpo = new THREE.Mesh(new THREE.CylinderGeometry(RS, RS * 1.03, HS, 56, 1, false, lado ? Math.PI : 0, Math.PI), cera);
     corpo.rotation.x = Math.PI / 2; corpo.castShadow = true; g.add(corpo);
-    // emblema dourado gravado, dividido ao meio junto com a cera
-    const pg2 = new THREE.PlaneGeometry(RS * 1.5, RS * 1.5 * 2, 1, 1);
+    // filete em relevo junto à borda
+    const anel = new THREE.Mesh(new THREE.TorusGeometry(RS * 0.86, 0.00045, 8, 40, Math.PI), cera);
+    anel.rotation.z = lado ? Math.PI / 2 : -Math.PI / 2; anel.position.z = HS / 2; g.add(anel);
+    // rubrica gravada, dividida ao meio junto com a cera
+    const pg2 = new THREE.PlaneGeometry(RS * 1.35, RS * 1.35 * 2, 1, 1);
     const uv = pg2.attributes.uv; for (let i = 0; i < uv.count; i++) uv.setX(i, lado ? uv.getX(i) * 0.5 : 0.5 + uv.getX(i) * 0.5);
-    const emb2 = new THREE.Mesh(pg2, ouroSelo); emb2.scale.y = 0.5; emb2.position.set(lado ? -RS * 0.375 : RS * 0.375, 0, HS / 2 + 0.0003); g.add(emb2);
+    const emb2 = new THREE.Mesh(pg2, ouroSelo); emb2.scale.y = 0.5; emb2.position.set(lado ? -RS * 0.3375 : RS * 0.3375, 0, HS / 2 + 0.0002); g.add(emb2);
     selo.add(g); return g;
   });
   selo.position.set(W / 2 - 0.006, -0.0, 0.022 + T / 2 + HS / 2 + 0.0004);
@@ -312,7 +317,7 @@ async function iniciar() {
 
   // sombra de contato sob a pasta (fases iniciais)
   const sc = document.createElement('canvas'); sc.width = sc.height = 128; const sg = sc.getContext('2d');
-  const rg = sg.createRadialGradient(64, 64, 4, 64, 64, 62); rg.addColorStop(0, 'rgba(0,0,0,.75)'); rg.addColorStop(1, 'rgba(0,0,0,0)');
+  const rg = sg.createRadialGradient(64, 64, 4, 64, 64, 62); rg.addColorStop(0, 'rgba(40,32,20,.42)'); rg.addColorStop(1, 'rgba(0,0,0,0)');
   sg.fillStyle = rg; sg.fillRect(0, 0, 128, 128);
   const sombraPasta = new THREE.Mesh(new THREE.PlaneGeometry(0.5, 0.16), new THREE.MeshBasicMaterial({ map: new THREE.CanvasTexture(sc), transparent: true, depthWrite: false }));
   sombraPasta.rotation.x = -Math.PI / 2; sombraPasta.position.set(0, -0.235, 0);
@@ -326,13 +331,14 @@ async function iniciar() {
   pg.setAttribute('position', new THREE.BufferAttribute(pp, 3));
   pg.setAttribute('seed', new THREE.BufferAttribute(ps, 1));
   const poeira = NP === 0 ? null : new THREE.Points(pg, new THREE.ShaderMaterial({
-    transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
+    // fundo claro: mistura normal (a soma de luz sumiria no branco) e dourado mais profundo
+    transparent: true, depthWrite: false, blending: THREE.NormalBlending,
     uniforms: { uT: { value: 0 }, uA: { value: 1 }, uPx: { value: renderer.getPixelRatio() } },
     vertexShader: `attribute float seed; uniform float uT; uniform float uPx; varying float vA;
       void main(){ vec3 p=position; p.y+=mod(uT*0.012+seed*1.0,1.0)-0.5; p.x+=sin(uT*0.3+seed*20.)*0.02;
       vec4 mv=modelViewMatrix*vec4(p,1.); gl_Position=projectionMatrix*mv; gl_PointSize=(1.5+seed*2.5)*uPx*(1.2/-mv.z); vA=0.25+0.5*seed; }`,
     fragmentShader: `uniform float uA; varying float vA; void main(){ float d=length(gl_PointCoord-.5); if(d>.5) discard;
-      gl_FragColor=vec4(1.,.82,.5, (1.-d*2.)*vA*uA); }`,
+      gl_FragColor=vec4(.74,.58,.2, (1.-d*2.)*vA*uA*.9); }`,
   }));
   if (NP) scene.add(poeira);
 
