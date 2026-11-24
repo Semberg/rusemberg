@@ -87,12 +87,9 @@
 <link rel="preload" href="assets/fonts/cormorant-garamond-latin-500-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/barlow-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
 
-<link rel="stylesheet" href="css/style.css?v=20261124f">
+<link rel="stylesheet" href="css/style.css?v=20261124g">
 <link rel="stylesheet" href="css/ebooks.css?v=20261124e">
 
-<script type="importmap">
-{ "imports": { "three": "./assets/vendor/three/three.module.min.js" } }
-</script>
 </head>
 <body>
 
@@ -130,138 +127,34 @@
   </div>
 </header>
 
-<!-- ===== CENA DE ABERTURA (narrativa conduzida pela rolagem) ===== -->
-<section class="cena" id="topo" aria-label="Apresentação do escritório">
-  <div class="cena-sticky" id="cenaSticky">
-    <div class="cena-fundo" aria-hidden="true">
-      <div class="cena-luz"></div>
-      <div class="cena-ambiente" id="cenaAmbiente"></div>
-    </div>
-    <picture><source media="(max-width: 760px)" srcset="assets/img/cena-poster-mobile.webp?v=20261124e"><img class="cena-poster" id="cenaPoster" src="assets/img/cena-poster.webp?v=20261124e" alt="" aria-hidden="true"></picture>
-    <canvas class="cena-canvas" id="cenaCanvas" aria-hidden="true"></canvas>
-    <div class="cena-vinheta" aria-hidden="true"></div>
-
-    <!-- Etapa 0: capa -->
-    <div class="cap cap-0 is-on" data-cap="0">
-      <h1 class="cap-titulo">
-        <span class="cap-eyebrow">Advogado</span>
-        <span class="t-esq"><span class="l">Defesa jurídica</span><span class="l">com <em>clareza</em>,</span></span>
-        <span class="t-dir"><span class="l">rigor técnico e</span><span class="l"><em>atenção</em> humana</span></span>
-      </h1>
-      <div class="cap-rodape">
-        <p class="cap-lead">Atendimento personalizado para pessoas físicas e empresas, com orientação transparente sobre prazos, riscos e estratégias em cada etapa do processo.</p>
-        <div class="cap-acoes">
-          <a href="https://wa.me/5583996069271" target="_blank" rel="noopener" class="btn btn-gold">Agendar Consulta</a>
-          <a href="#areas" class="btn btn-ghost">Áreas de Atuação</a>
-        </div>
-      </div>
-      <div class="cap-dica" aria-hidden="true"><span>Role para abrir</span><i></i></div>
-    </div>
-
-    <!-- Etapas 1 a 5: páginas do livro (conteúdo em HTML) -->
-    <div class="passos">
-      <article class="passo" data-passo="0" id="apresentacao">
-        <span class="passo-num">Apresentação profissional</span>
-        <h2>Rusemberg Tavares Fernandes</h2>
-        <p class="passo-sub">Advogado</p>
-        <p>Atendo pessoas físicas e empresas, de forma presencial e online, tanto na prevenção de conflitos quanto na condução de processos judiciais e administrativos.</p>
-        <p>Ao longo de mais de duas décadas, exerci funções de direção e gerência na indústria, na distribuição e no varejo. Essa experiência ajuda a compreender a rotina de quem empreende e de quem trabalha, e contribui para uma leitura prática de contratos, relações de trabalho e decisões de gestão.</p>
-      </article>
-
-      <article class="passo" data-passo="1" id="analise">
-        <span class="passo-num">Etapa 1 · Análise</span>
-        <h2>Entender o caso antes de agir</h2>
-        <p>O primeiro atendimento é dedicado a ouvir: o que aconteceu, o que se pretende e quais prazos já estão correndo. A partir daí, examino contratos, notificações, comprovantes, mensagens, documentos pessoais e processos em andamento.</p>
-        <p>O objetivo é identificar o que já está comprovado, o que ainda precisa ser reunido e quais prazos legais exigem providência imediata. Ao final dessa etapa, você conhece com clareza a situação jurídica do caso e sabe quais documentos ainda podem ser necessários.</p>
-      </article>
-
-      <article class="passo" data-passo="2" id="estrategia">
-        <span class="passo-num">Etapa 2 · Estratégia</span>
-        <h2>Escolher o caminho adequado</h2>
-        <p>Com os fatos organizados, avalio os riscos e as possibilidades de cada alternativa: negociação direta, acordo extrajudicial, notificação, requerimento administrativo ou ação judicial. Nem todo caso precisa chegar ao Judiciário, e nem toda negociação é suficiente para proteger um direito.</p>
-        <p>Cada caminho é apresentado com prazos prováveis, custos, documentos necessários e implicações, sem promessas de resultado. A decisão sobre como prosseguir é sua, tomada com informação completa.</p>
-      </article>
-
-      <article class="passo" data-passo="3" id="orientacao">
-        <span class="passo-num">Etapa 3 · Orientação</span>
-        <h2>Acompanhar e orientar em cada fase</h2>
-        <p>Definido o caminho, cuido da execução: elaboração de peças e contratos, protocolos, audiências e controle de prazos. Você recebe retorno sobre cada andamento relevante e orientação sobre o que fazer em cada fase, inclusive sobre documentos, comparecimento a audiências e propostas de acordo.</p>
-        <p>A comunicação é direta, por atendimento presencial, telefone ou WhatsApp, e o sigilo profissional é preservado em todas as etapas, conforme o Código de Ética e Disciplina da OAB.</p>
-      </article>
-
-      <article class="passo passo-areas" data-passo="4" id="areas-livro">
-        <span class="passo-num">Áreas de atuação</span>
-        <h2>Onde posso ajudar</h2>
-        <ul class="areas-livro">
-          <li><a href="#area-civil"><strong>Direito Civil</strong><span>Contratos, cobranças, indenizações e questões patrimoniais.</span></a></li>
-          <li><a href="#area-trabalhista"><strong>Direito Trabalhista</strong><span>Defesa de empresas e orientação a trabalhadores na Justiça do Trabalho.</span></a></li>
-          <li><a href="#area-empresarial"><strong>Direito Empresarial</strong><span>Contratos, estrutura societária e assessoria preventiva.</span></a></li>
-          <li><a href="#area-imobiliario"><strong>Direito Imobiliário</strong><span>Compra e venda, locação, regularização e condomínios.</span></a></li>
-          <li><a href="#area-previdenciario"><strong>Direito Previdenciário</strong><span>Aposentadorias, benefícios e revisões junto ao INSS.</span></a></li>
-          <li><a href="#area-execucao"><strong>Execução Civil</strong><span>Cobrança judicial, cumprimento de sentença e defesa do executado.</span></a></li>
-          <li><a href="#area-penal"><strong>Direito Penal e Execução Penal</strong><span>Defesa criminal, liberdade e acompanhamento da pena.</span></a></li>
-          <li><a href="#area-familia"><strong>Família e Sucessões</strong><span>Divórcio, guarda, pensão, inventário e testamento.</span></a></li>
-          <li><a href="#area-consumidor"><strong>Direito do Consumidor</strong><span>Cobranças indevidas, negativação e contratos bancários.</span></a></li>
-        </ul>
-      </article>
-
-      <article class="passo passo-formacao" data-passo="5" id="formacao">
-        <span class="passo-num">Formação e qualificação</span>
-        <h2>Formação e qualificação</h2>
-        <h3 class="formacao-grupo">Pós-graduação</h3>
-        <ul class="formacao">
-          <li><strong>Direito Imobiliário e Condominial Premium</strong></li>
-          <li><strong>Direito Civil e Direito Processual Civil</strong></li>
-          <li><strong>MBA Executivo em Gestão de Pessoas e Recursos Humanos</strong></li>
-        </ul>
-      </article>
-    </div>
-
-    <!-- Etapa final: fechamento sobre a mesa -->
-    <div class="cap cap-3" data-cap="3">
-      <div class="cartao" role="group" aria-label="Cartão de contato">
-        <img src="assets/icon-on-light-transparent.png" alt="" class="cartao-marca" width="64" height="48">
-        <p class="cartao-nome">Rusemberg Tavares Fernandes</p>
-        <p class="cartao-cargo">Advogado</p>
-        <ul class="cartao-dados">
-          <li><span>WhatsApp</span><a href="https://wa.me/5583996069271" target="_blank" rel="noopener">(83) 9 9606-9271</a></li>
-          <li><span>E-mail</span><a href="mailto:contato@rusemberg.adv.br">contato@rusemberg.adv.br</a></li>
-          <li><span>E-mail</span><a href="mailto:rusemberg@rusemberg.adv.br">rusemberg@rusemberg.adv.br</a></li>
-          <li><span>Instagram</span><a href="https://www.instagram.com/rusembergadv/" target="_blank" rel="noopener" data-rede="instagram">@rusembergadv</a></li>
-          <li><span>Atendimento</span>Presencial e online</li>
-        </ul>
-        <div class="cap-acoes">
-          <a href="https://wa.me/5583996069271" target="_blank" rel="noopener" class="btn btn-gold">Falar no WhatsApp</a>
-          <a href="#contato" class="btn btn-ghost-escuro">Endereço e horários</a>
-        </div>
+<!-- ===== INTRODUÇÃO ===== -->
+<section class="intro" id="topo" aria-label="Apresentação do escritório">
+  <canvas class="intro-poeira" id="introPoeira" aria-hidden="true"></canvas>
+  <div class="container intro-grid">
+    <div class="intro-texto">
+      <p class="intro-eyebrow">Advogado</p>
+      <h1 class="intro-titulo">Defesa jurídica com <em>clareza</em>, rigor técnico e <em>atenção</em> humana</h1>
+      <p class="intro-lead">Atendimento personalizado para pessoas físicas e empresas, com orientação transparente sobre prazos, riscos e estratégias em cada etapa do processo.</p>
+      <div class="intro-acoes">
+        <a href="https://wa.me/5583996069271" target="_blank" rel="noopener" class="btn btn-gold">Agendar Consulta</a>
+        <a href="#areas" class="btn btn-ghost-escuro">Áreas de Atuação</a>
       </div>
     </div>
-
-    <nav class="cena-abas" id="cenaAbas" aria-label="Páginas do livro">
-      <button type="button" data-etapa="0">Capa</button>
-      <button type="button" data-etapa="1">Apresentação</button>
-      <button type="button" data-etapa="2">Análise</button>
-      <button type="button" data-etapa="3">Estratégia</button>
-      <button type="button" data-etapa="4">Orientação</button>
-      <button type="button" data-etapa="5">Áreas</button>
-      <button type="button" data-etapa="6">Formação</button>
-      <button type="button" data-etapa="7">Contato</button>
-    </nav>
-    <button class="cena-folhear" id="cenaFolhear" type="button" aria-pressed="false" title="Folhear o livro sozinho">
-      <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path class="ic-play" d="M8 5.5v13l10.5-6.5z" fill="currentColor"/><path class="ic-pausa" d="M7.5 5.5h3v13h-3zM13.5 5.5h3v13h-3z" fill="currentColor"/></svg>
-      <span>Folhear sozinho</span>
-    </button>
-    <div class="cena-retorno" id="cenaRetorno" hidden>
-      <span>Já conhece o livro?</span>
-      <a href="#escala-5x2" id="cenaPular">Ir para o conteúdo ↓</a>
-      <button type="button" id="cenaRetornoFechar" aria-label="Fechar aviso">×</button>
+    <div class="intro-marca" aria-hidden="true">
+      <svg class="intro-emblema" viewBox="0 0 726 542">
+        <defs>
+          <linearGradient id="introOuro" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#F1D98A"/><stop offset=".4" stop-color="#D7B12E"/><stop offset=".7" stop-color="#A9861E"/><stop offset="1" stop-color="#E2C25A"/>
+          </linearGradient>
+        </defs>
+        <rect class="intro-quadro" x="26" y="21" width="460" height="459" pathLength="1"/>
+        <rect class="intro-quadro q2" x="66" y="61" width="459" height="459" pathLength="1"/>
+        <svg class="intro-rubrica" x="0" y="16" width="726" height="515" viewBox="1130.7 920.7 1236.6 877.6"><path fill="url(#introOuro)" d="M1230.5,1712.1C1224.9,1710.5 1222.5,1709.2 1219.5,1706.0C1216.7,1703.0 1216.5,1702.4 1216.5,1694.6C1216.5,1686.4 1216.6,1686.2 1222.8,1673.9C1239.6,1640.7 1284.3,1587.8 1362.1,1508.9C1372.8,1498.1 1389.3,1481.8 1398.8,1472.6L1416.0,1456.0L1408.1,1456.0C1399.4,1456.0 1383.4,1457.4 1372.5,1459.1C1364.6,1460.4 1346.3,1465.1 1313.0,1474.5C1265.4,1487.9 1247.5,1491.3 1242.5,1487.6C1240.7,1486.3 1240.7,1486.1 1242.3,1483.6C1244.8,1479.9 1248.2,1478.4 1280.9,1466.5C1398.6,1423.9 1494.6,1375.9 1612.0,1301.1C1675.2,1260.8 1752.1,1205.0 1819.0,1151.1C1861.5,1116.7 1900.8,1080.9 1904.2,1073.3C1908.6,1063.3 1900.0,1061.1 1870.5,1064.5C1815.6,1070.9 1729.9,1094.3 1642.0,1126.8C1582.3,1148.9 1552.1,1162.7 1492.1,1195.0C1408.6,1239.9 1384.9,1254.9 1315.0,1306.9C1259.4,1348.2 1258.7,1348.6 1292.0,1319.2C1332.9,1283.2 1361.3,1262.0 1427.3,1218.2C1481.2,1182.4 1512.3,1165.0 1585.5,1129.7C1760.5,1045.2 1882.6,1010.8 1936.2,1030.9C1948.7,1035.7 1955.0,1043.6 1955.0,1054.7C1955.0,1065.6 1949.8,1076.6 1937.6,1091.8C1924.6,1107.8 1882.1,1145.0 1840.2,1176.9C1833.5,1182.1 1828.0,1186.4 1828.0,1186.7C1828.0,1186.9 1829.2,1186.4 1830.8,1185.6C1840.7,1180.6 1895.3,1155.1 1919.5,1144.2C2002.9,1106.9 2097.3,1069.5 2189.0,1037.3C2220.3,1026.3 2278.3,1007.0 2278.7,1007.3C2278.8,1007.5 2248.1,1020.6 2210.2,1036.5C1948.1,1146.4 1771.2,1236.5 1620.1,1337.3C1579.0,1364.7 1534.7,1397.2 1498.7,1426.3C1480.2,1441.3 1480.7,1440.1 1492.5,1441.5C1521.9,1445.2 1556.1,1455.5 1582.5,1468.8C1593.3,1474.2 1608.4,1483.5 1619.9,1491.8L1630.2,1499.3L1648.2,1490.4L1666.2,1481.5L1665.5,1463.5C1664.4,1433.6 1667.8,1342.2 1670.8,1321.4C1671.5,1316.5 1676.7,1416.1 1677.8,1455.8C1678.0,1466.3 1678.4,1475.0 1678.6,1475.0C1678.8,1475.0 1703.2,1462.9 1732.8,1448.1C1917.2,1355.9 2042.3,1302.4 2172.5,1260.1C2212.4,1247.2 2265.7,1231.4 2266.6,1232.2C2266.7,1232.4 2257.1,1235.6 2245.2,1239.4C2171.3,1262.6 2081.2,1297.1 1997.0,1334.5C1919.0,1369.1 1811.2,1422.8 1709.0,1477.8L1679.5,1493.6L1679.8,1505.6C1680.2,1521.0 1680.8,1526.0 1688.2,1572.0C1692.3,1597.9 1694.1,1611.7 1693.7,1614.1C1692.7,1619.2 1687.7,1624.0 1683.2,1624.0C1677.5,1624.0 1673.3,1618.6 1667.1,1603.4C1658.6,1582.7 1649.8,1567.3 1637.2,1551.5C1630.6,1543.2 1617.0,1529.0 1615.7,1529.0C1615.2,1529.0 1595.6,1539.5 1572.1,1552.4C1468.3,1609.3 1434.5,1627.2 1373.5,1657.5C1325.8,1681.2 1285.0,1700.1 1270.2,1705.4C1254.1,1711.1 1237.3,1714.0 1230.5,1712.1Z M1290.5,1663.7C1331.2,1645.9 1365.7,1630.1 1417.8,1605.4C1456.1,1587.2 1599.0,1516.0 1599.0,1515.1C1599.0,1514.7 1596.2,1512.3 1592.8,1509.8C1559.3,1485.5 1511.2,1466.2 1468.2,1460.0L1460.0,1458.8L1454.6,1463.4C1429.3,1485.0 1380.5,1533.4 1325.8,1591.3C1294.1,1624.8 1269.6,1654.4 1255.5,1676.3L1253.7,1679.1L1260.1,1676.7C1263.6,1675.3 1277.3,1669.5 1290.5,1663.7Z M1667.0,1520.2C1666.6,1510.1 1666.1,1501.7 1665.9,1501.5C1665.7,1501.4 1660.9,1503.7 1655.3,1506.8L1645.2,1512.4L1652.3,1520.5C1656.3,1524.9 1661.3,1530.9 1663.4,1533.7C1665.6,1536.6 1667.5,1538.9 1667.6,1538.7C1667.7,1538.6 1667.5,1530.3 1667.0,1520.2Z M1418.0,1439.0C1433.5,1438.1 1436.8,1437.6 1438.5,1436.1C1444.4,1430.8 1464.1,1414.3 1474.8,1405.6C1481.5,1400.2 1487.0,1395.6 1487.0,1395.4C1487.0,1394.9 1468.0,1404.0 1430.0,1422.9C1409.9,1432.8 1394.8,1440.8 1396.5,1440.5C1398.2,1440.2 1407.8,1439.6 1418.0,1439.0Z"/></svg>
+      </svg>
+      <img class="intro-selo" src="assets/badge-on-light-transparent.png" alt="" width="700" height="700">
     </div>
-    <div class="cena-progresso" aria-hidden="true"><i id="cenaBarra"></i></div>
-    <button class="cena-som is-mudo" id="cenaSom" type="button" aria-pressed="false" aria-label="Ativar som das páginas" title="Ativar som">
-      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M4 9.5h3.2L12 5.5v13l-4.8-4H4z" fill="currentColor"/><path class="onda" d="M15.5 9a4.2 4.2 0 0 1 0 6M18 6.5a7.7 7.7 0 0 1 0 11" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path class="risco" d="M15.5 9.5l5 5m0-5l-5 5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
-      <span>Ativar som</span>
-    </button>
   </div>
+  <a class="intro-rolar" href="#escala-5x2"><span>Role para conhecer</span><i></i></a>
 </section>
 
 <!-- ===== CHAMADA PARA O SIMULADOR DA ESCALA 5x2 (a ferramenta fica em escala-5x2.html) ===== -->
@@ -305,7 +198,16 @@
         <div class="sobre-bio">
           <p>Cada demanda é analisada individualmente, a partir dos documentos e dos objetivos de quem a apresenta. A orientação é dada em linguagem clara, para que o cliente compreenda os riscos envolvidos e participe de cada decisão sobre o próprio caso.</p>
           <p>Dou especial atenção à advocacia preventiva. Revisar um contrato antes da assinatura, orientar uma rescisão ou conferir um requerimento ao INSS costuma evitar conflitos mais longos e mais custosos do que a medida tomada a tempo.</p>
+          <p>Antes da advocacia, exerci por mais de duas décadas funções de direção e gerência na indústria, na distribuição e no varejo. Essa experiência ajuda a compreender a rotina de quem empreende e de quem trabalha, e contribui para uma leitura prática de contratos, relações de trabalho e decisões de gestão.</p>
           <p>Mantenho atualização profissional contínua, com pós-graduação e acompanhamento da legislação e da jurisprudência, e utilizo recursos tecnológicos para organizar prazos, documentos e comunicação, sem abrir mão da proximidade e do relacionamento transparente com cada cliente.</p>
+        </div>
+        <div class="sobre-formacao reveal" id="formacao">
+          <h3>Pós-graduação</h3>
+          <ul>
+            <li>Direito Imobiliário e Condominial</li>
+            <li>Direito Civil e Direito Processual Civil</li>
+            <li>MBA Executivo em Gestão de Pessoas e Recursos Humanos</li>
+          </ul>
         </div>
         <figure class="sobre-palestra reveal">
           <img src="assets/img/rusemberg-palestra.webp" srcset="assets/img/rusemberg-palestra-sm.webp 560w, assets/img/rusemberg-palestra.webp 900w" sizes="(max-width: 900px) 90vw, 30vw" alt="Rusemberg Fernandes apresentando um workshop, diante de uma tela com o título Checklist Essencial para Abrir Sua Barbearia com Sucesso" loading="lazy" width="900" height="900">
@@ -313,6 +215,33 @@
         </figure>
       </div>
     </div>
+  </div>
+</section>
+
+<!-- ===== COMO CONDUZO CADA CASO ===== -->
+<section class="section metodo" id="apresentacao" aria-labelledby="metodoTitulo">
+  <div class="container">
+    <div class="section-head">
+      <p class="eyebrow reveal">Como conduzo cada caso</p>
+      <h2 class="reveal" id="metodoTitulo">Do primeiro atendimento à última fase do processo</h2>
+    </div>
+    <ol class="metodo-lista">
+      <li class="reveal">
+        <span class="metodo-etapa">Etapa 1 · Análise</span>
+        <h3>Entender o caso antes de agir</h3>
+        <p>O primeiro atendimento é dedicado a ouvir: o que aconteceu, o que se pretende e quais prazos já estão correndo. Examino contratos, notificações, comprovantes, mensagens e processos em andamento para identificar o que já está comprovado, o que ainda precisa ser reunido e quais prazos exigem providência imediata.</p>
+      </li>
+      <li class="reveal">
+        <span class="metodo-etapa">Etapa 2 · Estratégia</span>
+        <h3>Escolher o caminho adequado</h3>
+        <p>Com os fatos organizados, avalio riscos e possibilidades de cada alternativa: negociação, acordo extrajudicial, notificação, requerimento administrativo ou ação judicial. Cada caminho é apresentado com prazos prováveis, custos e implicações, sem promessas de resultado. A decisão é sua, tomada com informação completa.</p>
+      </li>
+      <li class="reveal">
+        <span class="metodo-etapa">Etapa 3 · Orientação</span>
+        <h3>Acompanhar e orientar em cada fase</h3>
+        <p>Definido o caminho, cuido da execução: peças, contratos, protocolos, audiências e controle de prazos. Você recebe retorno sobre cada andamento relevante, por atendimento presencial, telefone ou WhatsApp, com o sigilo profissional preservado em todas as etapas.</p>
+      </li>
+    </ol>
   </div>
 </section>
 
@@ -612,7 +541,7 @@
 
     <a class="footer-social" href="https://www.instagram.com/rusembergadv/" target="_blank" rel="noopener" aria-label="Instagram @rusembergadv" data-rede="instagram"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="4.2" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="17.4" cy="6.6" r="1.2" fill="currentColor"/></svg><span>@rusembergadv</span></a>
     <nav class="footer-nav" aria-label="Rodapé">
-      <a href="#apresentacao">Apresentação</a>
+      <a href="#apresentacao">Como trabalho</a>
       <a href="#formacao">Formação</a>
       <a href="escala-5x2">Escala 5x2</a>
       <a href="#sobre">Sobre</a>
@@ -650,7 +579,8 @@
   <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20 11.6A8.4 8.4 0 017.6 19L4 20l1-3.5A8.4 8.4 0 1120 11.6z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M9.2 8.6c.2-.4.5-.4.7-.4h.5c.2 0 .4.1.5.4l.6 1.4c.1.2 0 .4-.1.6l-.4.5c.5.9 1.3 1.7 2.2 2.2l.5-.4c.2-.1.4-.2.6-.1l1.4.6c.3.1.4.3.4.5v.5c0 .2 0 .5-.4.7-.5.3-1.3.5-2.2.2a8 8 0 01-4.6-4.6c-.3-.9-.1-1.7.2-2.2z" fill="currentColor"/></svg>
 </a>
 
-<script src="js/main.js?v=20261124e"></script>
+<script src="js/intro.js?v=20261124g" defer></script>
+<script src="js/main.js?v=20261124g"></script>
 <script>
 /* chamada da escala 5x2: destaca a etapa atual da jornada e conta os dias até a próxima mudança */
 (function () {
@@ -665,7 +595,6 @@
   }
 })();
 </script>
-<script type="module" src="js/cena.js?v=20261124e"></script>
 <script src="js/estatisticas.js?v=20261124e" defer></script>
 </body>
 </html>
