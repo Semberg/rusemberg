@@ -409,7 +409,7 @@ async function iniciar() {
     } else if (tipo === 'apresentacao') {
       g.strokeStyle = 'rgba(184,145,63,.35)'; g.lineWidth = 3; g.beginPath(); g.arc(c.width - M - 70, 300, 52, 0, Math.PI * 2); g.stroke();
       g.fillStyle = ink + '.88)'; g.font = '500 58px CormorantCena, serif'; g.fillText('Rusemberg Tavares Fernandes', M, 360);
-      g.fillStyle = goldC; g.font = '500 24px BarlowCena, sans-serif'; g.letterSpacing = '5px'; g.fillText('ADVOGADO · OAB/PB 30.070', M, 404); g.letterSpacing = '0px';
+      g.fillStyle = goldC; g.font = '500 24px BarlowCena, sans-serif'; g.letterSpacing = '5px'; g.fillText('ADVOGADO', M, 404); g.letterSpacing = '0px';
       // texto à esquerda da foto, depois em largura total
       let y = 510; for (let i = 0; i < 7; i++) { linha(y, 470 * (i % 4 === 3 ? .6 : .86 + ((i * 29) % 13) / 100)); y += 46; }
       y = 880; for (let i = 0; i < 2; i++) { linha(y, (c.width - M * 2) * (i ? .55 : .9)); y += 46; }
@@ -462,7 +462,6 @@ async function iniciar() {
         y += 108;
       }
       g.strokeStyle = ink + '.4)'; g.lineWidth = 3; g.beginPath(); g.moveTo(M, 1120); g.lineTo(M + 380, 1120); g.stroke();
-      g.fillStyle = ink + '.55)'; g.font = '500 20px BarlowCena, sans-serif'; g.fillText('OAB/PB 30.070', M, 1156);
     }
     // rodapé
     g.fillStyle = goldC; g.fillRect(M, c.height - 92, c.width - M * 2, 1.5);
@@ -894,7 +893,8 @@ async function iniciar() {
     pos = mix3(pos, [mob ? 0.06 : 0.07, yMob, -0.02], f1);
     // aberta como um livro: no computador a lombada fica à esquerda dos textos; no celular, a página atual centralizada
     const aberto = eio(fAbre) * (1 - f3a);
-    pos = mix3(pos, [mob ? -0.004 : -0.015, yMob, -0.02], aberto);
+    const kAsp = clamp((asp - 1.25) / 0.5); // telas mais estreitas: livro aberto um pouco mais longe
+    pos = mix3(pos, [mob ? -0.004 : lerp(-0.02, -0.045, kAsp), yMob, -0.02], aberto); // livro aberto à esquerda, sem encostar no painel de texto
     rot = mix3(rot, [0.03 + mouse.y * 0.03, (mob ? 0.0 : 0.1) + mouse.x * 0.05, 0], aberto);
     rot = mix3(rot, [-Math.PI / 2, 0, 0.18], f3c);
     pos = mix3(pos, [0, -0.2 + T / 2 + 0.0005, 0], f3c);
@@ -938,7 +938,7 @@ async function iniciar() {
 
     // --- câmera ---
     camPos.set(0, 0.02, lerp(dist0, dist, f1)); camAlvo.set(0, 0, 0);
-    camPos.z -= f1 * 0.1 + Math.sin(fPag * Math.PI) * 0.02 - (mob ? 0 : eio(fAbre) * (1 - f3a) * 0.08);
+    camPos.z -= f1 * 0.1 + Math.sin(fPag * Math.PI) * 0.02 - (mob ? 0 : eio(fAbre) * (1 - f3a) * lerp(0.24, 0.08, clamp((asp - 1.25) / 0.5)));
     camAlvo.y -= subirMob * 0.15; camPos.y -= subirMob * 0.15; camPos.z += subirMob * 0.38;
     camPos.lerp(new THREE.Vector3(mob ? 0.04 : 0.2, 0.46, mob ? dist * 0.78 : dist * 0.86 + 0.12), f3c);
     camAlvo.lerp(new THREE.Vector3(-0.1, mob ? -0.2 : -0.17, -0.1), f3c);

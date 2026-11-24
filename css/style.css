@@ -819,7 +819,12 @@ body:has(.cena) .site-header .brand-text em { color: var(--gold-dark); }
 .cap-titulo { color: #1F2124; text-shadow: 0 0 3px rgba(250,248,243,.9), 0 0 22px rgba(250,248,243,.85); }
 /* o título nunca invade o livro: o tamanho acompanha o espaço livre de cada lado */
 @media (min-width: 761px) {
-  .cap-titulo { font-size: clamp(2rem, min(4.9vw, calc((50vw - 24vh - 56px) / 6.2)), 4.8rem); }
+  /* em telas grandes o título se afasta para as laterais, longe do livro */
+  .cena { --lado: max(32px, calc(50vw - 820px)); }
+  .cap-titulo .t-esq { left: var(--lado); }
+  .cap-titulo .t-dir { right: var(--lado); }
+  .cap-rodape { left: var(--lado); right: var(--lado); }
+  .cap-titulo { font-size: clamp(2rem, min(4.9vw, calc((50vw - var(--lado) - 26vh - 48px) / 6.2)), 4.8rem); }
 }
 .cap-titulo em { color: var(--gold-dark); }
 .cap-lead { color: var(--text-muted); }
@@ -854,4 +859,10 @@ body:has(.cena) .site-header .brand-text em { color: var(--gold-dark); }
   .cap-rodape::before { background: linear-gradient(rgba(250,248,243,0), rgba(250,248,243,.86) 34%, rgba(250,248,243,.96)); }
   .cena-abas button { border-color: rgba(31,33,36,.35); background: transparent; }
   .cena-abas button.is-on { background: var(--gold); }
+}
+/* notebooks menores: painel de texto mais estreito, para não cobrir a página do livro */
+@media (min-width: 761px) and (max-width: 1150px) {
+  .passo { width: 30vw; padding: 24px 22px 22px; }
+  .passo h2 { font-size: clamp(1.5rem, 2.4vw, 2rem); }
+  .passo p { font-size: .88rem; }
 }
