@@ -228,27 +228,54 @@ async function iniciar() {
   dobradica.add(assin);
 
   // ---------- selo de cera sobre a borda da capa: rompe-se ao abrir ----------
-  // selo pequeno e discreto, em cera dourada acetinada (paleta do escritório),
-  // com a rubrica gravada em tom de bronze e um filete fino na borda
+  // selo de cera em ouro, com o selo circular da marca prensado no topo,
+  // sobre uma fita que envolve o livro: a fita e o selo mantêm o livro fechado
+  const relevo = await tex('assets/3d/selo_relevo.png');
+  if (relevo) { relevo.wrapS = relevo.wrapT = THREE.ClampToEdgeWrapping; relevo.repeat.set(1, 1); }
   const selo = new THREE.Group();
-  const cera = new THREE.MeshPhysicalMaterial({ color: 0xc9a24a, metalness: 0.55, roughness: 0.36, clearcoat: 0.6, clearcoatRoughness: 0.3, transparent: true });
-  const RS = 0.0165, HS = 0.0028;
-  const ouroSelo = new THREE.MeshPhysicalMaterial({ color: 0x7a5f22, metalness: 0.85, roughness: 0.5, alphaMap: emblema, transparent: true, alphaTest: 0.35 });
+  const cera = new THREE.MeshPhysicalMaterial({ color: 0xd9a93c, metalness: 0.9, roughness: 0.3, clearcoat: 0.45, clearcoatRoughness: 0.25, envMapIntensity: 1.5, transparent: true });
+  const ouroSelo = cera.clone(); // topo prensado: relevo da marca e um leve brilho nos traços em alto-relevo
+  ouroSelo.bumpMap = relevo; ouroSelo.bumpScale = 3.2; ouroSelo.emissiveMap = relevo; ouroSelo.emissive = new THREE.Color(0x4a3208); ouroSelo.emissiveIntensity = 0.55;
+  const RS = 0.021, HS = 0.0042, YS = -0.057;
+  // contorno irregular, como cera derramada e prensada
+  const raio = (a) => RS * (1 + 0.045 * Math.sin(5 * a + 1.3) + 0.03 * Math.sin(11 * a + 0.4) + 0.018 * Math.sin(19 * a + 2.1));
+  const corpoCera = (a0, ang) => {
+    const sh = new THREE.Shape(), N = Math.round(64 * ang / (2 * Math.PI));
+    for (let i = 0; i <= N; i++) { const a = a0 + ang * i / N, r = raio(a); const x = Math.cos(a) * r, y = Math.sin(a) * r; if (i) sh.lineTo(x, y); else sh.moveTo(x, y); }
+    if (ang < 6) sh.lineTo(0, 0);
+    const g = new THREE.ExtrudeGeometry(sh, { depth: HS * 0.4, bevelEnabled: true, bevelThickness: HS * 0.3, bevelSize: RS * 0.09, bevelSegments: 5, curveSegments: 8 });
+    g.translate(0, 0, -HS * 0.2); return g;
+  };
+  const RT = RS * 0.8; // área prensada pelo sinete
+  const topo = (t0, ang) => new THREE.CircleGeometry(RT, 64, t0, ang);
+  // selo inteiro (antes de romper)
+  const inteiro = new THREE.Group();
+  { const c = new THREE.Mesh(corpoCera(0, Math.PI * 2), cera); c.castShadow = true; inteiro.add(c);
+    const tp = new THREE.Mesh(topo(0, Math.PI * 2), ouroSelo); tp.position.z = HS / 2 + 0.00012; inteiro.add(tp);
+    const anel = new THREE.Mesh(new THREE.TorusGeometry(RT * 1.02, 0.0006, 10, 72), cera); anel.position.z = HS / 2 + 0.0001; inteiro.add(anel); }
+  selo.add(inteiro);
+  // metades (aparecem quando o selo racha)
   const metades = [0, 1].map((lado) => {
-    const g = new THREE.Group();
-    const corpo = new THREE.Mesh(new THREE.CylinderGeometry(RS, RS * 1.03, HS, 56, 1, false, lado ? Math.PI : 0, Math.PI), cera);
-    corpo.rotation.x = Math.PI / 2; corpo.castShadow = true; g.add(corpo);
-    // filete em relevo junto à borda
-    const anel = new THREE.Mesh(new THREE.TorusGeometry(RS * 0.86, 0.00045, 8, 40, Math.PI), cera);
-    anel.rotation.z = lado ? Math.PI / 2 : -Math.PI / 2; anel.position.z = HS / 2; g.add(anel);
-    // rubrica gravada, dividida ao meio junto com a cera
-    const pg2 = new THREE.PlaneGeometry(RS * 1.35, RS * 1.35 * 2, 1, 1);
-    const uv = pg2.attributes.uv; for (let i = 0; i < uv.count; i++) uv.setX(i, lado ? uv.getX(i) * 0.5 : 0.5 + uv.getX(i) * 0.5);
-    const emb2 = new THREE.Mesh(pg2, ouroSelo); emb2.scale.y = 0.5; emb2.position.set(lado ? -RS * 0.3375 : RS * 0.3375, 0, HS / 2 + 0.0002); g.add(emb2);
+    const g = new THREE.Group(); g.visible = false;
+    const a0 = lado ? Math.PI / 2 : -Math.PI / 2;
+    const c = new THREE.Mesh(corpoCera(a0, Math.PI), cera); c.castShadow = true; g.add(c);
+    const tp = new THREE.Mesh(topo(a0, Math.PI), ouroSelo); tp.position.z = HS / 2 + 0.00012; g.add(tp);
+    const anel = new THREE.Mesh(new THREE.TorusGeometry(RT * 1.02, 0.0006, 10, 36, Math.PI), cera);
+    anel.rotation.z = a0; anel.position.z = HS / 2 + 0.0001; g.add(anel);
     selo.add(g); return g;
   });
-  selo.position.set(W / 2 - 0.006, -0.0, 0.022 + T / 2 + HS / 2 + 0.0004);
+  selo.position.set(W / 2 - 0.006, YS, 0.022 + T / 2 + HS / 2 + 0.0004);
   pasta.add(selo);
+  // fita acetinada que passa pela capa, contorna a borda e segue pelo verso
+  const fitaMat = new THREE.MeshPhysicalMaterial({ color: 0x8f6f28, metalness: 0.55, roughness: 0.38, sheen: 0.6, sheenColor: new THREE.Color(0xd9b866), sheenRoughness: 0.35, transparent: true, side: THREE.DoubleSide });
+  const LF = 0.0062;
+  const fitaFrente = new THREE.Mesh(new THREE.PlaneGeometry(W - 0.003, LF), fitaMat);
+  fitaFrente.position.set(W / 2 - 0.004, YS, T / 2 + 0.0004); dobradica.add(fitaFrente);
+  const fitaBorda = new THREE.Mesh(new THREE.PlaneGeometry(0.022 + T + 0.002, LF), fitaMat);
+  fitaBorda.rotation.y = Math.PI / 2; fitaBorda.position.set(W / 2 + 0.0006, YS, 0.011); pasta.add(fitaBorda);
+  const fitaVerso = new THREE.Mesh(new THREE.PlaneGeometry(W - 0.003, LF), fitaMat);
+  fitaVerso.rotation.y = Math.PI; fitaVerso.position.set(0, YS, -T / 2 - 0.0004); pasta.add(fitaVerso);
+  const fitas = [fitaFrente, fitaBorda, fitaVerso];
 
   // ---------- a mesa (capítulo 3) ----------
   const mesaAlpha = mascaraRadial();
@@ -325,7 +352,7 @@ async function iniciar() {
   scene.add(sombraPasta);
 
   // ---------- poeira dourada em suspensão ----------
-  const NP = mobile() ? 0 : 220;
+  const NP = mobile() ? 90 : 240;
   const pg = new THREE.BufferGeometry();
   const pp = new Float32Array(NP * 3), ps = new Float32Array(NP);
   for (let i = 0; i < NP; i++) { pp[i * 3] = (Math.random() - .5) * 1.6; pp[i * 3 + 1] = (Math.random() - .5) * 1.0; pp[i * 3 + 2] = (Math.random() - .5) * 1.0; ps[i] = Math.random(); }
@@ -337,9 +364,9 @@ async function iniciar() {
     uniforms: { uT: { value: 0 }, uA: { value: 1 }, uPx: { value: renderer.getPixelRatio() } },
     vertexShader: `attribute float seed; uniform float uT; uniform float uPx; varying float vA;
       void main(){ vec3 p=position; p.y+=mod(uT*0.012+seed*1.0,1.0)-0.5; p.x+=sin(uT*0.3+seed*20.)*0.02;
-      vec4 mv=modelViewMatrix*vec4(p,1.); gl_Position=projectionMatrix*mv; gl_PointSize=(1.5+seed*2.5)*uPx*(1.2/-mv.z); vA=0.25+0.5*seed; }`,
+      vec4 mv=modelViewMatrix*vec4(p,1.); gl_Position=projectionMatrix*mv; gl_PointSize=(2.2+seed*3.2)*uPx*(1.2/-mv.z); vA=0.42+0.58*seed; }`,
     fragmentShader: `uniform float uA; varying float vA; void main(){ float d=length(gl_PointCoord-.5); if(d>.5) discard;
-      gl_FragColor=vec4(.74,.58,.2, (1.-d*2.)*vA*uA*.9); }`,
+      gl_FragColor=vec4(.72,.55,.17, (1.-d*2.)*vA*uA); }`,
   }));
   if (NP) scene.add(poeira);
 
@@ -982,12 +1009,15 @@ async function iniciar() {
       const sq = seg(abertura.v, 0, 0.22);
       const racha = eio(seg(sq, 0, 0.4)), cai = seg(sq, 0.4, 1);
       selo.visible = sq < 0.999;
+      inteiro.visible = racha < 0.01;
       metades.forEach((g, lado) => {
+        g.visible = racha >= 0.01;
         const sd = lado ? -1 : 1;
         g.position.set(sd * (racha * 0.0035 + cai * 0.006), -cai * cai * 0.1, racha * 0.002);
         g.rotation.set(0, sd * racha * 0.22, -sd * cai * 0.35);
       });
       cera.opacity = 1 - seg(cai, 0.35, 1); ouroSelo.opacity = cera.opacity;
+      fitaMat.opacity = 1 - seg(sq, 0.15, 0.7); fitas.forEach((f) => { f.visible = fitaMat.opacity > 0.01; });
     }
     barra.style.transform = `scaleX(${p.toFixed(4)})`;
   }
