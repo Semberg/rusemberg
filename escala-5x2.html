@@ -172,10 +172,10 @@ input,select{min-height:36px;padding:6px 10px;font-size:14px;border-radius:9px}
 .chk{font-size:12.5px;padding:2px 0;margin-top:5px}.chk input{width:16px;height:16px}.chk small{font-size:11px}
 .seg button{min-height:32px;font-size:11.5px}.half{margin-top:7px}
 .apl{min-height:42px;font-size:14px;margin-top:8px;border-radius:11px}
-.hdt{display:inline-flex;align-items:center;gap:6px;margin:6px 0 0;padding:3px 0;border:0;background:none;color:var(--gold-d);font:500 12.5px "Jost",sans-serif;cursor:pointer;text-align:left}
+.hdt{display:inline-flex;align-items:center;gap:5px;margin:0 0 0 auto;padding:2px 8px;border:1px solid var(--gold-m)!important;border-radius:99px;border:0;background:none;color:var(--gold-d);font:500 12.5px "Jost",sans-serif;cursor:pointer;text-align:left}
 .hdt svg{width:15px;height:15px;flex:none}.hdt .cv{width:10px;height:10px;transition:transform .2s;opacity:.75}.hdt[aria-expanded=true] .cv{transform:rotate(180deg)}
 .hdt:hover span{text-decoration:underline;text-underline-offset:3px;text-decoration-color:var(--gold)}
-.hdt b{background:var(--gold-m);color:var(--ink);border-radius:99px;padding:0 8px;font-size:11px;font-weight:700;margin-left:2px}
+.hdt:hover{background:var(--gold-s)}.hdt[aria-expanded=true]{background:var(--gold-m)}.hdt b{background:var(--gold);color:var(--ink);border-radius:99px;padding:0 8px;font-size:11px;font-weight:700;margin-left:2px}
 .hdp{margin-top:6px;border:1px solid var(--gold-m);border-radius:14px;background:var(--paper);padding:10px 12px 10px;box-shadow:0 22px 50px rgba(30,34,39,.22);position:relative;overflow:hidden}
 .hdp::before{content:"";position:absolute;left:0;right:0;top:0;height:3px;background:linear-gradient(90deg,var(--gold),transparent 80%)}
 .hdp[hidden]{display:none}.hdp.fx{position:fixed;z-index:45;margin:0;width:330px;animation:hdIn .2s ease}
@@ -199,6 +199,7 @@ input,select{min-height:36px;padding:6px 10px;font-size:14px;border-radius:9px}
 .hdz{border:0;background:none;color:var(--mute);font:500 11.5px "Jost",sans-serif;cursor:pointer;padding:4px 0}.hdz:hover{color:var(--red)}.hdz[disabled]{opacity:.4;cursor:default}.hdz[disabled]:hover{color:var(--mute)}
 .hdo{border:0;border-radius:9px;background:light-dark(#1E2227,#DCB651);color:light-dark(#fff,#1E2227);font:600 12.5px "Jost",sans-serif;padding:7px 16px;cursor:pointer}
 @media(max-width:900px){.hdp.fx{position:static;width:auto;animation:none}}
+@media(min-width:901px) and (max-height:780px){.app{height:auto;min-height:100vh;overflow:visible}html,body{overflow:visible}.cols{align-items:start}.chks{flex:none}.cg{grid-auto-rows:minmax(46px,auto)}}
 .cw{display:flex;gap:6px;align-items:flex-start;margin:4px 0 0;padding:6px 8px;border-radius:8px;background:var(--ambbg);color:var(--amb);font-size:11px;line-height:1.4}.cw[hidden]{display:none}.cw svg{width:14px;height:14px;flex:none;margin-top:1px}
 .mlw{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:5px}.mlw[hidden]{display:none}.step.sm{grid-template-columns:30px 44px 30px;gap:4px}.step.sm button{min-height:30px;font-size:15px}.step.sm input{min-height:30px;padding:2px;font-size:14px}
 .tlw{margin-top:8px;padding-top:7px;border-top:1px dashed var(--line2)}.tlw:has(.tl:empty){display:none}.tlh{margin:0 0 4px;font-size:11.5px;font-weight:600;color:var(--ink2)}.tlh b{color:var(--ok)}.tlh{display:flex;flex-wrap:wrap;align-items:center;gap:4px 6px}.lg{margin-left:auto;display:inline-flex;align-items:center;gap:5px;font-weight:400;color:var(--mute);font-size:10.5px}.lg i{display:inline-block;width:14px;height:8px;border-radius:3px}.lg .lw{background:light-dark(#5b5f66,#8a8e95)}.lg .ld{background:var(--gold);margin-left:6px}.tls{color:var(--amb);font-weight:600}
@@ -286,11 +287,10 @@ input,select{min-height:36px;padding:6px 10px;font-size:14px;border-radius:9px}
 <div class="q q2"><p class="qt"><i class="num">3</i>Dias em que a empresa abre</p><div class="chips" id="dias"></div>
 <label class="chk"><input type="checkbox" id="fer"><span>Também abre nos feriados</span></label></div>
 
-<div class="q q4"><p class="qt"><i class="num">4</i>Horário de trabalho</p>
+<div class="q q4"><p class="qt"><i class="num">4</i>Horário de trabalho<button type="button" class="hdt" id="hdT" aria-expanded="false" aria-controls="hdP"><svg><use href="#cal"/></svg><span id="hdTx">Horário por dia</span><svg class="cv"><use href="#dn"/></svg></button></p>
 <div class="row2"><div><label class="sl" for="ent">Entrada</label><div class="tm" data-k="ent"><input id="ent" inputmode="numeric" maxlength="5" autocomplete="off"><span class="ar"><button type="button" data-k="ent" data-d="1" aria-label="Aumentar entrada"><svg><use href="#up"/></svg></button><button type="button" data-k="ent" data-d="-1" aria-label="Diminuir entrada"><svg><use href="#dn"/></svg></button></span></div></div>
 <div><label class="sl" for="sai">Saída</label><div class="tm" data-k="sai"><input id="sai" inputmode="numeric" maxlength="5" autocomplete="off"><span class="ar"><button type="button" data-k="sai" data-d="1" aria-label="Aumentar saída"><svg><use href="#up"/></svg></button><button type="button" data-k="sai" data-d="-1" aria-label="Diminuir saída"><svg><use href="#dn"/></svg></button></span></div></div></div>
 <p class="note" id="madr"></p>
-<button type="button" class="hdt" id="hdT" aria-expanded="false" aria-controls="hdP"><svg><use href="#cal"/></svg><span id="hdTx">Horário diferente em algum dia?</span><svg class="cv"><use href="#dn"/></svg></button>
 <div class="hdp" id="hdP" role="dialog" aria-label="Horário por dia da semana" hidden><div class="hdh"><b>Horário por dia</b><button type="button" class="hdc" id="hdC" aria-label="Fechar">×</button></div>
 <p class="hds">Mude só os dias que fogem do padrão, como o sábado até o meio-dia. Os demais seguem o horário acima. Dia fechado? Use "+ abrir" para incluí-lo.</p>
 <div class="hdl" id="hdL"></div><div class="hdf"><button type="button" class="hdz" id="hdZ">Voltar todos ao padrão</button><button type="button" class="hdo" id="hdO">Pronto</button></div></div>
@@ -816,7 +816,7 @@ function hdRow(k){if(!S.abre[k])return`<div class="hdr fe" data-k="${k}"><b>${DI
  return`<div class="hdr${on?' on':''}" data-k="${k}"><b>${DIAN[k]}</b><input data-f="ent" inputmode="numeric" maxlength="5" autocomplete="off" value="${v.ent}" aria-label="Entrada de ${DOWF[k]}"><span>às</span><input data-f="sai" inputmode="numeric" maxlength="5" autocomplete="off" value="${v.sai}" aria-label="Saída de ${DOWF[k]}">`+
   (on?`<button type="button" class="hx" aria-label="Voltar ${DOWF[k]} ao horário padrão">× padrão</button>`:'<em>padrão</em>')+(tx?`<small>${tx}</small>`:'')+'</div>'}
 function hdFill(force){const L=$('#hdL');if(!L)return;const n=hdAtivos().length;
- $('#hdTx').innerHTML=n?`Horário por dia <b>${n} ${n>1?'dias diferentes':'dia diferente'}</b>`:'Horário diferente em algum dia?';$('#hdZ').disabled=!n;
+ $('#hdTx').innerHTML=n?`Horário por dia <b>${n} ${n>1?'dias':'dia'}</b>`:'Horário por dia';$('#hdT').title=n?n+(n>1?' dias com horário diferente':' dia com horário diferente'):'Definir horário diferente em algum dia da semana';$('#hdZ').disabled=!n;
  if(!force&&L.contains(document.activeElement))return;
  L.innerHTML=[0,1,2,3,4,5,6].map(hdRow).join('')}
 function hdPos(){const p=$('#hdP');if(p.hidden)return;if(innerWidth<=900){p.classList.add('fx');p.style.left=p.style.top='';return}
@@ -828,7 +828,7 @@ $('#hdC').addEventListener('click',()=>hdAbre(false));$('#hdO').addEventListener
 $('#hdZ').addEventListener('click',()=>{S.hd={};hdFill(true);refresh()});
 document.addEventListener('click',ev=>{const p=$('#hdP');if(!p.hidden&&innerWidth>900&&!p.contains(ev.target)&&!ev.target.closest('#hdT')&&ev.target.isConnected)hdAbre(false)});
 document.addEventListener('keydown',ev=>{if(ev.key==='Escape'&&!$('#hdP').hidden)hdAbre(false)});
-addEventListener('resize',hdPos);
+addEventListener('resize',hdPos);addEventListener('scroll',hdPos,{passive:true});
 const hdSet=(inp)=>{const row=inp.closest('.hdr'),k=+row.dataset.k,f=inp.dataset.f,n=norm(inp.value);
  const cur=hdOf(k)||{ent:S.ent,sai:S.sai};if(!n){inp.value=cur[f];return}
  const nv={ent:cur.ent,sai:cur.sai,[f]:n};S.hd=S.hd||{};if(nv.ent===S.ent&&nv.sai===S.sai)delete S.hd[k];else S.hd[k]=nv;
