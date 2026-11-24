@@ -978,3 +978,13 @@ body:has(.intro) .site-header .brand-text em { color: var(--gold-dark); }
 .sobre-formacao h3 { font-family: var(--sans); font-size: .68rem; letter-spacing: .22em; text-transform: uppercase; font-weight: 600; color: var(--gold-dark); margin: 0 0 10px; }
 .sobre-formacao ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
 .sobre-formacao li { color: var(--heading); font-size: .98rem; }
+
+/* sequência de fundos: nenhuma seção com o mesmo fundo da vizinha;
+   escuro só nos destaques (escala, áreas, diferenciais, rodapé) e claros alternando branco e creme do kit */
+.metodo { background: var(--panel); }
+.publico { background: var(--paper); }
+.publico-card { background: #fcfbf8; }
+.eb-vitrine { background: var(--panel); }
+.noticias { background: var(--paper); }
+.contato { background: var(--panel); }
+.contato-form { background: #fff; }
