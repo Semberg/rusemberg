@@ -124,7 +124,7 @@ async function iniciar() {
        float faixa = smoothstep(0.14, 0.0, abs((vAlphaMapUv.x + (1.0 - vAlphaMapUv.y)) * 0.5 - uReflexo));
        totalEmissiveRadiance += vec3(1.0, 0.84, 0.52) * faixa * 1.6;`);
   };
-  const forro = new THREE.MeshStandardMaterial({ color: 0xcfc6b4, map: forroCor, roughness: 0.95 }); // forro em bege, mais discreto
+  const forro = new THREE.MeshStandardMaterial({ color: 0xe6ddcc, map: papelCor || forroCor, roughness: 0.95 }); // guarda de papel creme, como num livro encadernado
   const costura = new THREE.MeshStandardMaterial({ color: 0xb7934a, roughness: 0.5, metalness: 0.3 });
 
   // ---------- a pasta ----------
@@ -159,7 +159,7 @@ async function iniciar() {
   // folhas
   const paginas = [];
   const matVerso = new THREE.MeshStandardMaterial({ color: 0xdcd7ce, map: papelCor, roughness: 0.95, side: THREE.BackSide });
-  const pagW = W - 0.028, pagH = H - 0.03;
+  const pagW = W - 0.02, pagH = H - 0.014; // miolo quase do tamanho da capa, como num livro encadernado
   const HcPag = Math.round(1024 * pagH / pagW);
   const conteudos = ['apresentacao', 'analise', 'estrategia', 'orientacao', 'areas', 'formacao'];
   const NC = conteudos.length;
@@ -179,7 +179,7 @@ async function iniciar() {
     m.userData.idx = idx;
     // pivô na lombada: a folha vira como num livro
     const piv = new THREE.Group();
-    piv.position.set(-pagW / 2 + 0.006, -0.002, m.userData.z);
+    piv.position.set(-W / 2 + 0.014, 0, m.userData.z); // costura junto à lombada
     m.position.x = pagW / 2;
     piv.add(m); pasta.add(piv);
     m.userData.piv = piv;
@@ -557,10 +557,11 @@ async function iniciar() {
   // comprimento se mantém e a folha se curva em vez de esticar.
   // dobra: ângulo acumulado na borda (rad; + = borda adiantada no sentido do giro)
   // torcao: quanto o canto inferior se adianta em relação ao superior
-  function curvar(m, dobra, torcao = 0) {
+  const GUT = 0.011; // largura da curva da folha junto à costura
+  function curvar(m, dobra, torcao = 0, calha = 0) {
     const ud = m.userData;
-    if (Math.abs((ud.dobra ?? 0) - dobra) < 1e-4 && Math.abs((ud.torcao ?? 0) - torcao) < 1e-4) return;
-    ud.dobra = dobra; ud.torcao = torcao;
+    if (Math.abs((ud.dobra ?? 0) - dobra) < 1e-4 && Math.abs((ud.torcao ?? 0) - torcao) < 1e-4 && Math.abs((ud.calha ?? 0) - calha) < 2e-5) return;
+    ud.dobra = dobra; ud.torcao = torcao; ud.calha = calha;
     const a = m.geometry.attributes.position, arr = a.array;
     const ds = pagW / SX;
     for (let iy = 0; iy <= SY; iy++) {
@@ -568,13 +569,15 @@ async function iniciar() {
       const A = dobra * (1 + torcao * (v - 0.5));
       let x = -pagW / 2, z = 0;
       const i0 = iy * (SX + 1);
-      arr[i0 * 3] = x; arr[i0 * 3 + 2] = 0;
+      arr[i0 * 3] = x; arr[i0 * 3 + 2] = calha;
       for (let ix = 1; ix <= SX; ix++) {
         const um = (ix - 0.5) / SX;
         const phi = A * Math.pow(um, 1.7);
         x += ds * Math.cos(phi); z += ds * Math.sin(phi);
         const i = i0 + ix;
-        arr[i * 3] = x; arr[i * 3 + 2] = z;
+        // a folha virada desce em curva até a costura, em vez de flutuar sobre a capa
+        const g = Math.max(0, 1 - (ix * ds) / GUT);
+        arr[i * 3] = x; arr[i * 3 + 2] = z + calha * g * g * (3 - 2 * g);
       }
     }
     a.needsUpdate = true; m.geometry.computeVertexNormals();
@@ -898,7 +901,7 @@ async function iniciar() {
     pasta.rotation.set(...rot); pasta.position.set(...pos);
     // a capa se ergue, faz uma breve pausa a meio caminho e termina de abrir
     const curvaCapa = abreSuave < .5 ? eio(abreSuave * 2) * .45 : .45 + eio((abreSuave - .5) * 2) * .55;
-    dobradica.rotation.y = -curvaCapa * (1 - f3b) * 2.75;
+    dobradica.rotation.y = -curvaCapa * (1 - f3b) * Math.PI; // abre até deitar, como um livro
 
     // --- folhas: cada página permanece para leitura e depois vira pela lombada ---
     atualizarViradas(p);
@@ -910,7 +913,13 @@ async function iniciar() {
       const st = viradas[i];
       let vira = viraveis ? st.v : 0;
       vira *= 1 - f3a; // no fechamento, as folhas voltam antes de a capa fechar
-      piv.rotation.y = -vira * (2.64 - Math.max(k, 0) * 0.014);
+      piv.rotation.y = -vira * Math.PI;
+      // a folha virada pousa sobre a capa aberta, na ordem em que foi virada;
+      // perto da costura ela desce em curva até o lugar onde está presa
+      const zEsq = 0.022 + T / 2 + 0.0009 + Math.max(k, 0) * 0.0011;
+      const sobe = eio(clamp(vira * 1.15 - 0.15));
+      piv.position.z = lerp(m.userData.z, zEsq, sobe);
+      const calha = (piv.position.z - m.userData.z) * sobe;
       // progresso no sentido do movimento: no início o canto se solta e lidera;
       // perto do fim a borda livre fica para trás e a folha "plana" até pousar
       const tm = st.dir > 0 ? vira : 1 - vira;
@@ -918,7 +927,7 @@ async function iniciar() {
       const dobraGiro = viraveis ? Math.sin(Math.PI * tm) * (1.2 * (1 - tm) - 0.36) * 1.25 * st.dir * giroLivre : 0;
       const torcao = viraveis ? Math.sin(Math.PI * tm) * 0.9 * giroLivre : 0;
       const dobraFecha = viraveis ? -Math.sin(f3a * Math.PI) * 0.35 : 0;
-      curvar(m, dobraGiro + dobraFecha, torcao);
+      curvar(m, dobraGiro + dobraFecha, torcao, calha);
       if (m.userData.uP) {
         const [a, b] = janelas[k];
         m.userData.uP.value = forcadoQ ? (k < NC - 1 ? seg(p, a + JW * 0.02, b - JW * 0.58) : seg(p, a + JW * 0.10, J1 - 0.03)) : tinta[k];
