@@ -869,38 +869,43 @@ body:has(.cena) .site-header .brand-text em { color: var(--gold-dark); }
 
 /* ---------- Chamada para o simulador da escala 5x2 (entre o livro e o Sobre) ----------
    Identidade: pergaminho como fundo, grafite no texto, ouro como acento; moldura dupla em prata e filete dourado de pontas esmaecidas. */
-.chamada-escala { background: var(--panel); padding: 130px 0; }
-.chamada-escala::after { content: ""; position: absolute; left: 8%; right: 8%; bottom: 0; height: 1px; background: linear-gradient(90deg, transparent, var(--gold) 30%, var(--gold) 70%, transparent); opacity: .55; }
+.chamada-escala { background: var(--graphite); color: #E9E9E9; padding: 130px 0; overflow: hidden; isolation: isolate; }
+.chamada-escala::before { content: ""; position: absolute; inset: 0; z-index: -1; background: radial-gradient(ellipse 60% 70% at 78% 50%, rgba(220,182,81,.10), transparent 70%), radial-gradient(ellipse 50% 60% at 10% 0%, rgba(233,233,233,.05), transparent 70%); }
+.chamada-escala .eyebrow { color: var(--gold); }
+.chamada-escala h2 { color: #fff; }
+.chamada-escala h2 em { color: var(--gold-light); }
+.chamada-escala .lead { color: rgba(233,233,233,.72); }
+.chamada-escala::after { content: ""; position: absolute; left: 8%; right: 8%; top: 0; height: 1px; background: linear-gradient(90deg, transparent, var(--gold) 30%, var(--gold) 70%, transparent); opacity: .55; }
 .ce-grid { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr); gap: 90px; align-items: center; }
 .chamada-escala .section-head { margin-bottom: 40px; }
 .chamada-escala h2 { font-size: clamp(2.2rem, 3.6vw, 3.2rem); }
 .chamada-escala h2 em { display: block; }
 .ce-linha { list-style: none; margin: 0 0 18px; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); position: relative; max-width: 560px; }
-.ce-linha::before { content: ""; position: absolute; left: 5px; right: 30%; top: 5px; height: 1px; background: #d6d0c0; }
+.ce-linha::before { content: ""; position: absolute; left: 5px; right: 30%; top: 5px; height: 1px; background: rgba(233,233,233,.22); }
 .ce-linha li { position: relative; padding-top: 24px; }
-.ce-linha li::before { content: ""; position: absolute; left: 0; top: 0; width: 11px; height: 11px; border-radius: 50%; background: var(--panel); border: 1px solid #848688; }
-.ce-linha b { display: block; font-family: var(--serif); font-weight: 600; font-size: 2.1rem; line-height: 1; color: var(--heading); }
-.ce-linha span { font-size: .8rem; color: var(--text-muted); }
-.ce-linha li.is-passado b { color: #848688; text-decoration: line-through; text-decoration-thickness: 1px; }
+.ce-linha li::before { content: ""; position: absolute; left: 0; top: 0; width: 11px; height: 11px; border-radius: 50%; background: var(--graphite); border: 1px solid #848688; }
+.ce-linha b { display: block; font-family: var(--serif); font-weight: 600; font-size: 2.1rem; line-height: 1; color: #fff; }
+.ce-linha span { font-size: .8rem; color: #a3a5a8; }
+.ce-linha li.is-passado b { color: #6f7378; text-decoration: line-through; text-decoration-thickness: 1px; }
 .ce-linha li.is-atual::before { background: var(--gold); border-color: var(--gold); box-shadow: 0 0 0 5px rgba(220,182,81,.22); }
-.ce-linha li.is-atual b { color: var(--gold-dark); }
-.ce-conta { margin: 0 0 34px; font-size: .95rem; color: var(--text); }
-.ce-conta b { color: var(--heading); font-weight: 600; }
+.ce-linha li.is-atual b { color: var(--gold); }
+.ce-conta { margin: 0 0 34px; font-size: .95rem; color: rgba(233,233,233,.8); }
+.ce-conta b { color: #fff; font-weight: 600; }
 /* cartão da prévia, com a moldura dupla da marca por trás */
 .ce-mini { display: block; position: relative; padding: 26px 26px 0 0; }
-.ce-mini::before, .ce-mini::after { content: ""; position: absolute; border: 1px solid #848688; opacity: .55; pointer-events: none; transition: transform .8s var(--ease); }
+.ce-mini::before, .ce-mini::after { content: ""; position: absolute; border: 1px solid #848688; opacity: .7; pointer-events: none; transition: transform .8s var(--ease); }
 .ce-mini::before { inset: 0 0 26px 26px; }
 .ce-mini::after { inset: 12px 12px 14px 38px; border-color: var(--gold); opacity: .6; }
 .ce-mini:hover::before { transform: translate(6px, -6px); }
-.ce-card { position: relative; z-index: 1; display: block; background: var(--paper); color: var(--graphite); padding: 26px 26px 20px; margin: 0 26px 26px 0; box-shadow: 0 24px 60px rgba(30,34,39,.12); transition: transform .6s var(--ease), box-shadow .6s var(--ease); }
-.ce-mini:hover .ce-card { transform: translateY(-4px); box-shadow: 0 32px 70px rgba(30,34,39,.16); }
+.ce-card { position: relative; z-index: 1; display: block; background: var(--panel); color: var(--graphite); padding: 26px 26px 20px; margin: 0 26px 26px 0; box-shadow: 0 34px 80px rgba(0,0,0,.45); transition: transform .6s var(--ease), box-shadow .6s var(--ease); }
+.ce-mini:hover .ce-card { transform: translateY(-4px); box-shadow: 0 42px 90px rgba(0,0,0,.5); }
 .ce-mini-t { display: flex; justify-content: space-between; align-items: baseline; font-family: var(--serif); font-size: 1.35rem; font-weight: 600; margin-bottom: 16px; }
 .ce-mini-t small { font-family: var(--sans); font-size: .74rem; color: var(--text-muted); font-weight: 400; }
 .ce-tab { display: grid; grid-template-columns: 56px repeat(7, minmax(0, 1fr)); gap: 4px; font-size: .76rem; }
 .ce-tab b { text-align: center; font-weight: 500; color: var(--text-muted); padding: 2px 0 4px; }
 .ce-tab b.ce-d { color: var(--gold-dark); }
 .ce-tab .ce-n { align-self: center; font-weight: 500; color: var(--text); }
-.ce-tab i { font-style: normal; text-align: center; padding: 9px 0; background: var(--panel); color: var(--text); }
+.ce-tab i { font-style: normal; text-align: center; padding: 9px 0; background: #fff; color: var(--text); }
 .ce-tab i.ce-f { background: var(--gold); font-weight: 600; color: var(--graphite); }
 .ce-tab i.ce-x { background: #E9E9E9; color: #848688; }
 .ce-mini-r { display: flex; align-items: center; gap: 7px; margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--line); font-size: .76rem; color: var(--text-muted); }
