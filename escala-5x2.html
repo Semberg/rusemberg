@@ -193,6 +193,8 @@ input,select{min-height:36px;padding:6px 10px;font-size:14px;border-radius:9px}
 .hdr .hx{justify-self:end;display:inline-flex;align-items:center;gap:3px;border:0;background:none;color:var(--gold-d);font:600 10.5px "Jost",sans-serif;cursor:pointer;padding:4px 4px;border-radius:6px;white-space:nowrap}.hdr .hx:hover{background:var(--paper);color:var(--red)}
 .hdr small{grid-column:2/-1;font-size:10.5px;color:var(--mute);margin:-1px 0 1px;padding-left:4px}
 .hdv{font-size:11.5px;color:var(--mute);padding:6px 4px}
+.hdr.fe b{color:var(--mute);font-weight:500}.hdfe{grid-column:2/5;text-align:left!important;font-size:12px!important;font-style:italic;color:var(--mute);padding-left:8px;min-height:32px;display:flex;align-items:center}
+.hdr .hab{justify-self:end;border:0;background:none;color:var(--gold-d);font:600 10.5px "Jost",sans-serif;cursor:pointer;padding:4px;border-radius:6px;white-space:nowrap}.hdr .hab:hover{background:var(--gold-s)}
 .hdf{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:8px;padding-top:8px;border-top:1px dashed var(--line2)}
 .hdz{border:0;background:none;color:var(--mute);font:500 11.5px "Jost",sans-serif;cursor:pointer;padding:4px 0}.hdz:hover{color:var(--red)}.hdz[disabled]{opacity:.4;cursor:default}.hdz[disabled]:hover{color:var(--mute)}
 .hdo{border:0;border-radius:9px;background:light-dark(#1E2227,#DCB651);color:light-dark(#fff,#1E2227);font:600 12.5px "Jost",sans-serif;padding:7px 16px;cursor:pointer}
@@ -290,7 +292,7 @@ input,select{min-height:36px;padding:6px 10px;font-size:14px;border-radius:9px}
 <p class="note" id="madr"></p>
 <button type="button" class="hdt" id="hdT" aria-expanded="false" aria-controls="hdP"><svg><use href="#cal"/></svg><span id="hdTx">Horário diferente em algum dia?</span><svg class="cv"><use href="#dn"/></svg></button>
 <div class="hdp" id="hdP" role="dialog" aria-label="Horário por dia da semana" hidden><div class="hdh"><b>Horário por dia</b><button type="button" class="hdc" id="hdC" aria-label="Fechar">×</button></div>
-<p class="hds">Mude só os dias que fogem do padrão, como o sábado até o meio-dia. Os demais seguem o horário acima.</p>
+<p class="hds">Mude só os dias que fogem do padrão, como o sábado até o meio-dia. Os demais seguem o horário acima. Dia fechado? Use "+ abrir" para incluí-lo.</p>
 <div class="hdl" id="hdL"></div><div class="hdf"><button type="button" class="hdz" id="hdZ">Voltar todos ao padrão</button><button type="button" class="hdo" id="hdO">Pronto</button></div></div>
 <label class="chk"><input type="checkbox" id="cct"><span>Tenho acordo ou convenção coletiva que amplia a jornada diária <small>(se não souber, deixe desmarcado)</small></span></label><p class="cw" id="cctW" hidden><svg><use href="#inf"/></svg><span>Na transição (16/12/2026 a 15/12/2027), o acordo ou a convenção coletiva pode ampliar a jornada diária para distribuir as 42 horas: 8h24 em 5 dias. Marque só se a norma da sua categoria autorizar; sem ela, o que passar de 8 horas por dia é hora extra.</span></p></div>
 <div class="q q5"><p class="qt"><i class="num">5</i>Intervalo para descanso e refeição</p>
@@ -808,15 +810,15 @@ const fill=()=>{$('#mes').value=S.mes;$('#qtd').value=S.qtd;$('#ent').value=S.en
  $('#dias').innerHTML=DOW.map((d,k)=>`<button type="button" data-k="${k}" aria-pressed="${!!S.abre[k]}">${d}</button>`).join('')};
 /* ---------- horário por dia ---------- */
 const DIAN=['Seg','Ter','Qua','Qui','Sex','Sáb','Dom'];
-function hdRow(k){const h=hdOf(k),on=!!(h&&(h.ent!==S.ent||h.sai!==S.sai)),v=on?h:{ent:S.ent,sai:S.sai};
+function hdRow(k){if(!S.abre[k])return`<div class="hdr fe" data-k="${k}"><b>${DIAN[k]}</b><span class="hdfe">Empresa fechada</span><button type="button" class="hab" aria-label="Abrir a empresa ${DOWF[k].endsWith('o')?'no':'na'} ${DOWF[k]}">+ abrir</button></div>`;
+ const h=hdOf(k),on=!!(h&&(h.ent!==S.ent||h.sai!==S.sai)),v=on?h:{ent:S.ent,sai:S.sai};
  let tx='';if(on){const cc=calc(shDia({ent:S.ent,sai:S.sai,id:S.id,ii:''},k));if(cc.ok)tx=fH(cc.comp).replace('h00','h')+' de trabalho'+(cc.bd?' · descanso de '+(cc.bd<60?cc.bd+' min':fIv(cc.bd)):' · sem intervalo obrigatório')}
  return`<div class="hdr${on?' on':''}" data-k="${k}"><b>${DIAN[k]}</b><input data-f="ent" inputmode="numeric" maxlength="5" autocomplete="off" value="${v.ent}" aria-label="Entrada de ${DOWF[k]}"><span>às</span><input data-f="sai" inputmode="numeric" maxlength="5" autocomplete="off" value="${v.sai}" aria-label="Saída de ${DOWF[k]}">`+
   (on?`<button type="button" class="hx" aria-label="Voltar ${DOWF[k]} ao horário padrão">× padrão</button>`:'<em>padrão</em>')+(tx?`<small>${tx}</small>`:'')+'</div>'}
 function hdFill(force){const L=$('#hdL');if(!L)return;const n=hdAtivos().length;
  $('#hdTx').innerHTML=n?`Horário por dia <b>${n} ${n>1?'dias diferentes':'dia diferente'}</b>`:'Horário diferente em algum dia?';$('#hdZ').disabled=!n;
  if(!force&&L.contains(document.activeElement))return;
- const ks=[0,1,2,3,4,5,6].filter(k=>S.abre[k]);
- L.innerHTML=ks.length?ks.map(hdRow).join(''):'<p class="hdv">Marque no item 3 os dias em que a empresa abre.</p>'}
+ L.innerHTML=[0,1,2,3,4,5,6].map(hdRow).join('')}
 function hdPos(){const p=$('#hdP');if(p.hidden)return;if(innerWidth<=900){p.classList.add('fx');p.style.left=p.style.top='';return}
  p.classList.add('fx');const fm=$('.form').getBoundingClientRect(),t=$('#hdT').getBoundingClientRect(),hh=p.offsetHeight;
  p.style.left=Math.min(fm.right+12,innerWidth-p.offsetWidth-10)+'px';p.style.top=Math.max(10,Math.min(t.top-40,innerHeight-hh-10))+'px'}
@@ -841,7 +843,8 @@ $('#hdL').addEventListener('focusin',ev=>{if(ev.target.matches('input'))ev.targe
 $('#hdL').addEventListener('keydown',ev=>{const i=ev.target;if(!i.matches('input'))return;
  if(ev.key==='Enter'){ev.preventDefault();i.blur()}
  if(ev.key==='ArrowUp'||ev.key==='ArrowDown'){ev.preventDefault();const t=toMin(norm(i.value))??480,d=ev.key==='ArrowUp'?1:-1;i.value=hm(d>0?Math.floor(t/30)*30+30:Math.ceil(t/30)*30-30);hdSet(i);const x=$('#hdL [data-k="'+i.closest('.hdr').dataset.k+'"] [data-f="'+i.dataset.f+'"]');if(x)x.focus()}});
-$('#hdL').addEventListener('click',ev=>{const b=ev.target.closest('.hx');if(!b)return;const k=+b.closest('.hdr').dataset.k;delete S.hd[k];hdFill(true);refresh()});
+$('#hdL').addEventListener('click',ev=>{const a=ev.target.closest('.hab');if(a){const k=+a.closest('.hdr').dataset.k;S.abre[k]=1;fill();hdFill(true);hdPos();refresh();return}
+ const b=ev.target.closest('.hx');if(!b)return;const k=+b.closest('.hdr').dataset.k;delete S.hd[k];hdFill(true);refresh()});
 $('#mes').addEventListener('change',ev=>{if(/^\d{4}-\d{2}$/.test(ev.target.value)){S.mes=ev.target.value;refresh()}});
 $('#dias').addEventListener('click',ev=>{const b=ev.target.closest('[data-k]');if(!b)return;const k=+b.dataset.k;S.abre[k]=S.abre[k]?0:1;b.setAttribute('aria-pressed',!!S.abre[k]);hdFill(true);hdPos();refresh()});
 const setQ=q=>{S.qtd=Math.min(50,Math.max(1,q||1));$('#qtd').value=S.qtd;refresh()};
