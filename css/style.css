@@ -815,7 +815,11 @@ body:has(.cena) .site-header .brand-text em { color: var(--gold-dark); }
     linear-gradient(180deg, rgba(255,255,255, calc(var(--saida) * var(--saida) * .9)) 0%, rgba(255,255,255, calc(var(--saida) * var(--saida))) 100%);
 }
 .cap-eyebrow { color: var(--gold-dark); }
-.cap-titulo { color: #1F2124; }
+.cap-titulo { color: #1F2124; text-shadow: 0 0 3px rgba(250,248,243,.9), 0 0 22px rgba(250,248,243,.85); }
+/* o título nunca invade o livro: o tamanho acompanha o espaço livre de cada lado */
+@media (min-width: 761px) {
+  .cap-titulo { font-size: clamp(2rem, min(4.9vw, calc((50vw - 24vh - 56px) / 6.2)), 4.8rem); }
+}
 .cap-titulo em { color: var(--gold-dark); }
 .cap-lead { color: var(--text-muted); }
 .cap-dica { color: rgba(31,33,36,.5); }

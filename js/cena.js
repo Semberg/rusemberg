@@ -124,7 +124,7 @@ async function iniciar() {
        float faixa = smoothstep(0.14, 0.0, abs((vAlphaMapUv.x + (1.0 - vAlphaMapUv.y)) * 0.5 - uReflexo));
        totalEmissiveRadiance += vec3(1.0, 0.84, 0.52) * faixa * 1.6;`);
   };
-  const forro = new THREE.MeshStandardMaterial({ color: 0xcdb08a, map: forroCor, roughness: 0.95 });
+  const forro = new THREE.MeshStandardMaterial({ color: 0xcfc6b4, map: forroCor, roughness: 0.95 }); // forro em bege, mais discreto
   const costura = new THREE.MeshStandardMaterial({ color: 0xb7934a, roughness: 0.5, metalness: 0.3 });
 
   // ---------- a pasta ----------
@@ -308,12 +308,13 @@ async function iniciar() {
 
   // brilho quente que escapa do interior quando a capa se abre
   const brilho = new THREE.PointLight(0xffc98a, 0, 0.9, 1.6);
-  brilho.position.set(0.02, 0.02, 0.09); pasta.add(brilho);
+  brilho.position.set(0.02, 0.02, 0.014); pasta.add(brilho); // dentro do livro: ilumina as folhas, não a capa por fora
   const gc = document.createElement('canvas'); gc.width = gc.height = 128; const gg = gc.getContext('2d');
   const gr = gg.createRadialGradient(64, 64, 0, 64, 64, 64); gr.addColorStop(0, 'rgba(255,214,150,.9)'); gr.addColorStop(.4, 'rgba(255,190,110,.25)'); gr.addColorStop(1, 'rgba(255,190,110,0)');
   gg.fillStyle = gr; gg.fillRect(0, 0, 128, 128);
   const halo = new THREE.Sprite(new THREE.SpriteMaterial({ map: new THREE.CanvasTexture(gc), blending: THREE.AdditiveBlending, depthWrite: false, transparent: true, opacity: 0 }));
-  halo.scale.set(0.55, 0.55, 1); halo.position.set(-0.02, 0.0, 0.03); pasta.add(halo);
+  // fica entre as folhas e a capa: com a capa fechada, o brilho não atravessa o couro
+  halo.scale.set(0.55, 0.55, 1); halo.position.set(-0.02, 0.0, 0.016); pasta.add(halo);
 
   // sombra de contato sob a pasta (fases iniciais)
   const sc = document.createElement('canvas'); sc.width = sc.height = 128; const sg = sc.getContext('2d');
@@ -576,6 +577,9 @@ async function iniciar() {
       const st = viradas[i];
       if (arrasto.ativo && arrasto.i === i) { st.v = st.de = st.para = arrasto.v; st.dir = arrasto.dir; return; }
       let alvo = desejado[n];
+      // nenhuma folha começa a virar antes de a capa estar aberta (evita a folha atravessar a capa
+      // quando o visitante salta etapas pela aba ou rola muito rápido)
+      if (alvo === 1 && st.para === 0 && abertura.v < 0.97) alvo = 0;
       // folhas viram uma de cada vez, como num maço de papel
       if (alvo === 1 && n > 0 && viradas[ordem[n - 1]].v < folga) alvo = st.para;
       if (alvo === 0 && n < ordem.length - 1 && viradas[ordem[n + 1]].v > 1 - folga) alvo = st.para;
