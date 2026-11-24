@@ -126,6 +126,10 @@ ul, ol { list-style: none; margin: 0; padding: 0; }
 .cena-poster, .cena-canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
 .cena-poster { object-fit: cover; transition: opacity .8s ease; }
 .cena-poster.is-oculto { opacity: 0; }
+/* a imagem estática só aparece quando não há animação 3D; com a cena 3D, o fundo claro
+   fica sozinho até o livro surgir (evita ver dois livros sobrepostos na transição) */
+.cena-poster { display: none; }
+.cena-estatica .cena-poster { display: block; }
 .cena-canvas { opacity: 0; transition: opacity 1s ease; }
 .cena-canvas.is-pronto { opacity: 1; }
 .cena-vinheta {
