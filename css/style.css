@@ -704,6 +704,7 @@ ul, ol { list-style: none; margin: 0; padding: 0; }
 .cena-sticky { touch-action: pan-y; }
 /* enquanto o livro está sendo folheado, o dedo vira páginas em vez de rolar a página */
 .cena-sticky:not([data-etapa="7"]):not(.is-fora) { touch-action: none; }
+.cena-sticky.is-ocupado:not(.is-fora) { touch-action: none; }
 .cena-abas { position: absolute; left: max(32px, calc(50vw - 600px)); bottom: 2px; z-index: 6; display: flex; gap: 3px; transition: opacity .5s; }
 .cena-abas button {
   font: inherit; cursor: pointer; padding: 9px 12px 12px; font-size: .58rem; letter-spacing: .14em; text-transform: uppercase; font-weight: 600;

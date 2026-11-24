@@ -586,6 +586,7 @@ async function iniciar() {
   // rápido ou arraste a barra de rolagem.
   const DUR_VIRADA = mobile() ? 1.9 : 2.3; // segundos por folha
   const viradas = paginas.map(() => ({ v: 0, de: 0, para: 0, t0: 0, dur: 1, dir: 1 }));
+  let viradasPendentes = 0;
   const ordemViraveis = paginas.map((m, i) => i).filter((i) => { const k = paginas[i].userData.idx; return k >= 0 && k < NC - 1; })
     .sort((i, j) => paginas[i].userData.idx - paginas[j].userData.idx);
   const opTexto = conteudos.map(() => 0); let tTextos = 0;
@@ -600,6 +601,7 @@ async function iniciar() {
     const atraso = ordem.filter((i, n) => Math.abs(desejado[n] - viradas[i].v) > 0.5).length;
     const ritmo = atraso > 1 ? Math.max(0.55, 1 / (1 + 0.22 * (atraso - 1))) : 1;
     const folga = atraso > 1 ? 0.3 : 0.42;
+    viradasPendentes = ordem.filter((i, n) => Math.abs(desejado[n] - viradas[i].v) > 0.03).length;
     ordem.forEach((i, n) => {
       const st = viradas[i];
       if (arrasto.ativo && arrasto.i === i) { st.v = st.de = st.para = arrasto.v; st.dir = arrasto.dir; return; }
@@ -710,7 +712,15 @@ async function iniciar() {
     etapa = n; mudouEm = performance.now(); avisar();
     if (etapa === ULTIMA) { try { localStorage.setItem('rf-livro-visto', '1'); } catch { /* sem armazenamento */ } }
   }
-  window.__livro = { irPara: (n) => { irPara(n); }, etapa: () => etapa, ULTIMA };
+  // o livro ainda está chegando à etapa atual (capa, folhas ou fechamento em movimento)?
+  // enquanto estiver, a rolagem não avança nem sai da cena, para o livro ser folheado até o fim
+  function livroOcupado() {
+    if (document.documentElement.classList.contains('cena-estatica')) return false;
+    const p = progresso();
+    return Math.abs(pSuave - p) > 0.01 || Math.abs(abertura.v - seg(p, A0, A1)) > 0.02
+      || Math.abs(fechamento.v - seg(p, C0, C1)) > 0.02 || viradasPendentes > 0;
+  }
+  window.__livro = { irPara: (n) => { irPara(n); }, etapa: () => etapa, ULTIMA, ocupado: () => livroOcupado() };
   window.addEventListener('scroll', () => { if (window.scrollY <= 4 && !chegouTopoEm) chegouTopoEm = performance.now(); if (window.scrollY > 4) chegouTopoEm = 0; sticky.classList.toggle('is-fora', window.scrollY > 4); }, { passive: true });
   chegouTopoEm = window.scrollY <= 4 ? 1 : 0;
 
@@ -722,9 +732,10 @@ async function iniciar() {
     ultimoGesto = agora;
     if (!naCena() || Math.abs(e.deltaY) < Math.abs(e.deltaX)) return;
     const prox = e.deltaY > 0;
-    if ((prox && etapa === ULTIMA) || (!prox && etapa === 0)) return; // segue a página normalmente
+    if ((prox && etapa === ULTIMA && !livroOcupado()) || (!prox && etapa === 0)) return; // segue a página normalmente
     e.preventDefault();
     if (Math.abs(e.deltaY) < 2) return;
+    if (prox && livroOcupado()) return; // espera a capa ou a folha terminar
     const gestoNovo = gestoInicio > mudouEm && gestoInicio >= chegouTopoEm;
     if ((gestoNovo && agora - mudouEm > 450) || agora - mudouEm > 1500) { irPara(etapa + (prox ? 1 : -1)); gestoInicio = 0; }
   }, { passive: false });
@@ -738,13 +749,13 @@ async function iniciar() {
     if (!tDir && Math.hypot(dx, dy) > 8) tDir = Math.abs(dy) > Math.abs(dx) ? 'v' : 'h';
     if (tDir !== 'v' || !naCena()) return;
     const prox = dy < 0;
-    if ((prox && etapa === ULTIMA) || (!prox && etapa === 0)) return;
+    if ((prox && etapa === ULTIMA && !livroOcupado()) || (!prox && etapa === 0)) return;
     if (e.cancelable) e.preventDefault();
   }, { passive: false });
   sticky.addEventListener('touchend', (e) => {
     if (tDir === 'v' && naCena() && tY !== null) {
       const dy = e.changedTouches[0].clientY - tY;
-      if (Math.abs(dy) > 36) { const prox = dy < 0; if (!(prox && etapa === ULTIMA) && !(!prox && etapa === 0)) irPara(etapa + (prox ? 1 : -1)); }
+      if (Math.abs(dy) > 36) { const prox = dy < 0; if (!(prox && (etapa === ULTIMA || livroOcupado())) && !(!prox && etapa === 0)) irPara(etapa + (prox ? 1 : -1)); }
     }
     tY = null;
   }, { passive: true });
@@ -759,7 +770,7 @@ async function iniciar() {
     if (!naCena()) return;
     if (e.key === ' ' && el && el.closest && el.closest('button, a')) return;
     const prox = ['ArrowDown', 'PageDown', ' ', 'ArrowRight'].includes(e.key), ant = ['ArrowUp', 'PageUp', 'ArrowLeft'].includes(e.key);
-    if (prox && etapa < ULTIMA) { e.preventDefault(); if (performance.now() - mudouEm > 350) irPara(etapa + 1); }
+    if (prox && (etapa < ULTIMA || livroOcupado())) { e.preventDefault(); if (etapa < ULTIMA && !livroOcupado() && performance.now() - mudouEm > 350) irPara(etapa + 1); }
     else if (ant && etapa > 0) { e.preventDefault(); if (performance.now() - mudouEm > 350) irPara(etapa - 1); }
   });
 
@@ -1060,6 +1071,7 @@ async function iniciar() {
     }
     medirQualidade(dt);
     aplicar(pSuave);
+    { const oc = livroOcupado(); if (oc !== sticky.classList.contains('is-ocupado')) sticky.classList.toggle('is-ocupado', oc); }
     renderer.render(scene, camera);
     if (primeiro) {
       primeiro = false;
