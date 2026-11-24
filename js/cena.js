@@ -763,7 +763,7 @@ async function iniciar() {
   }, { passive: true });
 
   // teclado: setas, espaço e Page Up/Down viram; Esc pula para o conteúdo
-  const pular = () => { pararFolhear(); const alvo = document.getElementById('sobre'); if (alvo) window.scrollTo({ top: alvo.getBoundingClientRect().top + window.scrollY, behavior: 'instant' }); };
+  const pular = () => { pararFolhear(); const alvo = document.getElementById('escala-5x2') || document.getElementById('sobre'); if (alvo) window.scrollTo({ top: alvo.getBoundingClientRect().top + window.scrollY, behavior: 'instant' }); };
   window.addEventListener('keydown', (e) => {
     if (e.altKey || e.ctrlKey || e.metaKey) return;
     const el = e.target;

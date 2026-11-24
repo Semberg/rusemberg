@@ -109,6 +109,7 @@
     </a>
 
     <nav class="main-nav" id="mainNav" aria-label="Principal">
+      <a href="escala-5x2">Escala 5x2</a>
       <a href="#sobre">Sobre</a>
       <a href="#areas">Áreas de Atuação</a>
       <a href="ebooks.html">E-books</a>
@@ -252,7 +253,7 @@
     </button>
     <div class="cena-retorno" id="cenaRetorno" hidden>
       <span>Já conhece o livro?</span>
-      <a href="#sobre" id="cenaPular">Ir para o conteúdo ↓</a>
+      <a href="#escala-5x2" id="cenaPular">Ir para o conteúdo ↓</a>
       <button type="button" id="cenaRetornoFechar" aria-label="Fechar aviso">×</button>
     </div>
     <div class="cena-progresso" aria-hidden="true"><i id="cenaBarra"></i></div>
@@ -260,6 +261,33 @@
       <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M4 9.5h3.2L12 5.5v13l-4.8-4H4z" fill="currentColor"/><path class="onda" d="M15.5 9a4.2 4.2 0 0 1 0 6M18 6.5a7.7 7.7 0 0 1 0 11" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path class="risco" d="M15.5 9.5l5 5m0-5l-5 5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
       <span>Ativar som</span>
     </button>
+  </div>
+</section>
+
+<!-- ===== CHAMADA PARA O SIMULADOR DA ESCALA 5x2 (a ferramenta fica em escala-5x2.html) ===== -->
+<section class="section chamada-escala" id="escala-5x2" aria-labelledby="ceTitulo">
+  <div class="container ce-grid">
+    <div class="ce-texto">
+      <div class="section-head reveal">
+        <p class="eyebrow">Escala 5x2 · Ferramenta gratuita</p>
+        <h2 id="ceTitulo">A jornada de trabalho mudou. <em>Sua escala está pronta?</em></h2>
+        <p class="lead">Monte em um minuto a escala da sua equipe pelas regras da EC 141/2026, com folgas, descansos e horários conferidos pela lei.</p>
+      </div>
+      <ol class="ce-linha reveal" id="ceLinha">
+        <li data-ate="2026-12-16"><b>44h</b><span>até 15/12/2026</span></li>
+        <li data-ate="2027-12-16"><b>42h</b><span>a partir de 16/12/2026</span></li>
+        <li><b>40h</b><span>a partir de 16/12/2027</span></li>
+      </ol>
+      <p class="ce-conta reveal" id="ceConta" hidden></p>
+      <a class="btn btn-gold reveal" href="escala-5x2">Montar minha escala</a>
+    </div>
+    <a class="ce-mini reveal" href="escala-5x2" aria-label="Abrir o simulador da escala 5x2" tabindex="-1">
+      <span class="ce-card">
+        <span class="ce-mini-t">Prévia da escala <small>dezembro de 2026</small></span>
+        <span class="ce-tab"><span></span><b>Seg</b><b>Ter</b><b>Qua</b><b>Qui</b><b>Sex</b><b>Sáb</b><b class="ce-d">Dom</b><span class="ce-n">Func. 1</span><i>8h</i><i>8h</i><i>8h</i><i>8h</i><i>8h</i><i class="ce-f">Folga</i><i class="ce-x">—</i><span class="ce-n">Func. 2</span><i>8h</i><i>8h</i><i>8h</i><i>8h</i><i class="ce-f">Folga</i><i>8h</i><i class="ce-x">—</i><span class="ce-n">Func. 3</span><i>8h</i><i class="ce-f">Folga</i><i>8h</i><i>8h</i><i>8h</i><i>8h</i><i class="ce-x">—</i><span class="ce-n">Func. 4</span><i class="ce-f">Folga</i><i>8h</i><i>8h</i><i>8h</i><i>8h</i><i>8h</i><i class="ce-x">—</i></span>
+        <span class="ce-mini-r"><i></i>Folga<em>Conferida pela lei</em></span>
+      </span>
+    </a>
   </div>
 </section>
 
@@ -586,6 +614,7 @@
     <nav class="footer-nav" aria-label="Rodapé">
       <a href="#apresentacao">Apresentação</a>
       <a href="#formacao">Formação</a>
+      <a href="escala-5x2">Escala 5x2</a>
       <a href="#sobre">Sobre</a>
       <a href="#areas">Áreas de Atuação</a>
       <a href="ebooks.html">E-books</a>
@@ -622,6 +651,20 @@
 </a>
 
 <script src="js/main.js?v=20261124e"></script>
+<script>
+/* chamada da escala 5x2: destaca a etapa atual da jornada e conta os dias até a próxima mudança */
+(function () {
+  var hoje = new Date(), lis = document.querySelectorAll('#ceLinha li'), conta = document.getElementById('ceConta'), atual = lis.length - 1;
+  for (var k = 0; k < lis.length; k++) { var a = lis[k].getAttribute('data-ate'); if (a && hoje < new Date(a + 'T00:00:00-03:00')) { atual = k; break; } }
+  lis.forEach(function (li, k) { li.classList.toggle('is-atual', k === atual); li.classList.toggle('is-passado', k < atual); });
+  var prox = lis[atual] && lis[atual].getAttribute('data-ate');
+  if (prox && conta) {
+    var d = Math.ceil((new Date(prox + 'T00:00:00-03:00') - hoje) / 864e5);
+    conta.innerHTML = (d === 1 ? 'Falta <b>1 dia</b>' : 'Faltam <b>' + d + ' dias</b>') + ' para o limite de <b>' + lis[atual + 1].querySelector('b').textContent + ' semanais</b>.';
+    conta.hidden = false;
+  }
+})();
+</script>
 <script type="module" src="js/cena.js?v=20261124e"></script>
 <script src="js/estatisticas.js?v=20261124e" defer></script>
 </body>

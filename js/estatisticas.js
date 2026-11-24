@@ -47,7 +47,7 @@
 
   // seções lidas: cada seção conta uma vez por visita, quando metade dela aparece na tela
   if ('IntersectionObserver' in window) {
-    var nomes = { sobre: 'Sobre', situacoes: 'Situações', areas: 'Áreas de atuação', ebooks: 'E-books', noticias: 'Notícias', diferenciais: 'Diferenciais', contato: 'Contato' };
+    var nomes = { 'escala-5x2': 'Escala 5x2', sobre: 'Sobre', situacoes: 'Situações', areas: 'Áreas de atuação', ebooks: 'E-books', noticias: 'Notícias', diferenciais: 'Diferenciais', contato: 'Contato' };
     var vistas = {};
     var obs = new IntersectionObserver(function (itens) {
       itens.forEach(function (it) {

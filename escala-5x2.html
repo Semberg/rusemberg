@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Simulador de escala 5x2 · nova jornada (EC 141/2026) | Rusemberg Fernandes</title>
+<meta name="description" content="Monte gratuitamente a escala 5x2 da sua equipe pela nova jornada de trabalho (EC 141/2026): 44h até 15/12/2026, 42h na transição e 40h a partir de 16/12/2027, com folgas, descansos e conferência pela lei.">
+<link rel="canonical" href="https://www.rusemberg.adv.br/escala-5x2">
+<link rel="icon" href="/favicon.ico">
+<meta name="theme-color" content="#1E2227">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Jost:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* VOICE: sóbrio e elegante, de escritório de advocacia; ferramenta leve
+   IDEA: um quadro de escala impresso em papel fino, com filetes dourados, como um documento do escritório
+   PICTURE: a prévia viva da escala, com o restante guardado sob um cartão de envio
+   COLOUR and TYPE: papel quase branco, tinta #1F2124, dourado #D7B12E só em filetes e destaques; Libre Baskerville + Open Sans
+   LAYOUT: formulário em coluna à esquerda, prévia à direita; no celular, formulário e depois a prévia */
+:root{color-scheme:light dark;
+--bg:light-dark(#F5F2EA,#16191d);--paper:light-dark(#ffffff,#1E2227);--ink:light-dark(#1E2227,#E9E9E9);--ink2:light-dark(#3a3f46,#cfd0d2);
+--mute:light-dark(#6a6c6f,#a3a5a8);--line:light-dark(#e6e1d3,#2f343a);--line2:light-dark(#d6d0c0,#3d434a);
+--gold:#DCB651;--gold-d:light-dark(#8a6a22,#DCB651);--gold-s:light-dark(#fbf6e8,#2a2720);--gold-m:light-dark(#f2e5bf,#3d3624);--dom:light-dark(#9b2c2c,#f08f86);--doms:light-dark(#f8e9e7,#3a2224);--domm:light-dark(#efd2ce,#4a2a2c);--fer:light-dark(#9b2c2c,#c9463f);
+--red:light-dark(#a8281f,#ff8a80);--redbg:light-dark(#fcefed,#35201e);--amb:light-dark(#7d5600,#ffcc66);--ambbg:light-dark(#fdf6e3,#352d1c);
+--ok:light-dark(#1f6a3c,#7fd49b);--okbg:light-dark(#eef7f1,#1b2e22);
+--sh:0 1px 2px rgba(30,34,39,.04),0 8px 28px rgba(30,34,39,.06)}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 "Jost","Century Gothic",system-ui,sans-serif;overflow-x:clip;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:"Libre Baskerville",Georgia,serif;font-weight:400;line-height:1.18;text-wrap:balance;margin:0;letter-spacing:-.01em}
+.wrap{max-width:1220px;margin:0 auto}
+/* topo */
+.hero{padding:clamp(22px,3.4vw,40px) max(5vw,16px) clamp(20px,3vw,32px);background:var(--paper);border-bottom:1px solid var(--line);position:relative}
+.hero::after{content:"";position:absolute;left:max(5vw,16px);right:max(5vw,16px);bottom:-1px;height:2px;background:linear-gradient(90deg,var(--gold),transparent 70%)}
+.hwrap{display:grid;grid-template-columns:minmax(0,1fr) 160px;gap:32px;align-items:center}
+.kick{margin:0 0 8px;color:var(--gold-d);font-size:12.5px;font-weight:600}
+.hero h1{font-size:clamp(24px,3vw,34px)}.hero h1 em{font-style:italic;color:var(--gold-d)}
+.lead{color:var(--mute);max-width:62ch;margin:10px 0 0;font-size:15px}
+.seals{display:flex;flex-wrap:wrap;gap:6px 16px;list-style:none;padding:0;margin:14px 0 0;font-size:13px;color:var(--ink2)}
+.seals li{display:flex;align-items:center;gap:7px}.seals svg{width:16px;height:16px;flex:none}
+.art{width:100%;height:auto}
+/* grade principal */
+main{padding:22px max(5vw,16px) 44px}
+.grid{display:grid;grid-template-columns:minmax(0,320px) minmax(0,1fr);gap:22px;align-items:start}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:18px;box-shadow:var(--sh)}
+.form{padding:18px 18px 16px;position:sticky;top:16px}
+.ft{font-size:17px;margin-bottom:2px}.fsub{font-size:12.5px;color:var(--mute);margin:0 0 6px}
+.q{padding:14px 0;border-top:1px solid var(--line)}.q:first-of-type{border-top:0}
+.qt{display:flex;align-items:center;gap:9px;font-weight:600;font-size:14px;margin:0 0 8px;color:var(--ink)}
+.num{display:inline-grid;place-items:center;width:22px;height:22px;border-radius:50%;border:1px solid var(--gold);color:var(--gold-d);font:400 11.5px "Libre Baskerville",serif;flex:none;background:var(--gold-s)}
+.sl{display:block;font-size:12px;color:var(--mute);margin:0 0 5px}
+input,select{font:16px "Jost",sans-serif;color:var(--ink);background:var(--bg);border:1px solid var(--line2);border-radius:10px;padding:8px 11px;width:100%;min-height:42px;transition:border-color .15s,box-shadow .15s}
+input:hover,select:hover{border-color:var(--gold)}
+input:focus,select:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 4px rgba(220,182,81,.18)}
+button:focus-visible{outline:none;box-shadow:0 0 0 4px rgba(220,182,81,.35)}
+.chips{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px}
+.chips button{min-height:40px;padding:0;border-radius:9px;border:1px solid var(--line2);background:var(--bg);color:var(--mute);font:500 12.5px "Jost",sans-serif;cursor:pointer;transition:all .15s}
+.chips button:hover{border-color:var(--gold)}
+.chips button[aria-pressed=true]{background:var(--gold-m);border-color:var(--gold);color:var(--ink);font-weight:700}
+.step{display:grid;grid-template-columns:42px minmax(0,1fr) 42px;gap:6px}
+.step button{min-height:42px;border-radius:10px;border:1px solid var(--line2);background:var(--bg);color:var(--ink);font-size:20px;cursor:pointer}.step button:hover{border-color:var(--gold);background:var(--gold-s)}
+.step input{text-align:center;font-weight:600;font-size:16px}
+.row2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.tm{display:flex;align-items:stretch;border:1px solid var(--line2);border-radius:10px;background:var(--bg);overflow:hidden;transition:border-color .15s,box-shadow .15s}
+.tm:hover{border-color:var(--gold)}.tm:focus-within{border-color:var(--gold);box-shadow:0 0 0 4px rgba(220,182,81,.18)}
+.tm input{border:0;border-radius:0;background:transparent;font-size:18px;font-weight:600;text-align:center;min-height:46px;padding:0 4px;font-variant-numeric:tabular-nums;box-shadow:none!important}
+.tm .ar{display:flex;flex-direction:column;border-left:1px solid var(--line)}
+.tm button{flex:1;width:34px;border:0;background:transparent;color:var(--mute);cursor:pointer;display:grid;place-items:center;padding:0}
+.tm button:hover{color:var(--gold-d);background:var(--gold-s)}.tm button+button{border-top:1px solid var(--line)}
+.tm svg{width:12px;height:12px}
+.seg{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:3px;padding:3px;border:1px solid var(--line2);border-radius:12px;background:var(--bg)}
+.seg button{min-height:38px;border:0;border-radius:9px;background:transparent;color:var(--mute);font:500 12px "Jost",sans-serif;cursor:pointer;padding:0 2px;white-space:nowrap}
+.seg button[aria-checked=true]{background:var(--paper);color:var(--ink);font-weight:700;box-shadow:0 1px 3px rgba(30,34,39,.12);outline:1px solid var(--gold-m)}
+.half{max-width:calc(50% - 5px);margin-top:10px}.half[hidden]{display:none}
+.note{font-size:12px;color:var(--mute);margin:6px 0 0;line-height:1.5}
+.chk{display:flex;align-items:flex-start;gap:10px;line-height:1.45;font-size:13.5px;color:var(--ink2);min-height:24px;padding:3px 0;cursor:pointer;margin:8px 0 0}
+.chk input{appearance:none;-webkit-appearance:none;width:18px;height:18px;min-height:0;margin:0;padding:0;border:1.5px solid var(--line2);border-radius:6px;background:var(--bg);flex:none;display:grid;place-items:center;cursor:pointer;margin-top:1px}
+.chk input::after{content:"";width:10px;height:6px;border:2px solid #1E2227;border-top:0;border-right:0;transform:rotate(-45deg) scale(0);margin-top:-2px;transition:transform .12s}
+.chk input:checked{background:var(--gold);border-color:var(--gold)}.chk input:checked::after{transform:rotate(-45deg) scale(1)}
+.chk small{color:var(--mute);font-size:12.5px}
+.apl{width:100%;margin-top:4px;min-height:46px;border:0;border-radius:12px;background:light-dark(#1E2227,#DCB651);color:light-dark(#fff,#1E2227);font:600 15px "Jost",sans-serif;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 10px 24px rgba(30,34,39,.18);transition:transform .12s,box-shadow .12s}
+.apl:hover{box-shadow:0 14px 30px rgba(30,34,39,.24)}.apl:active{transform:translateY(1px)}.apl svg{width:18px;height:18px;color:light-dark(var(--gold),#1E2227)}
+.fl{animation:fl 1.6s ease}@keyframes fl{0%,35%{box-shadow:0 0 0 4px rgba(220,182,81,.55);border-color:var(--gold)}100%{box-shadow:none}}
+/* resultado */
+.rh{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:6px 16px;margin-bottom:14px}
+.rh h2{font-size:clamp(19px,2.2vw,23px)}.rh span{font-size:13.5px;color:var(--mute)}
+.figs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:0 0 12px}
+.fig{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:11px 14px;box-shadow:var(--sh)}
+.fig b{display:block;font:400 clamp(18px,1.9vw,22px)/1.1 "Libre Baskerville",serif;white-space:nowrap;margin-bottom:4px}
+.fig span{font-size:12px;color:var(--mute)}
+.fig.ok b{color:var(--ok)}.fig.err b{color:var(--red)}.fig.ok{border-color:light-dark(#cfe6d7,#2c4434)}.fig.err{border-color:light-dark(#f0cfca,#4a2c29)}
+.hint{display:flex;gap:10px;align-items:flex-start;border-radius:12px;padding:10px 12px;margin:0 0 12px;font-size:13.5px;background:var(--gold-s);border:1px solid var(--gold-m);color:var(--ink2)}
+.hint svg,.adj h3 svg{width:18px;height:18px;flex:none;color:var(--gold-d);margin-top:2px}
+.adj{background:var(--paper);border:1px solid var(--gold-m);border-radius:14px;padding:13px 16px;margin:0 0 14px;box-shadow:var(--sh);position:relative;overflow:hidden}
+.adj::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--gold)}
+.adj h3{display:flex;gap:8px;align-items:center;font-size:15.5px;margin-bottom:10px}
+.adj ul{margin:0;padding:0;list-style:none}.adj li{margin:0 0 9px;padding-left:16px;position:relative;font-size:13.5px;color:var(--ink2)}
+.adj li::before{content:"";position:absolute;left:2px;top:.62em;width:5px;height:5px;border-radius:50%;background:var(--gold)}
+.ba{display:inline-flex;align-items:center;gap:6px;white-space:nowrap;font-weight:600;color:var(--ink)}.ba s{color:var(--mute);font-weight:400}
+.adj button{margin-top:4px;background:transparent;border:1px solid var(--line2);border-radius:10px;min-height:40px;padding:6px 14px;font:600 13.5px "Jost",sans-serif;color:var(--ink2);cursor:pointer}.adj button:hover{border-color:var(--gold)}
+.al{padding:9px 12px;border-radius:10px;font-size:13px;margin:0 0 12px;color:var(--ink2)}.al.err{background:var(--redbg)}.al.warn{background:var(--ambbg)}.al.info{background:var(--gold-s)}
+.week{background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:13px 15px;margin-bottom:14px;box-shadow:var(--sh)}
+.week h3{font-size:15px;margin-bottom:10px}.week h3 small{font:400 13px "Jost",sans-serif;color:var(--mute);margin-left:6px}
+.scroll{overflow-x:auto}
+table.g{border-collapse:separate;border-spacing:3px;width:100%;min-width:640px;font-size:13px}
+table.g th{font-weight:600;font-size:12px;padding:3px;text-align:center;white-space:nowrap;color:var(--ink2)}
+table.g th.n,table.g td.n{text-align:left;min-width:96px;font-size:13px}th.out{color:var(--mute);font-weight:400}
+.c{border-radius:8px;border:1px solid var(--line);background:var(--bg);padding:7px 2px;text-align:center;white-space:nowrap;font-size:12.5px}
+.c.f{background:var(--gold);border-color:transparent;color:#1E2227;font-weight:700}table.g th.sun{background:var(--doms);color:var(--dom);border-radius:7px}table.g th.hol{background:var(--fer);color:#fff;border-radius:7px}table.g th.hol .hol{color:#fff;opacity:.9}td.sun .c:not(.f){background:var(--doms);border-color:var(--domm);color:var(--dom)}td.hol .c:not(.f){background:var(--domm);border-color:var(--fer);color:var(--dom)}.c.x{border-style:dashed;color:var(--mute);background:transparent}
+td.out .c{opacity:.5}td.tot{font-weight:600;text-align:right;white-space:nowrap;padding:0 4px}
+.hol{display:block;font-size:10.5px;color:var(--gold-d)}
+/* prévia de 10 dias */
+.pv{display:grid;gap:3px;font-size:12px}
+.pv div{min-height:32px;display:flex;align-items:center;justify-content:center;border-radius:9px;text-align:center;line-height:1.15}
+.pv .h{font-weight:600;font-size:11.5px;flex-direction:column;color:var(--ink2);min-height:34px}.pv .h small{font-weight:400;color:var(--mute);font-size:11px}
+.pv .h.sun{background:var(--doms);color:var(--dom)}.pv .h.sun small{color:var(--dom)}.pv .h.hol{background:var(--fer);color:#fff}.pv .h.hol small{color:#fff;opacity:.85}.pv .w.sun{background:var(--doms);border-color:var(--domm)}.pv .w.hol{background:var(--domm);border-color:transparent;color:var(--dom);font-weight:600}.pv .x.sun{background:var(--doms);border-color:var(--domm);color:var(--dom)}.pv .x.hol{border-color:var(--fer);color:var(--dom);background:var(--doms)}
+.pv .n{justify-content:flex-start;font-weight:600;color:var(--ink2)}
+.pv .w{background:var(--bg);border:1px solid var(--line);font-variant-numeric:tabular-nums}
+.pv .f{background:var(--gold);color:#1E2227;font-weight:700}
+.pv .x{border:1px dashed var(--line2);color:var(--mute)}.pv .e{border:1.5px solid var(--red)}
+.pv.sm{gap:2px;font-size:11px}.pv.sm div{min-height:32px;border-radius:6px}.pv.sm .f{font-size:9.5px}.pv.sm .h{font-size:10.5px}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;margin:12px 0 0;font-size:12.5px;color:var(--mute)}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:4px;vertical-align:-1px;margin-right:6px}
+/* bloqueio */
+.lock{position:relative;min-height:590px}
+.lock .blur{filter:blur(6px);opacity:.55;pointer-events:none;user-select:none;max-height:440px;overflow:hidden;-webkit-mask-image:linear-gradient(#000 40%,transparent)}
+.lock .blur .scroll{overflow:hidden}
+.gate{position:absolute;left:50%;top:16px;transform:translateX(-50%);width:min(410px,94%);background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:20px 20px 16px;box-shadow:0 30px 70px rgba(30,34,39,.18)}
+.gi{width:38px;height:38px;border-radius:50%;background:var(--gold-s);border:1px solid var(--gold-m);display:grid;place-items:center;color:var(--gold-d);margin-bottom:12px}.gi svg{width:22px;height:22px}
+.gate h3{font-size:17px;margin-bottom:6px}
+.gate ul{margin:0 0 14px;padding:0;list-style:none;font-size:13px;color:var(--ink2)}.gate li{display:flex;gap:8px;align-items:center;margin-bottom:4px}.gate li svg{width:15px;height:15px;color:var(--gold-d);flex:none}
+.gate label.l{display:block;font-size:12.5px;font-weight:600;margin:8px 0 4px;color:var(--ink2)}
+.gate .chk{font-size:12.5px;color:var(--mute);line-height:1.5}
+button.go{width:100%;margin-top:12px;font:700 15px "Jost",sans-serif;min-height:46px;border-radius:12px;border:0;background:var(--gold);color:#1E2227;cursor:pointer;box-shadow:0 10px 22px rgba(220,182,81,.32)}
+button.go:hover{filter:brightness(1.04)}
+.err-t{color:var(--red);font-size:13px;min-height:18px;margin-top:8px;text-align:center}
+.sent{display:flex;gap:10px;border:1px solid light-dark(#cfe6d7,#2c4434);background:var(--okbg);border-radius:16px;padding:14px 16px;margin-bottom:14px;font-size:14.5px}
+table.sum{border-collapse:collapse;width:100%;font-size:14px}table.sum th,table.sum td{border-bottom:1px solid var(--line);padding:8px 6px;text-align:right;white-space:nowrap}
+table.sum th{font-weight:600;color:var(--ink2);font-size:13px}table.sum th:first-child,table.sum td:first-child{text-align:left}
+.law p{font-size:14.5px;margin:0 0 9px;color:var(--ink2)}
+.cta2{text-align:center;margin-top:24px}.cta2 a{display:inline-flex;align-items:center;gap:8px;color:var(--ink);text-decoration:none;font-weight:600;font-size:14px;padding:10px 24px;border-radius:99px;border:1px solid var(--line2);background:var(--paper);box-shadow:var(--sh)}
+.cta2 a:hover{border-color:var(--gold)}.cta2 svg{width:18px;height:18px;color:var(--gold-d)}
+/* aplicativo compacto no canto da tela: cabe em cerca de 1040 x 820 */
+body{font-size:14px}
+.app{width:100%;max-width:1680px;margin:0;padding:10px clamp(14px,1.6vw,28px) 10px;height:100vh;display:flex;flex-direction:column;overflow:hidden}
+html,body{overflow:hidden}
+.qrow{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:14px;align-items:start}.qrow .q{border-top:0!important}
+.q3{}.step.qt3{grid-template-columns:34px 58px 34px}
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px 22px;padding:0 2px 8px;border-bottom:1px solid var(--line);position:relative;margin-bottom:12px}
+.top::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:2px;background:linear-gradient(90deg,transparent,var(--gold) 12%,var(--gold) 40%,transparent 85%)}
+.top .brand{flex:none;display:block;line-height:0;padding-right:22px;border-right:1px solid var(--line)}.logo{width:200px;height:auto;display:block}.logo .lm{fill:light-dark(#848688,#E9E9E9)}.logo .ln{fill:light-dark(#1E2227,#E9E9E9)}.logo .lg0{fill:#DCB651}.top .ttl{flex:1;min-width:0}.ctt{display:flex;flex-direction:column;align-items:flex-end;font-size:11.5px;color:var(--mute);line-height:1.45;white-space:nowrap}.ctt span:first-child{color:var(--ink2);font-weight:500}.top .kick{margin:0 0 3px;font-size:11.5px;letter-spacing:.04em}.top h1{font-size:23px}.top h1 em{font-style:italic;color:var(--gold-d)}
+.fc{display:inline-flex;align-items:center;gap:8px;flex:none;color:var(--ink);text-decoration:none;font-weight:600;font-size:14px;padding:9px 18px;border-radius:99px;border:1.5px solid var(--gold);background:var(--gold-s);box-shadow:0 4px 14px rgba(220,182,81,.22);transition:background .15s,box-shadow .15s}
+.fc:hover{background:var(--gold-m);box-shadow:0 6px 18px rgba(220,182,81,.32)}.fc svg{width:16px;height:16px;color:var(--gold-d)}
+.cols{flex:1;min-height:0;display:grid;grid-template-columns:clamp(330px,24vw,420px) minmax(0,1fr);gap:clamp(14px,1.4vw,24px);align-items:stretch;padding:0}
+.form{position:static;padding:12px 14px;border-radius:16px;display:flex;flex-direction:column;justify-content:space-between}.form .apl{margin-top:6px!important}.form .q5{margin-bottom:10px}
+.res{display:flex;flex-direction:column;min-height:0}#out{flex:1;min-height:0;display:flex;flex-direction:column}
+.chks{flex:1;min-height:0;overflow:hidden;display:flex;flex-direction:column;margin-bottom:6px;padding-bottom:8px!important}.chks h3 small{font-size:11.5px}
+.cg{flex:1;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));grid-auto-rows:minmax(46px,1fr);gap:6px;min-height:0}
+.ci{display:grid;grid-template-columns:18px minmax(0,1fr);grid-template-rows:auto auto;column-gap:7px;align-content:center;padding:22px 10px 6px;border-radius:9px;background:var(--bg);border:1px solid var(--line);position:relative}
+.ci svg{width:16px;height:16px;grid-row:1/3;align-self:start;margin-top:1px}.ci b{font-size:12.5px!important}.ci span{font-size:11px!important}.ci b{display:block;font-size:12px;line-height:1.25}.ci span{display:block;font-size:10.5px;color:var(--mute);line-height:1.3}
+.ci em{position:absolute;right:8px;top:5px;font-style:normal;font-size:10px;font-weight:700}.ci b{padding-right:0}.ci span{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.ci.fx{cursor:pointer;text-align:left;font:inherit;color:inherit;width:100%}.ci.fx em{padding:2px 8px;border-radius:99px;top:5px}.ci.err.fx em{background:var(--red);color:#fff}.ci.warn.fx em{background:var(--amb);color:#fff}.ci.fx:hover{filter:brightness(.97);box-shadow:0 0 0 2px var(--gold-m)}
+.ci.ok svg,.ci.ok em{color:var(--ok)}.ci.warn{background:var(--ambbg);border-color:transparent}.ci.warn svg,.ci.warn em{color:var(--amb)}.ci.err{background:var(--redbg);border-color:transparent}.ci.err svg,.ci.err em{color:var(--red)}
+@media(max-width:1100px){.cg{grid-template-columns:repeat(3,minmax(0,1fr))}}@media(max-width:600px){.cg{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:900px){.app{height:auto;overflow:visible}html,body{overflow:visible}.cg{grid-auto-rows:minmax(40px,auto)}.form .apl{margin-top:8px!important}}
+.fh{padding-bottom:6px;border-bottom:1px solid var(--line)}.ft{font-size:15.5px}.fsub{font-size:11.5px;margin:0}
+.form .q{padding:5px 0;border-top:1px solid var(--line)}.form .q:first-of-type{border-top:0}.fh+.q{border-top:0}
+.qt{font-size:13px;margin:0 0 5px;gap:8px}.num{width:20px;height:20px;font-size:10.5px}
+input,select{min-height:36px;padding:6px 10px;font-size:14px;border-radius:9px}
+.chips button{min-height:34px;font-size:12px;border-radius:8px}.step{grid-template-columns:36px minmax(0,1fr) 36px}.step button{min-height:36px;font-size:17px;border-radius:9px}.step input{font-size:15px}
+.tm input{min-height:40px;font-size:16px}.tm button{width:30px}.tm{border-radius:9px}
+.sl{font-size:11.5px;margin-bottom:3px}.note{font-size:11.5px;margin-top:5px}
+.chk{font-size:12.5px;padding:2px 0;margin-top:5px}.chk input{width:16px;height:16px}.chk small{font-size:11px}
+.seg button{min-height:32px;font-size:11.5px}.half{margin-top:7px}
+.apl{min-height:42px;font-size:14px;margin-top:8px;border-radius:11px}
+.cw{display:flex;gap:6px;align-items:flex-start;margin:4px 0 0;padding:6px 8px;border-radius:8px;background:var(--ambbg);color:var(--amb);font-size:11px;line-height:1.4}.cw[hidden]{display:none}.cw svg{width:14px;height:14px;flex:none;margin-top:1px}
+.mlw{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:5px}.mlw[hidden]{display:none}.step.sm{grid-template-columns:30px 44px 30px;gap:4px}.step.sm button{min-height:30px;font-size:15px}.step.sm input{min-height:30px;padding:2px;font-size:14px}
+.tlw{margin-top:8px;padding-top:7px;border-top:1px dashed var(--line2)}.tlw:has(.tl:empty){display:none}.tlh{margin:0 0 4px;font-size:11.5px;font-weight:600;color:var(--ink2)}.tlh b{color:var(--ok)}.tlh{display:flex;flex-wrap:wrap;align-items:center;gap:4px 6px}.lg{margin-left:auto;display:inline-flex;align-items:center;gap:5px;font-weight:400;color:var(--mute);font-size:10.5px}.lg i{display:inline-block;width:14px;height:8px;border-radius:3px}.lg .lw{background:light-dark(#5b5f66,#8a8e95)}.lg .ld{background:var(--gold);margin-left:6px}.tls{color:var(--amb);font-weight:600}
+.tl{display:grid;grid-template-columns:52px minmax(0,1fr);gap:8px}.tl:empty{display:none}
+.tl .lb{display:grid;grid-auto-rows:20px;font-size:11px;color:var(--ink2);font-weight:600}.tl .lb span{display:flex;align-items:center}
+.tl .trk{position:relative;display:grid;grid-auto-rows:20px}
+.tl .b{position:relative;height:20px}.tl .b::before{content:"";position:absolute;left:0;right:0;top:5px;height:10px;border-radius:4px;background:light-dark(#5b5f66,#8a8e95)}
+.tl .b i{position:absolute;top:3px;height:14px;border-radius:4px;box-shadow:0 0 0 2px var(--paper);background:var(--gold);color:#1E2227;font:600 9.5px/15px "Jost",sans-serif;font-style:normal;text-align:center;white-space:nowrap;overflow:hidden;z-index:1}
+.tl .ln{position:absolute;top:0;bottom:6px;width:0;border-left:1.5px solid var(--ink);opacity:.7}
+.tl .brk{position:absolute;top:2px;width:5px;margin-left:-2.5px;background:var(--paper);transform:skewX(-22deg);z-index:2;border-left:1px solid var(--line2);border-right:1px solid var(--line2)}.tl .ax{position:relative;height:20px;border-top:1px solid var(--line2)}.tl .ax.two{height:34px}.tl .ax b{z-index:2;background:var(--paper);padding:0 2px}.tl .ax b.r2{top:18px;z-index:1}.tl .ax b.r2::before{content:"";position:absolute;left:50%;top:-16px;height:14px;border-left:1px dotted var(--mute)}
+.tl .ax b{position:absolute;top:3px;transform:translateX(-50%);font-size:11.5px;font-weight:700;color:var(--ink);white-space:nowrap}
+.tl .ax b:first-child,.tl .ax b:last-child{color:var(--ink);font-weight:700}
+.pvc>h3{grid-area:t}.pvc>.pv{grid-area:pv}.pvc>.tlw{grid-area:tl}.pvc>.more{grid-area:m}
+@media(min-width:1280px){.pvc{display:grid;grid-template-columns:minmax(0,1.12fr) minmax(0,1fr);grid-template-areas:"t t" "pv tl" "m m";column-gap:22px;align-items:start}
+.pvc>.tlw{margin-top:0;padding:0 0 0 20px;border-top:0;border-left:1px dashed var(--line2);align-self:stretch}}
+.tlm{grid-column:1/-1;margin:2px 0 0;font-size:10.5px;color:var(--mute)}
+.tl .ok{font-size:11.5px;color:var(--ok);font-weight:600;margin-top:2px}
+.res{min-width:0}
+.rh{margin-bottom:8px}.rh h2{font-size:18px}.rh span{font-size:12px}
+.figs{gap:8px;margin-bottom:8px}.fig{padding:6px 11px;display:block;box-shadow:none;border-radius:12px}.fig b{font-size:17px;margin:0 0 1px}.fig span{font-size:11px;display:block;line-height:1.35}
+.al{font-size:12px;padding:7px 11px;margin-bottom:8px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.rh{flex-wrap:nowrap!important;align-items:center!important}.rh h2{flex:none}#adj{flex:1;min-width:0;display:flex;justify-content:flex-end}
+.limtx{margin:-4px 0 8px;font-size:11.5px;color:var(--ink2);line-height:1.4}.limtx b{color:var(--gold-d)}
+.opm{position:fixed;z-index:50;background:var(--paper);border:1px solid var(--line);border-radius:14px;box-shadow:0 22px 50px rgba(30,34,39,.25);padding:10px;display:grid;gap:6px}
+.opm .oh{display:flex;justify-content:space-between;align-items:center;padding:2px 4px 4px}.opm .oh b{font:400 15px "Libre Baskerville",serif}
+.opm .ox{border:0;background:transparent;font-size:20px;line-height:1;color:var(--mute);cursor:pointer;width:30px;height:30px;border-radius:8px}.opm .ox:hover{background:var(--bg)}
+.opm .oi{display:block;text-align:left;border:1px solid var(--line);background:var(--bg);border-radius:10px;padding:8px 10px;cursor:pointer;font:inherit;color:var(--ink)}
+.opm .oi:hover,.opm .oi:focus-visible{border-color:var(--gold);background:var(--gold-s)}.opm .oi.rec{border-color:var(--gold)}
+.opm .oi b{display:flex;align-items:center;gap:8px;font-size:13px}.opm .oi em{font-style:normal;font-size:10px;font-weight:700;color:#1E2227;background:var(--gold);padding:1px 7px;border-radius:99px}
+.opm .oi span{display:block;font-size:11.5px;color:var(--mute);margin-top:2px;line-height:1.4}
+.adj1{display:flex;align-items:center;gap:8px;max-width:100%;padding:4px 6px 4px 10px;border-radius:99px;background:var(--gold-s);border:1px solid var(--gold-m);font-size:12px;color:var(--ink2);position:relative}
+.adj1>svg{width:14px;height:14px;color:var(--gold-d);flex:none}.adj1 .t{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.adj1 details{flex:none}.adj1 summary{cursor:pointer;color:var(--gold-d);font-weight:700;list-style:none}.adj1 summary::-webkit-details-marker{display:none}
+.adj1 .pop{position:absolute;right:0;top:calc(100% + 6px);width:min(560px,80vw);background:var(--paper);border:1px solid var(--line);border-radius:12px;box-shadow:0 18px 40px rgba(30,34,39,.18);padding:12px 14px;z-index:5}
+.adj1 .pop h4{margin:0 0 6px;font:400 15px "Libre Baskerville",serif}.adj1 .pop ul{margin:0;padding-left:16px}.adj1 .pop li{font-size:12.5px;margin-bottom:6px;color:var(--ink2)}
+.adj1 button{flex:none;min-height:26px;padding:2px 10px;border-radius:99px;border:1px solid var(--line2);background:var(--paper);font:600 11.5px "Jost",sans-serif;color:var(--ink2);cursor:pointer}
+@media(max-width:900px){.rh{flex-wrap:wrap!important}#adj{flex-basis:100%;justify-content:flex-start}.adj1{border-radius:12px;flex-wrap:wrap}.adj1 .t{white-space:normal}}
+.adj{padding:9px 12px;margin-bottom:8px;border-radius:12px}.adj h3{font-size:14px;margin:0}.adj .rs{font-size:12.5px;color:var(--ink2);margin:4px 0 0}
+.adj details{margin-top:4px}.adj summary{cursor:pointer;font-size:12px;color:var(--gold-d);font-weight:600}.adj ul{margin-top:6px}.adj li{font-size:12px;margin-bottom:5px}
+.adj .ab{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.adj button{min-height:30px;padding:3px 10px;font-size:12px;margin:0}
+.week{padding:10px 12px;border-radius:14px;margin-bottom:8px;box-shadow:none}.week h3{font-size:14px;margin-bottom:6px}
+.pv{gap:3px;font-size:11.5px}.pv div{min-height:25px;border-radius:7px}.pv .h{min-height:28px;font-size:11px}
+.legend{margin-top:6px;font-size:11px}#pvN{font-size:11px}#pvT{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px}.dl{margin-left:auto;display:inline-flex;align-items:center;gap:5px;font:400 11px "Jost",sans-serif;color:var(--mute)}.dl i{display:inline-block;width:12px;height:12px;border-radius:3px;vertical-align:-1px}.dl i+i,.dl i:not(:first-child){margin-left:8px}.dl .df{background:var(--gold)}.dl .dd{background:var(--doms);box-shadow:inset 0 0 0 1px var(--dom)}.dl .dh{background:var(--fer)}
+.more{display:flex;align-items:center;justify-content:center;gap:6px;margin:8px 0 0;padding:5px;border-radius:9px;background:repeating-linear-gradient(135deg,var(--gold-s) 0 8px,transparent 8px 16px);font-size:11.5px;color:var(--gold-d);font-weight:600}
+.more svg{width:14px;height:14px}
+.gate2{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:14px;align-items:center;background:var(--paper);border:1px solid var(--gold-m);border-radius:14px;padding:12px 14px;position:relative;overflow:hidden}
+.gate2::before{content:"";position:absolute;left:0;top:0;right:0;height:3px;background:var(--gold)}
+.gate2 h3{font-size:15px;margin:3px 0 8px;line-height:1.25}.gate2 ul{clear:both}.gate2 ul{margin:0;padding:0;list-style:none;font-size:12px;color:var(--ink2)}.gate2 li{display:flex;gap:6px;align-items:center;margin-bottom:3px}.gate2 li svg{width:13px;height:13px;color:var(--gold-d);flex:none}
+.gate2 .gi{width:28px;height:28px;margin:0;float:left;margin-right:8px}.gate2 .gi svg{width:16px;height:16px}
+.gate2 .gf{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(0,1fr) minmax(0,1.15fr);gap:6px}.gate2 input,.gate2 select{font-size:13px;padding:6px 8px}
+.gate2 label.l{display:block;font-size:11px;font-weight:600;color:var(--ink2);margin:0 0 2px}
+.gate2 .chk{font-size:10.5px;line-height:1.4;color:var(--mute);margin-top:4px}
+.gate2 button.go{min-height:38px;margin-top:6px;font-size:13.5px;border-radius:10px}
+.err-t{font-size:11.5px;min-height:14px;margin-top:4px}
+.full{max-height:600px;overflow:auto;padding-right:4px}
+.sent{padding:9px 12px;font-size:12.5px;margin-bottom:8px;align-items:center}.sent .pdfb{width:auto;flex:none;margin:0 0 0 auto;min-height:36px;padding:0 18px;font-size:13px}
+@media(max-width:900px){.cols{grid-template-columns:minmax(0,1fr)}.top{flex-wrap:wrap}.full{max-height:none}.ctt{display:none}.top .brand{border-right:0;padding-right:0}}@media(max-width:1250px){.ctt{display:none}}
+@media(max-width:600px){.top .brand{flex-basis:100%;padding:0 0 8px}.logo{width:190px}.top .ttl{flex-basis:100%}}@media(max-width:600px){.gate2{grid-template-columns:minmax(0,1fr)}.gate2 .gf{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.gate2 .gf>div:first-child{grid-column:1/-1}.top h1{font-size:20px}.fig{display:flex}}
+@media(max-width:900px){.grid{grid-template-columns:minmax(0,1fr)}.form{position:static}.hwrap{grid-template-columns:minmax(0,1fr)}.art{display:none}}
+@media(max-width:600px){.figs{grid-template-columns:minmax(0,1fr)}.fig{display:flex;align-items:baseline;gap:10px}.fig b{margin:0}
+.lock{min-height:0}.lock .blur{max-height:180px}.gate{position:relative;left:0;top:0;transform:none;width:100%;margin-top:-120px;padding:22px 18px}}
+@media(prefers-reduced-motion:no-preference){.week,.adj,.gate{animation:in .4s ease both}@keyframes in{from{opacity:0;translate:0 8px}}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+<symbol id="ck" viewBox="0 0 16 16"><circle cx="8" cy="8" r="7.2" fill="none" stroke="currentColor" stroke-width="1.2"/><path d="M5 8.2l2 2 4-4.4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+<symbol id="up" viewBox="0 0 12 12"><path d="M2.5 7.5L6 4l3.5 3.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+<symbol id="dn" viewBox="0 0 12 12"><path d="M2.5 4.5L6 8l3.5-3.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+<symbol id="sp" viewBox="0 0 20 20"><path d="M10 2l1.6 4.6L16 8l-4.4 1.4L10 14l-1.6-4.6L4 8l4.4-1.4z" fill="currentColor"/><path d="M15.5 13l.7 1.8 1.8.7-1.8.7-.7 1.8-.7-1.8-1.8-.7 1.8-.7z" fill="currentColor"/></symbol>
+<symbol id="inf" viewBox="0 0 20 20"><circle cx="10" cy="10" r="8.3" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M10 9v5M10 6.2v.1" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+<symbol id="ml" viewBox="0 0 24 24"><rect x="3" y="5.5" width="18" height="13" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M4 7l8 6 8-6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></symbol>
+<symbol id="ch" viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></symbol>
+</svg>
+<div class="app">
+<header class="top"><a class="brand" href="https://www.rusemberg.adv.br/" target="_top" aria-label="Rusemberg Fernandes, Advogado: página inicial"><svg class="logo" role="img" aria-label="Rusemberg Fernandes, Advogado" xmlns="http://www.w3.org/2000/svg" viewBox="982.9 719.9 3380.6 1270.1"><g transform="translate(0,0) scale(1)"><path d="M1285.0,1724.6C1285.0,1715.1 1285.2,1714.2 1287.0,1713.7C1288.9,1713.2 1289.0,1713.7 1289.0,1722.1L1289.0,1731.0L1645.5,1731.0L2002.0,1731.0L2002.0,1539.1C2002.0,1365.0 2002.1,1347.2 2003.6,1346.6C2004.5,1346.3 2005.4,1346.0 2005.6,1346.0C2005.8,1346.0 2006.0,1433.5 2006.0,1540.5L2006.0,1735.0L1645.5,1735.0L1285.0,1735.0L1285.0,1724.6Z M1377.0,1672.0C1380.4,1670.1 1386.5,1670.1 1660.2,1670.0L1940.0,1670.0L1940.0,1523.0C1940.0,1378.8 1940.0,1376.1 1941.9,1375.0C1943.0,1374.5 1944.1,1374.0 1944.4,1374.0C1944.7,1374.0 1945.0,1441.5 1945.0,1524.0L1945.0,1674.0L1659.2,1674.0C1377.1,1673.9 1373.5,1673.9 1377.0,1672.0Z M1223.0,1298.5L1223.0,953.0L1584.0,953.0L1945.0,953.0L1945.0,983.5L1945.0,1014.0L1975.5,1014.0L2006.0,1014.0L2006.0,1052.9C2006.0,1087.4 2005.8,1091.9 2004.4,1092.4C2003.5,1092.7 2002.6,1093.0 2002.4,1093.0C2002.2,1093.0 2002.0,1076.1 2002.0,1055.5L2002.0,1017.9L1971.8,1018.0C1944.2,1018.0 1941.0,1017.9 1935.5,1016.1L1929.5,1014.1L1934.8,1014.1L1940.0,1014.0L1940.0,985.5L1940.0,957.0L1584.0,957.0L1228.0,957.0L1228.0,1221.2C1228.0,1366.6 1228.0,1519.8 1228.0,1561.8C1228.0,1632.5 1227.9,1638.3 1226.3,1641.1C1225.3,1642.7 1224.2,1644.0 1223.8,1644.0C1223.4,1644.0 1223.0,1488.5 1223.0,1298.5Z M1285.3,1533.0C1285.5,1499.2 1285.6,1496.5 1287.2,1496.2C1288.9,1495.9 1289.0,1498.0 1289.0,1530.3C1289.0,1563.2 1288.9,1564.9 1287.0,1567.1C1285.1,1569.5 1285.1,1569.5 1285.3,1533.0Z M1285.0,1398.1C1285.0,1347.0 1285.0,1346.1 1287.0,1345.0C1289.0,1343.9 1289.0,1344.1 1288.8,1396.7C1288.5,1446.0 1288.4,1449.5 1286.8,1449.8C1285.1,1450.1 1285.0,1447.1 1285.0,1398.1Z M1940.0,1253.2L1940.0,1172.3L1942.5,1171.2L1945.0,1170.0L1945.0,1251.4C1945.0,1337.6 1945.2,1334.0 1940.9,1334.0C1940.4,1334.0 1940.0,1301.6 1940.0,1253.2Z M2002.0,1225.5C2002.0,1144.1 2002.0,1143.1 2004.0,1142.0C2006.0,1140.9 2006.0,1141.2 2006.0,1223.9C2006.0,1298.6 2005.8,1306.8 2004.4,1307.4C2003.5,1307.7 2002.6,1308.0 2002.4,1308.0C2002.2,1308.0 2002.0,1270.9 2002.0,1225.5Z M1285.0,1160.0L1285.0,1014.0L1574.2,1014.1C1858.6,1014.2 1863.3,1014.2 1853.5,1016.0C1843.9,1017.8 1831.5,1017.9 1566.2,1017.9L1289.0,1018.0L1289.0,1160.8C1289.0,1302.4 1289.0,1303.5 1287.0,1304.8C1285.0,1306.0 1285.0,1305.8 1285.0,1160.0Z M1940.0,1114.8C1940.1,1111.0 1942.5,1106.0 1944.4,1106.0C1944.7,1106.0 1945.0,1108.7 1945.0,1111.9C1945.0,1116.3 1944.6,1117.9 1943.4,1118.4C1940.5,1119.5 1940.0,1119.0 1940.0,1114.8Z" class="lm" fill-rule="evenodd"/></g><g transform="translate(0,0) scale(1)"><path d="M1230.5,1712.1C1224.9,1710.5 1222.5,1709.2 1219.5,1706.0C1216.7,1703.0 1216.5,1702.4 1216.5,1694.6C1216.5,1686.4 1216.6,1686.2 1222.8,1673.9C1239.6,1640.7 1284.3,1587.8 1362.1,1508.9C1372.8,1498.1 1389.3,1481.8 1398.8,1472.6L1416.0,1456.0L1408.1,1456.0C1399.4,1456.0 1383.4,1457.4 1372.5,1459.1C1364.6,1460.4 1346.3,1465.1 1313.0,1474.5C1265.4,1487.9 1247.5,1491.3 1242.5,1487.6C1240.7,1486.3 1240.7,1486.1 1242.3,1483.6C1244.8,1479.9 1248.2,1478.4 1280.9,1466.5C1398.6,1423.9 1494.6,1375.9 1612.0,1301.1C1675.2,1260.8 1752.1,1205.0 1819.0,1151.1C1861.5,1116.7 1900.8,1080.9 1904.2,1073.3C1908.6,1063.3 1900.0,1061.1 1870.5,1064.5C1815.6,1070.9 1729.9,1094.3 1642.0,1126.8C1582.3,1148.9 1552.1,1162.7 1492.1,1195.0C1408.6,1239.9 1384.9,1254.9 1315.0,1306.9C1259.4,1348.2 1258.7,1348.6 1292.0,1319.2C1332.9,1283.2 1361.3,1262.0 1427.3,1218.2C1481.2,1182.4 1512.3,1165.0 1585.5,1129.7C1760.5,1045.2 1882.6,1010.8 1936.2,1030.9C1948.7,1035.7 1955.0,1043.6 1955.0,1054.7C1955.0,1065.6 1949.8,1076.6 1937.6,1091.8C1924.6,1107.8 1882.1,1145.0 1840.2,1176.9C1833.5,1182.1 1828.0,1186.4 1828.0,1186.7C1828.0,1186.9 1829.2,1186.4 1830.8,1185.6C1840.7,1180.6 1895.3,1155.1 1919.5,1144.2C2002.9,1106.9 2097.3,1069.5 2189.0,1037.3C2220.3,1026.3 2278.3,1007.0 2278.7,1007.3C2278.8,1007.5 2248.1,1020.6 2210.2,1036.5C1948.1,1146.4 1771.2,1236.5 1620.1,1337.3C1579.0,1364.7 1534.7,1397.2 1498.7,1426.3C1480.2,1441.3 1480.7,1440.1 1492.5,1441.5C1521.9,1445.2 1556.1,1455.5 1582.5,1468.8C1593.3,1474.2 1608.4,1483.5 1619.9,1491.8L1630.2,1499.3L1648.2,1490.4L1666.2,1481.5L1665.5,1463.5C1664.4,1433.6 1667.8,1342.2 1670.8,1321.4C1671.5,1316.5 1676.7,1416.1 1677.8,1455.8C1678.0,1466.3 1678.4,1475.0 1678.6,1475.0C1678.8,1475.0 1703.2,1462.9 1732.8,1448.1C1917.2,1355.9 2042.3,1302.4 2172.5,1260.1C2212.4,1247.2 2265.7,1231.4 2266.6,1232.2C2266.7,1232.4 2257.1,1235.6 2245.2,1239.4C2171.3,1262.6 2081.2,1297.1 1997.0,1334.5C1919.0,1369.1 1811.2,1422.8 1709.0,1477.8L1679.5,1493.6L1679.8,1505.6C1680.2,1521.0 1680.8,1526.0 1688.2,1572.0C1692.3,1597.9 1694.1,1611.7 1693.7,1614.1C1692.7,1619.2 1687.7,1624.0 1683.2,1624.0C1677.5,1624.0 1673.3,1618.6 1667.1,1603.4C1658.6,1582.7 1649.8,1567.3 1637.2,1551.5C1630.6,1543.2 1617.0,1529.0 1615.7,1529.0C1615.2,1529.0 1595.6,1539.5 1572.1,1552.4C1468.3,1609.3 1434.5,1627.2 1373.5,1657.5C1325.8,1681.2 1285.0,1700.1 1270.2,1705.4C1254.1,1711.1 1237.3,1714.0 1230.5,1712.1Z M1290.5,1663.7C1331.2,1645.9 1365.7,1630.1 1417.8,1605.4C1456.1,1587.2 1599.0,1516.0 1599.0,1515.1C1599.0,1514.7 1596.2,1512.3 1592.8,1509.8C1559.3,1485.5 1511.2,1466.2 1468.2,1460.0L1460.0,1458.8L1454.6,1463.4C1429.3,1485.0 1380.5,1533.4 1325.8,1591.3C1294.1,1624.8 1269.6,1654.4 1255.5,1676.3L1253.7,1679.1L1260.1,1676.7C1263.6,1675.3 1277.3,1669.5 1290.5,1663.7Z M1667.0,1520.2C1666.6,1510.1 1666.1,1501.7 1665.9,1501.5C1665.7,1501.4 1660.9,1503.7 1655.3,1506.8L1645.2,1512.4L1652.3,1520.5C1656.3,1524.9 1661.3,1530.9 1663.4,1533.7C1665.6,1536.6 1667.5,1538.9 1667.6,1538.7C1667.7,1538.6 1667.5,1530.3 1667.0,1520.2Z M1418.0,1439.0C1433.5,1438.1 1436.8,1437.6 1438.5,1436.1C1444.4,1430.8 1464.1,1414.3 1474.8,1405.6C1481.5,1400.2 1487.0,1395.6 1487.0,1395.4C1487.0,1394.9 1468.0,1404.0 1430.0,1422.9C1409.9,1432.8 1394.8,1440.8 1396.5,1440.5C1398.2,1440.2 1407.8,1439.6 1418.0,1439.0Z" class="lg0" fill-rule="evenodd"/></g><rect x="2432" y="968.64" width="9" height="750.7199999999999" class="lg0"/><g transform="translate(2039.7433333333333,-1389.09) scale(1.3033333333333332)"><path d="M1521.6,2096.4C1509.1,2093.6 1500.7,2088.1 1496.9,2080.4C1494.2,2074.7 1494.6,2065.6 1497.9,2059.2C1500.2,2054.7 1506.3,2048.1 1512.0,2043.9L1515.5,2041.3L1509.6,2034.1C1506.4,2030.1 1503.5,2025.7 1503.1,2024.2C1501.5,2018.6 1502.7,2017.8 1519.1,2012.6C1534.2,2007.8 1538.4,2006.0 1534.4,2006.0C1531.8,2006.0 1522.8,2001.7 1518.4,1998.4C1503.4,1986.9 1497.6,1958.7 1506.4,1939.5C1511.3,1928.8 1520.7,1920.5 1531.8,1916.9C1537.9,1914.9 1541.2,1914.7 1571.2,1914.2L1604.0,1913.8L1604.0,1917.0L1604.0,1920.2L1587.8,1919.6C1574.5,1919.1 1571.9,1919.2 1573.5,1920.2C1574.5,1920.9 1577.8,1923.7 1580.7,1926.4C1588.1,1933.2 1592.7,1942.7 1594.1,1954.0C1597.7,1983.6 1581.1,2005.0 1552.5,2007.6C1543.0,2008.4 1524.3,2014.5 1522.9,2017.3C1520.6,2021.5 1523.3,2022.0 1549.6,2022.0C1571.1,2022.0 1574.5,2022.2 1580.4,2024.0C1592.6,2027.8 1600.8,2036.6 1603.0,2048.6C1604.6,2056.7 1603.7,2062.9 1599.9,2070.7C1594.6,2081.8 1582.0,2090.5 1564.8,2095.1C1554.6,2097.9 1531.1,2098.6 1521.6,2096.4Z M1567.4,2089.5C1579.5,2087.2 1586.8,2083.4 1591.7,2076.8C1599.5,2066.1 1595.2,2051.3 1582.3,2044.9C1577.6,2042.6 1576.7,2042.5 1547.9,2042.2L1518.3,2041.9L1516.7,2045.2C1513.5,2051.9 1512.9,2054.6 1512.9,2060.8C1512.9,2068.4 1516.3,2076.3 1521.2,2080.5C1531.8,2089.5 1549.6,2092.9 1567.4,2089.5Z M545.5,2036.4C535.0,2033.8 528.2,2029.6 523.7,2022.6C518.1,2014.1 518.0,2012.8 518.0,1970.1C518.0,1925.3 518.0,1925.3 510.8,1922.0C508.4,1920.9 505.7,1920.0 504.8,1920.0C503.8,1920.0 503.0,1919.3 503.0,1918.5C503.0,1917.2 505.6,1917.0 520.5,1917.0L538.0,1917.0L538.0,1960.8C538.0,1988.8 538.4,2005.9 539.1,2008.5C541.8,2018.7 549.7,2025.0 561.0,2025.8C566.7,2026.2 568.6,2025.9 573.2,2023.8C576.2,2022.4 580.3,2019.8 582.3,2018.0L586.0,2014.8L586.0,1970.9L586.0,1926.9L583.6,1924.5C582.2,1923.1 579.1,1921.5 576.6,1920.8C574.1,1920.1 572.0,1919.0 572.0,1918.3C572.0,1917.3 575.9,1917.0 589.5,1917.0L607.0,1917.0L607.0,1970.6L607.0,2024.2L609.8,2027.0C611.4,2028.6 614.6,2030.3 616.8,2031.0C625.0,2033.1 621.2,2034.0 603.5,2034.0L586.0,2034.0L586.0,2027.5L586.0,2020.9L579.8,2026.1C570.9,2033.5 564.3,2036.3 555.0,2036.6C550.9,2036.8 546.6,2036.7 545.5,2036.4Z M676.8,2035.4C672.6,2034.6 665.8,2033.0 661.8,2031.7L654.5,2029.4L654.2,2014.2C653.9,1996.0 654.7,1995.1 660.4,2007.2C667.4,2022.2 678.8,2030.9 693.4,2032.6C704.4,2033.9 715.4,2028.8 719.1,2020.7C723.1,2011.7 720.6,2002.4 712.1,1994.8C707.1,1990.4 704.8,1988.9 684.5,1977.5C671.1,1970.0 662.9,1962.9 659.7,1956.0C657.2,1950.5 657.0,1940.3 659.3,1934.8C661.6,1929.3 669.4,1921.5 674.9,1919.2C687.3,1913.8 706.0,1914.4 724.2,1920.7C729.0,1922.4 729.0,1922.4 729.0,1927.0C729.0,1937.3 727.7,1950.0 726.6,1950.0C726.0,1950.0 723.8,1946.3 721.7,1941.7C717.3,1932.1 711.5,1924.8 705.6,1921.7C702.5,1920.1 699.7,1919.6 694.0,1919.5C681.4,1919.5 675.1,1924.3 674.2,1934.6C673.3,1945.1 679.9,1951.8 703.6,1964.7C726.2,1977.0 734.5,1984.8 737.6,1997.0C738.9,2002.2 739.0,2004.4 738.1,2008.9C735.3,2022.9 726.7,2031.3 710.9,2035.5C704.1,2037.3 687.1,2037.3 676.8,2035.4Z M812.0,2035.6C790.6,2031.0 776.0,2012.0 772.8,1984.7C769.3,1955.0 780.5,1928.8 801.0,1918.7C806.8,1915.8 808.5,1915.5 818.1,1915.2C833.5,1914.6 842.3,1917.5 851.3,1925.9C859.5,1933.6 864.2,1943.2 865.6,1955.0L866.3,1961.0L829.4,1961.2L792.5,1961.5L792.7,1971.8C793.2,2002.3 806.4,2022.0 828.0,2024.6C838.1,2025.8 851.6,2021.1 859.0,2013.9C861.9,2011.0 863.5,2010.2 864.6,2010.8C865.9,2011.5 865.5,2012.5 862.2,2016.6C848.9,2033.4 831.7,2039.9 812.0,2035.6Z M1154.5,2035.1C1151.8,2034.1 1147.0,2031.8 1144.0,2030.1C1136.3,2025.8 1132.0,2025.9 1128.3,2030.5C1126.8,2032.4 1124.9,2034.0 1124.2,2034.0C1123.3,2034.0 1123.0,2016.7 1123.0,1950.9L1123.0,1867.8L1120.2,1865.0C1118.6,1863.5 1115.5,1861.6 1113.2,1860.9C1110.9,1860.2 1109.0,1859.1 1109.0,1858.3C1109.0,1857.3 1112.4,1857.0 1126.0,1857.0L1143.0,1857.0L1143.0,1894.0C1143.0,1914.3 1143.3,1931.0 1143.6,1931.0C1143.9,1931.0 1146.7,1928.7 1149.8,1926.0C1153.0,1923.2 1158.0,1919.7 1161.0,1918.2C1165.9,1915.8 1167.7,1915.5 1176.5,1915.5C1186.0,1915.5 1186.8,1915.7 1192.8,1918.9C1204.0,1925.0 1211.6,1935.7 1216.2,1951.7C1218.1,1958.3 1218.4,1962.0 1218.5,1975.5C1218.5,1989.5 1218.2,1992.4 1216.2,1999.0C1210.2,2018.1 1197.7,2031.3 1181.5,2035.6C1174.1,2037.6 1160.6,2037.3 1154.5,2035.1Z M1290.9,2035.2C1274.0,2030.7 1261.8,2018.0 1255.8,1999.0C1253.8,1992.3 1253.5,1989.6 1253.5,1974.5C1253.6,1958.8 1253.8,1956.9 1256.3,1949.4C1262.0,1932.2 1272.9,1920.7 1287.5,1916.5C1291.8,1915.2 1296.0,1914.9 1303.9,1915.2C1313.2,1915.5 1315.3,1915.9 1321.1,1918.7C1335.7,1925.5 1345.9,1941.1 1346.0,1956.8L1346.0,1961.0L1309.5,1961.0L1273.0,1961.0L1273.0,1970.9C1273.0,1999.4 1284.5,2018.8 1304.3,2023.6C1310.1,2025.1 1312.1,2025.1 1317.9,2024.1C1326.7,2022.5 1333.8,2019.2 1339.5,2013.9C1342.9,2010.8 1344.4,2010.0 1345.2,2010.8C1346.0,2011.6 1345.2,2013.4 1342.0,2017.5C1336.7,2024.4 1327.8,2031.2 1320.2,2034.0C1312.3,2037.1 1299.6,2037.6 1290.9,2035.2Z M467.0,2033.9C460.6,2032.8 452.7,2029.3 448.4,2025.7C446.7,2024.3 433.9,2006.4 419.9,1986.1L394.5,1949.1L388.2,1949.0L382.0,1949.0L382.0,1985.5C382.0,2016.3 382.2,2022.6 383.5,2025.0C385.1,2028.0 388.4,2030.2 393.2,2031.4C394.8,2031.7 396.0,2032.5 396.0,2033.0C396.0,2033.6 386.8,2034.0 371.5,2034.0C358.0,2034.0 347.0,2033.6 347.0,2033.1C347.0,2032.7 349.0,2031.7 351.4,2031.0C356.6,2029.6 359.7,2026.7 361.0,2021.9C362.1,2018.2 362.4,1877.1 361.4,1870.8C360.6,1866.0 357.2,1862.6 351.5,1861.0C349.0,1860.3 347.0,1859.1 347.0,1858.4C347.0,1857.2 352.6,1857.0 379.2,1857.0C426.1,1857.1 434.2,1858.2 447.4,1866.0C455.5,1870.9 462.2,1879.6 465.1,1889.1C467.9,1898.2 467.4,1911.6 464.0,1920.0C458.0,1935.1 442.8,1946.2 424.7,1948.6C421.3,1949.1 420.0,1949.7 420.4,1950.6C421.2,1952.6 464.7,2015.7 468.8,2020.7C472.7,2025.6 480.3,2030.7 484.9,2031.6C486.6,2032.0 487.9,2032.8 487.7,2033.4C487.2,2034.8 474.4,2035.1 467.0,2033.9Z M899.0,2033.1C899.0,2032.7 901.0,2031.7 903.5,2031.0C908.9,2029.5 912.5,2026.1 913.4,2021.9C914.5,2016.4 914.1,1932.8 912.9,1928.7C911.8,1924.5 907.8,1921.4 902.2,1920.4C900.4,1920.0 899.0,1919.2 899.0,1918.4C899.0,1917.3 902.2,1917.0 916.5,1917.0L934.0,1917.0L934.0,1923.5L934.0,1930.1L939.9,1925.2C948.7,1917.8 954.0,1915.6 963.7,1915.2C977.3,1914.6 988.8,1919.4 995.2,1928.4L998.3,1932.9L1004.8,1927.0C1014.0,1918.7 1020.5,1915.8 1030.7,1915.2C1051.0,1914.1 1065.4,1925.0 1068.1,1943.3C1068.6,1946.7 1069.0,1966.3 1069.0,1986.8L1069.0,2024.2L1071.8,2027.0C1073.4,2028.6 1076.6,2030.3 1078.8,2031.0C1087.6,2033.3 1082.9,2034.0 1058.5,2034.0C1034.1,2034.0 1029.4,2033.3 1038.2,2031.0C1040.4,2030.3 1043.6,2028.6 1045.2,2027.0L1048.0,2024.2L1048.0,1984.8C1048.0,1960.0 1047.6,1944.1 1046.9,1941.6C1045.5,1936.5 1038.9,1929.5 1033.5,1927.4C1030.4,1926.3 1027.1,1925.9 1022.3,1926.2C1014.8,1926.6 1010.0,1928.6 1004.5,1933.3L1000.8,1936.5L1000.9,1976.0C1001.0,1997.7 1001.3,2017.6 1001.6,2020.2C1002.4,2026.1 1005.3,2029.3 1011.5,2031.0C1014.0,2031.7 1016.0,2032.7 1016.0,2033.1C1016.0,2033.6 1005.0,2034.0 991.5,2034.0C967.2,2034.0 962.5,2033.3 971.0,2031.0C973.2,2030.4 976.2,2028.9 977.7,2027.6L980.5,2025.2L980.5,1983.8C980.5,1943.2 980.5,1942.4 978.3,1938.4C970.5,1923.8 949.7,1921.4 936.7,1933.8L933.9,1936.4L934.2,1980.8L934.5,2025.2L937.3,2027.6C938.8,2028.9 941.8,2030.4 944.0,2031.0C952.5,2033.3 947.8,2034.0 923.5,2034.0C910.0,2034.0 899.0,2033.6 899.0,2033.1Z M1177.8,2031.1C1186.0,2026.9 1193.4,2014.4 1196.6,1999.5C1198.9,1988.3 1199.0,1965.9 1196.6,1956.5C1191.8,1936.7 1181.2,1925.8 1167.0,1925.9C1159.6,1925.9 1153.7,1928.4 1147.6,1934.0L1143.0,1938.3L1143.0,1973.0C1143.0,2013.8 1143.5,2016.9 1151.5,2025.8C1158.8,2034.0 1168.4,2035.9 1177.8,2031.1Z M1380.0,2033.0C1380.0,2032.5 1381.8,2031.6 1384.0,2031.0C1386.2,2030.4 1389.2,2028.9 1390.7,2027.6L1393.5,2025.2L1393.8,1976.7L1394.1,1928.2L1391.6,1925.2C1390.0,1923.5 1387.3,1921.8 1384.5,1921.0C1382.0,1920.3 1380.0,1919.1 1380.0,1918.4C1380.0,1917.3 1383.3,1917.0 1397.0,1917.0L1414.0,1917.0L1414.0,1928.5C1414.0,1934.8 1414.4,1940.0 1414.8,1940.0C1415.2,1940.0 1416.4,1938.6 1417.4,1936.9C1420.4,1931.8 1431.0,1921.1 1435.9,1918.2C1440.0,1915.8 1441.5,1915.5 1449.6,1915.5C1457.6,1915.5 1459.1,1915.8 1462.3,1918.0C1466.6,1920.9 1469.4,1926.9 1468.5,1931.1C1467.6,1935.2 1462.6,1939.0 1458.3,1939.0C1455.2,1939.0 1453.9,1938.1 1448.9,1933.0C1443.6,1927.5 1442.8,1927.0 1438.8,1927.0C1432.1,1927.0 1426.8,1931.0 1418.3,1942.4L1414.0,1948.2L1414.0,1982.0C1414.0,2000.5 1414.3,2017.8 1414.6,2020.4C1415.4,2026.1 1418.4,2029.3 1424.5,2031.0C1427.0,2031.7 1429.0,2032.7 1429.0,2033.1C1429.0,2033.6 1418.0,2034.0 1404.5,2034.0C1389.5,2034.0 1380.0,2033.6 1380.0,2033.0Z M1555.1,2002.8C1560.9,2001.1 1566.3,1995.9 1569.3,1989.3C1573.1,1980.8 1574.3,1971.7 1573.8,1956.6C1573.4,1945.9 1572.8,1942.3 1570.8,1936.8C1566.0,1924.0 1559.5,1918.6 1548.5,1918.5C1537.5,1918.5 1529.2,1925.8 1525.4,1938.8C1521.6,1951.7 1521.9,1973.2 1526.0,1985.6C1530.7,1999.7 1542.4,2006.7 1555.1,2002.8Z M845.7,1951.2C844.7,1938.7 839.2,1927.1 832.1,1922.3C821.0,1914.8 809.0,1918.2 801.2,1931.1C797.7,1936.9 794.7,1945.6 793.6,1953.2L792.9,1958.0L819.6,1958.0L846.3,1958.0L845.7,1951.2Z M1326.6,1952.2C1325.1,1940.1 1321.5,1930.9 1315.9,1925.2C1311.2,1920.4 1307.3,1918.7 1301.0,1918.6C1291.4,1918.6 1285.1,1923.5 1279.5,1935.5C1276.3,1942.4 1274.0,1950.7 1274.0,1955.5L1274.0,1958.0L1300.6,1958.0L1327.2,1958.0L1326.6,1952.2Z M422.2,1943.1C435.0,1938.2 443.9,1925.8 446.2,1910.1C449.1,1889.3 439.8,1870.4 423.4,1864.0C418.2,1861.9 415.4,1861.6 399.8,1861.2L382.0,1860.8L382.0,1903.5L382.0,1946.3L399.2,1945.8C413.8,1945.3 417.4,1944.9 422.2,1943.1Z" class="ln" fill-rule="evenodd"/></g><g transform="translate(264.60333333333347,-1048.92) scale(1.3033333333333332)"><path d="M1896.9,2035.2C1880.0,2030.7 1867.8,2018.0 1861.8,1999.0C1859.8,1992.3 1859.5,1989.6 1859.5,1974.5C1859.6,1958.8 1859.8,1956.9 1862.3,1949.4C1868.0,1932.2 1878.9,1920.7 1893.5,1916.5C1897.8,1915.2 1902.0,1914.9 1909.9,1915.2C1919.2,1915.5 1921.3,1915.9 1927.1,1918.7C1941.7,1925.5 1951.9,1941.1 1952.0,1956.8L1952.0,1961.0L1915.5,1961.0L1879.0,1961.0L1879.0,1970.9C1879.0,1999.4 1890.5,2018.8 1910.3,2023.6C1916.1,2025.1 1918.1,2025.1 1923.9,2024.1C1932.7,2022.5 1939.8,2019.2 1945.5,2013.9C1948.9,2010.8 1950.4,2010.0 1951.2,2010.8C1952.8,2012.4 1945.5,2021.7 1938.1,2027.3C1934.7,2029.8 1929.4,2032.8 1926.2,2034.0C1918.3,2037.1 1905.6,2037.6 1896.9,2035.2Z M2278.5,2036.0C2264.8,2032.6 2256.8,2023.3 2256.7,2010.7C2256.7,1993.4 2264.7,1985.0 2293.5,1971.8C2309.2,1964.6 2318.2,1958.9 2323.0,1953.3C2326.1,1949.6 2326.1,1949.3 2325.8,1941.0C2325.2,1928.2 2320.9,1921.4 2312.1,1919.0C2302.4,1916.4 2295.8,1922.7 2290.1,1940.2C2287.5,1948.0 2283.7,1952.0 2278.6,1952.0C2267.5,1952.0 2266.3,1936.7 2276.6,1926.3C2284.0,1919.0 2295.6,1915.0 2309.7,1915.0C2322.1,1915.0 2330.0,1917.9 2337.1,1925.0C2346.4,1934.2 2346.3,1933.8 2346.8,1981.5C2347.1,2017.2 2347.3,2022.7 2348.7,2024.2C2351.0,2026.8 2355.7,2026.5 2358.3,2023.7C2360.6,2021.2 2363.0,2021.2 2363.0,2023.6C2363.0,2025.8 2355.9,2033.2 2352.3,2034.7C2347.6,2036.6 2339.6,2036.3 2335.0,2034.0C2330.8,2031.8 2327.0,2027.3 2327.0,2024.3C2327.0,2020.8 2325.8,2021.0 2320.6,2025.4C2313.8,2031.1 2309.6,2033.5 2303.1,2035.4C2297.4,2037.1 2284.0,2037.4 2278.5,2036.0Z M2576.7,2036.0C2570.4,2034.4 2564.8,2031.0 2559.5,2025.6C2553.2,2019.1 2549.9,2012.9 2546.4,2001.5C2544.0,1993.5 2543.7,1990.8 2543.6,1977.5C2543.5,1960.6 2544.7,1954.5 2550.5,1942.2C2554.7,1933.3 2563.9,1923.7 2572.0,1919.8C2584.5,1913.8 2600.0,1913.5 2611.5,1918.8C2615.2,1920.6 2618.4,1922.0 2618.6,1922.0C2619.3,1922.0 2619.0,1873.5 2618.4,1870.1C2617.5,1865.9 2613.5,1862.2 2608.3,1860.9C2605.8,1860.2 2604.0,1859.2 2604.0,1858.4C2604.0,1857.3 2607.3,1857.0 2621.5,1857.0L2639.0,1857.0L2639.0,1939.5C2639.0,2011.4 2639.2,2022.5 2640.5,2025.0C2642.1,2028.0 2645.4,2030.2 2650.2,2031.4C2651.8,2031.7 2653.0,2032.5 2653.0,2033.0C2653.0,2033.6 2646.4,2034.0 2636.0,2034.0L2619.0,2034.0L2619.0,2026.9L2619.0,2019.8L2613.4,2025.0C2604.9,2032.6 2597.3,2036.1 2588.1,2036.6C2583.9,2036.8 2578.8,2036.5 2576.7,2036.0Z M2720.0,2035.2C2703.2,2030.8 2691.1,2018.1 2685.0,1998.5C2681.9,1988.6 2681.1,1969.4 2683.4,1958.0C2686.9,1939.9 2697.2,1925.1 2710.7,1918.7C2717.3,1915.6 2717.9,1915.5 2730.5,1915.5C2743.0,1915.5 2743.7,1915.6 2750.0,1918.6C2765.0,1925.8 2773.3,1938.1 2775.4,1956.2L2776.0,1961.0L2739.2,1961.2L2702.5,1961.5L2702.2,1969.0C2701.4,1985.9 2706.6,2003.2 2715.3,2012.7C2721.1,2019.0 2729.2,2023.4 2736.9,2024.5C2747.0,2025.9 2760.3,2021.4 2768.5,2013.9C2771.8,2010.8 2773.4,2010.0 2774.2,2010.8C2776.4,2013.0 2767.6,2023.3 2758.6,2029.2C2747.0,2036.7 2733.7,2038.8 2720.0,2035.2Z M2831.0,2035.3C2826.3,2034.5 2819.6,2032.8 2816.0,2031.7L2809.5,2029.5L2809.2,2014.2C2809.1,2005.2 2809.3,1999.0 2809.9,1999.0C2810.4,1999.0 2812.7,2002.8 2814.9,2007.4C2821.7,2021.4 2831.1,2029.2 2844.5,2032.0C2855.3,2034.2 2864.6,2031.6 2870.8,2024.6C2874.3,2020.6 2875.5,2016.1 2874.8,2009.0C2873.8,1999.2 2867.5,1993.4 2843.2,1980.0C2819.7,1967.1 2812.0,1958.7 2812.0,1946.0C2812.0,1920.6 2837.7,1909.3 2873.0,1919.1C2884.2,1922.2 2883.5,1921.2 2883.2,1933.7C2882.9,1946.7 2882.3,1950.0 2880.4,1950.0C2879.6,1950.0 2879.0,1949.4 2879.0,1948.6C2879.0,1947.9 2877.2,1943.6 2875.0,1939.2C2870.3,1929.9 2862.6,1922.1 2856.3,1920.2C2847.4,1917.5 2838.4,1919.4 2832.9,1924.9C2822.7,1935.1 2829.4,1948.8 2850.0,1960.2C2871.1,1971.7 2875.8,1974.8 2882.1,1981.0C2892.6,1991.3 2895.5,2002.3 2890.9,2014.6C2887.0,2024.8 2878.1,2032.2 2865.5,2035.5C2858.1,2037.4 2842.4,2037.3 2831.0,2035.3Z M1709.0,2033.0C1709.0,2032.5 1710.9,2031.6 1713.2,2031.0C1715.4,2030.3 1718.6,2028.6 1720.2,2027.0L1723.0,2024.2L1723.0,1946.0L1723.0,1867.8L1720.2,1865.0C1718.6,1863.5 1715.5,1861.6 1713.2,1860.9C1710.9,1860.2 1709.0,1859.1 1709.0,1858.3C1709.0,1857.2 1718.4,1857.0 1764.2,1857.2L1819.5,1857.5L1821.6,1871.0C1825.4,1895.1 1825.3,1894.0 1823.6,1894.0C1822.7,1894.0 1822.0,1893.2 1822.0,1892.2C1822.0,1888.6 1816.8,1879.7 1811.8,1874.7C1801.1,1863.9 1790.6,1861.0 1762.8,1861.0L1744.0,1861.0L1744.0,1901.5L1744.0,1942.0L1760.3,1942.0C1778.1,1942.0 1783.7,1941.0 1789.4,1936.7C1793.4,1933.6 1798.4,1924.4 1800.1,1916.8C1800.9,1913.5 1802.0,1911.0 1802.7,1911.0C1803.7,1911.0 1804.0,1917.9 1804.0,1943.5C1804.0,1970.0 1803.8,1976.0 1802.7,1976.0C1801.9,1976.0 1800.8,1973.8 1800.1,1970.5C1798.2,1962.1 1793.4,1953.3 1788.8,1950.0C1783.4,1946.0 1777.3,1945.0 1759.5,1945.0L1744.0,1945.0L1744.0,1984.6L1744.0,2024.2L1746.8,2027.0C1748.4,2028.6 1751.6,2030.3 1753.8,2031.0C1762.6,2033.3 1757.9,2034.0 1733.5,2034.0C1718.5,2034.0 1709.0,2033.6 1709.0,2033.0Z M1986.0,2033.0C1986.0,2032.5 1987.8,2031.6 1990.0,2031.0C1992.2,2030.4 1995.2,2028.9 1996.7,2027.6L1999.5,2025.2L1999.8,1976.7L2000.1,1928.2L1997.6,1925.2C1996.0,1923.5 1993.3,1921.8 1990.5,1921.0C1988.0,1920.3 1986.0,1919.1 1986.0,1918.4C1986.0,1917.3 1989.3,1917.0 2003.0,1917.0L2020.0,1917.0L2020.0,1928.5C2020.0,1934.8 2020.3,1940.0 2020.8,1940.0C2021.2,1940.0 2023.0,1937.7 2024.9,1935.0C2030.0,1927.4 2040.0,1918.5 2045.6,1916.6C2055.5,1913.2 2068.5,1915.5 2072.3,1921.3C2077.7,1929.6 2073.2,1939.0 2063.8,1939.0C2061.3,1939.0 2059.5,1937.8 2054.9,1933.0C2049.6,1927.5 2048.8,1927.0 2044.8,1927.0C2038.1,1927.0 2032.8,1931.0 2024.3,1942.4L2020.0,1948.2L2020.0,1982.0C2020.0,2000.5 2020.3,2017.8 2020.6,2020.4C2021.4,2026.1 2024.4,2029.3 2030.5,2031.0C2033.0,2031.7 2035.0,2032.7 2035.0,2033.1C2035.0,2033.6 2024.0,2034.0 2010.5,2034.0C1995.5,2034.0 1986.0,2033.6 1986.0,2033.0Z M2108.0,2033.0C2108.0,2032.5 2109.9,2031.6 2112.2,2031.0C2114.4,2030.3 2117.6,2028.6 2119.2,2027.0L2122.0,2024.2L2122.0,1976.2L2122.0,1928.2L2119.4,1925.1C2117.7,1923.1 2115.2,1921.6 2112.4,1920.9C2109.8,1920.2 2108.0,1919.2 2108.0,1918.4C2108.0,1917.2 2111.0,1917.0 2125.2,1917.2L2142.5,1917.5L2142.8,1924.2L2143.1,1930.9L2148.4,1926.6C2161.9,1915.6 2176.5,1912.3 2191.0,1917.0C2203.3,1920.9 2210.9,1929.9 2213.0,1942.7C2213.6,1945.9 2214.0,1965.5 2214.0,1986.3L2214.0,2024.2L2216.8,2027.0C2218.4,2028.6 2221.6,2030.3 2223.8,2031.0C2232.6,2033.3 2227.9,2034.0 2203.5,2034.0C2190.0,2034.0 2179.0,2033.6 2179.0,2033.2C2179.0,2032.7 2180.9,2031.8 2183.2,2031.1C2185.5,2030.4 2188.6,2028.5 2190.2,2027.0L2193.0,2024.2L2193.0,1984.8C2193.0,1960.2 2192.6,1944.1 2191.9,1941.7C2190.6,1936.8 2184.6,1930.2 2179.5,1927.9C2170.8,1923.9 2156.5,1926.2 2147.1,1933.0L2143.0,1936.0L2143.0,1980.1L2143.0,2024.2L2145.8,2027.0C2147.4,2028.6 2150.6,2030.3 2152.8,2031.0C2161.6,2033.3 2156.9,2034.0 2132.5,2034.0C2117.5,2034.0 2108.0,2033.6 2108.0,2033.0Z M2394.0,2033.1C2394.0,2032.6 2395.2,2031.9 2396.8,2031.5C2402.5,2030.1 2406.3,2027.6 2407.6,2024.4C2408.7,2021.7 2409.0,2012.0 2409.0,1976.0C2409.0,1924.7 2409.1,1925.3 2401.8,1922.0C2399.4,1920.9 2396.7,1920.0 2395.8,1920.0C2394.8,1920.0 2394.0,1919.3 2394.0,1918.5C2394.0,1917.2 2396.6,1917.0 2411.5,1917.0L2429.0,1917.0L2429.0,1924.1L2429.0,1931.1L2434.8,1926.6C2438.0,1924.2 2443.6,1920.7 2447.1,1918.9C2452.5,1916.1 2454.9,1915.5 2462.1,1915.2C2476.8,1914.5 2487.7,1919.3 2494.3,1929.3C2499.9,1937.9 2500.0,1939.1 2500.0,1982.1C2500.0,2028.5 2499.8,2027.2 2509.2,2030.5C2512.4,2031.6 2515.0,2032.8 2515.0,2033.2C2515.0,2033.7 2503.8,2034.0 2490.0,2034.0C2466.9,2034.0 2460.6,2033.3 2467.8,2031.5C2473.5,2030.1 2477.3,2027.6 2478.6,2024.4C2479.7,2021.8 2480.0,2013.4 2480.0,1984.8C2480.0,1963.7 2479.5,1946.6 2478.9,1944.0C2477.5,1937.9 2473.9,1932.6 2468.7,1929.3C2464.9,1926.7 2463.7,1926.5 2455.0,1926.5C2446.5,1926.5 2444.9,1926.8 2440.1,1929.4C2437.1,1930.9 2433.4,1933.1 2431.8,1934.3L2429.0,1936.4L2429.0,1978.9C2429.0,2028.9 2428.7,2027.2 2438.2,2030.5C2441.4,2031.6 2444.0,2032.8 2444.0,2033.2C2444.0,2033.7 2432.8,2034.0 2419.0,2034.0C2405.0,2034.0 2394.0,2033.6 2394.0,2033.1Z M2310.6,2027.5C2313.3,2026.2 2317.9,2023.0 2320.8,2020.4L2326.0,2015.8L2326.0,1985.7C2325.9,1965.1 2325.6,1956.0 2324.9,1957.2C2323.3,1960.0 2313.2,1967.2 2302.1,1973.6C2283.7,1984.0 2277.0,1992.7 2277.0,2005.9C2277.0,2014.2 2278.6,2018.7 2283.3,2023.4C2290.4,2030.4 2301.4,2032.1 2310.6,2027.5Z M2607.2,2023.1C2609.8,2021.8 2613.5,2019.0 2615.5,2017.0L2619.1,2013.3L2618.8,1975.9C2618.5,1938.8 2618.5,1938.5 2616.1,1933.6C2605.7,1912.4 2582.2,1914.0 2570.7,1936.7C2565.6,1946.7 2562.4,1969.4 2564.1,1985.1C2566.1,2004.7 2573.0,2017.8 2584.3,2023.5C2591.0,2026.9 2600.0,2026.7 2607.2,2023.1Z M1932.6,1952.2C1930.7,1936.3 1924.7,1925.0 1915.6,1920.3C1911.5,1918.2 1902.3,1918.2 1898.4,1920.2C1893.5,1922.8 1889.0,1928.0 1885.9,1934.5C1882.8,1941.1 1880.0,1950.9 1880.0,1955.2L1880.0,1958.0L1906.6,1958.0L1933.2,1958.0L1932.6,1952.2Z M2756.0,1954.2C2756.0,1945.8 2751.9,1933.8 2746.6,1926.7C2744.0,1923.1 2737.7,1919.4 2732.9,1918.5C2724.0,1916.9 2714.3,1923.4 2709.0,1934.5C2706.1,1940.6 2703.0,1951.4 2703.0,1955.8L2703.0,1958.0L2729.5,1958.0L2756.0,1958.0L2756.0,1954.2Z" class="ln" fill-rule="evenodd"/></g><g transform="translate(956.4825000000003,-999.3281666666662) scale(1.2381666666666664)"><path d="M1447.0,2199.3C1441.2,2184.7 1435.7,2170.7 1434.7,2168.3L1433.0,2163.9L1436.7,2164.2L1440.4,2164.5L1448.6,2186.0C1453.2,2197.8 1457.2,2208.1 1457.7,2208.9C1458.3,2209.8 1460.1,2206.2 1463.4,2197.4C1466.1,2190.3 1470.1,2179.9 1472.3,2174.2L1476.2,2164.0L1479.7,2164.0C1482.6,2164.0 1483.1,2164.3 1482.6,2165.8C1478.7,2176.2 1458.5,2226.0 1458.1,2226.0C1457.8,2226.0 1452.8,2214.0 1447.0,2199.3Z M1245.0,2223.3C1245.0,2221.2 1272.4,2161.0 1273.0,2161.7C1273.6,2162.3 1288.8,2197.4 1298.7,2220.8L1300.1,2224.1L1296.4,2223.8C1292.8,2223.5 1292.6,2223.3 1289.2,2215.2L1285.8,2207.0L1272.2,2207.0L1258.5,2207.0L1255.0,2215.3C1251.7,2223.0 1251.3,2223.5 1248.2,2223.8C1246.5,2224.0 1245.0,2223.8 1245.0,2223.3Z M1347.0,2194.0L1347.0,2164.0L1355.9,2164.0C1371.6,2164.0 1381.8,2168.7 1387.7,2178.8C1389.9,2182.6 1390.5,2184.9 1390.8,2192.1C1391.2,2199.8 1390.9,2201.4 1388.8,2206.2C1387.4,2209.1 1385.0,2212.8 1383.4,2214.4C1377.2,2220.5 1366.1,2224.0 1352.8,2224.0L1347.0,2224.0L1347.0,2194.0Z M1549.3,2223.0C1540.3,2221.1 1532.1,2214.9 1527.8,2206.7C1524.7,2200.9 1524.6,2187.4 1527.5,2181.5C1530.6,2175.2 1537.8,2168.6 1544.3,2166.1C1568.7,2157.0 1592.6,2178.2 1585.6,2202.5C1583.3,2210.1 1575.0,2218.9 1567.5,2221.3C1561.0,2223.5 1554.5,2224.1 1549.3,2223.0Z M1659.7,2223.0C1645.6,2219.4 1636.6,2208.0 1636.6,2193.5C1636.6,2185.1 1639.2,2178.8 1645.3,2172.7C1651.5,2166.5 1656.9,2164.5 1667.5,2164.5C1677.4,2164.5 1681.5,2166.0 1688.5,2172.1L1692.1,2175.3L1689.9,2177.6L1687.7,2179.9L1683.3,2176.0C1677.7,2171.1 1673.4,2169.7 1665.5,2170.2C1653.2,2171.0 1644.1,2179.9 1643.2,2192.1C1642.6,2200.3 1644.8,2205.8 1651.0,2211.3C1660.5,2219.8 1672.7,2220.1 1681.2,2212.2C1683.3,2210.2 1685.7,2206.7 1686.5,2204.5L1687.8,2200.5L1679.2,2200.0C1670.6,2199.5 1670.5,2199.5 1670.2,2196.8L1669.9,2194.0L1682.4,2194.0L1695.0,2194.0L1694.4,2198.8C1693.5,2205.4 1690.4,2212.2 1686.7,2215.8C1680.4,2221.9 1668.3,2225.1 1659.7,2223.0Z M1737.0,2223.3C1737.0,2221.2 1764.4,2161.0 1765.0,2161.7C1765.6,2162.3 1780.8,2197.4 1790.7,2220.8L1792.1,2224.1L1788.4,2223.8C1784.8,2223.5 1784.6,2223.3 1781.2,2215.2L1777.8,2207.0L1764.2,2207.0L1750.5,2207.0L1747.0,2215.3C1743.7,2223.0 1743.3,2223.5 1740.2,2223.8C1738.5,2224.0 1737.0,2223.8 1737.0,2223.3Z M1839.0,2194.0L1839.0,2163.7L1849.8,2164.2C1865.6,2164.9 1874.0,2169.1 1879.4,2179.0C1885.5,2190.3 1883.7,2205.2 1875.2,2213.9C1869.0,2220.2 1862.2,2222.8 1849.0,2223.6L1839.0,2224.3L1839.0,2194.0Z M1955.3,2222.5C1941.1,2218.6 1932.6,2207.7 1932.6,2193.5C1932.7,2182.0 1938.4,2173.0 1949.3,2167.2C1953.8,2164.9 1955.6,2164.5 1963.5,2164.5C1971.3,2164.5 1973.2,2164.9 1977.5,2167.2C1988.5,2173.0 1993.9,2181.9 1994.0,2193.9C1994.0,2205.9 1988.5,2214.7 1977.7,2219.9C1970.1,2223.6 1962.4,2224.5 1955.3,2222.5Z M1371.3,2215.2C1385.7,2208.8 1389.7,2189.2 1378.9,2177.5C1374.1,2172.3 1368.1,2170.0 1359.3,2170.0L1353.0,2170.0L1353.0,2193.3C1353.0,2206.2 1353.3,2217.0 1353.8,2217.4C1355.0,2218.7 1366.7,2217.2 1371.3,2215.2Z M1568.3,2214.2C1574.3,2210.9 1579.4,2203.5 1580.4,2196.7C1581.8,2187.4 1575.7,2176.4 1566.6,2172.1C1561.5,2169.6 1551.9,2169.3 1546.7,2171.5C1530.5,2178.2 1526.3,2198.4 1538.5,2210.5C1546.4,2218.5 1558.1,2219.9 1568.3,2214.2Z M1862.6,2215.5C1871.5,2211.8 1876.4,2204.1 1876.4,2193.5C1876.4,2179.0 1868.4,2171.1 1852.8,2170.2L1845.0,2169.7L1845.0,2194.0L1845.0,2218.3L1851.9,2217.7C1855.6,2217.4 1860.5,2216.4 1862.6,2215.5Z M1972.4,2216.0C1990.9,2209.0 1993.4,2183.9 1976.6,2173.5C1972.2,2170.8 1970.8,2170.5 1963.5,2170.5C1956.2,2170.5 1954.8,2170.8 1950.4,2173.5C1938.0,2181.2 1935.3,2197.9 1944.6,2208.8C1952.0,2217.5 1961.7,2220.0 1972.4,2216.0Z M1282.7,2199.8C1278.4,2188.7 1272.6,2176.0 1272.0,2176.7C1271.0,2177.8 1262.0,2198.8 1262.0,2200.0C1262.0,2200.6 1266.3,2201.0 1272.6,2201.0C1280.7,2201.0 1283.1,2200.7 1282.7,2199.8Z M1774.7,2199.8C1770.4,2188.7 1764.6,2176.0 1764.0,2176.7C1763.0,2177.8 1754.0,2198.8 1754.0,2200.0C1754.0,2200.6 1758.3,2201.0 1764.6,2201.0C1772.7,2201.0 1775.1,2200.7 1774.7,2199.8Z" class="ln" fill-rule="evenodd"/></g></svg></a><div class="ttl"><p class="kick">Simulador gratuito · Nova lei da jornada (EC 141/2026)</p><h1>Monte a escala <em>5x2</em> da sua equipe em 1 minuto</h1></div>
+<a class="fc" href="https://www.rusemberg.adv.br/#contato" target="_top"><svg><use href="#ch"/></svg>Fale conosco</a></header>
+
+<main class="cols">
+<section class="card form" aria-label="Dados da escala">
+<div class="fh"><h2 class="ft">Dados da escala</h2><p class="fsub">Seus dados são a base; o sistema ajusta à lei.</p></div>
+<div class="qrow"><div class="q q1"><p class="qt"><i class="num">1</i><label for="mes">Mês da escala</label></p><input type="month" id="mes"></div><div class="q q3"><p class="qt"><i class="num">2</i><label for="qtd">Quantos funcionários</label></p>
+<div class="step qt3"><button type="button" id="menos" aria-label="Menos um">−</button><input type="number" id="qtd" min="1" max="50" inputmode="numeric"><button type="button" id="mais" aria-label="Mais um">+</button></div></div></div>
+<div class="q q2"><p class="qt"><i class="num">3</i>Dias em que a empresa abre</p><div class="chips" id="dias"></div>
+<label class="chk"><input type="checkbox" id="fer"><span>Também abre nos feriados</span></label></div>
+
+<div class="q q4"><p class="qt"><i class="num">4</i>Horário de trabalho</p>
+<div class="row2"><div><label class="sl" for="ent">Entrada</label><div class="tm" data-k="ent"><input id="ent" inputmode="numeric" maxlength="5" autocomplete="off"><span class="ar"><button type="button" data-k="ent" data-d="1" aria-label="Aumentar entrada"><svg><use href="#up"/></svg></button><button type="button" data-k="ent" data-d="-1" aria-label="Diminuir entrada"><svg><use href="#dn"/></svg></button></span></div></div>
+<div><label class="sl" for="sai">Saída</label><div class="tm" data-k="sai"><input id="sai" inputmode="numeric" maxlength="5" autocomplete="off"><span class="ar"><button type="button" data-k="sai" data-d="1" aria-label="Aumentar saída"><svg><use href="#up"/></svg></button><button type="button" data-k="sai" data-d="-1" aria-label="Diminuir saída"><svg><use href="#dn"/></svg></button></span></div></div></div>
+<p class="note" id="madr"></p>
+<label class="chk"><input type="checkbox" id="cct"><span>Tenho acordo ou convenção coletiva que amplia a jornada diária <small>(se não souber, deixe desmarcado)</small></span></label><p class="cw" id="cctW" hidden><svg><use href="#inf"/></svg><span>Na transição (16/12/2026 a 15/12/2027), o acordo ou a convenção coletiva pode ampliar a jornada diária para distribuir as 42 horas: 8h24 em 5 dias. Marque só se a norma da sua categoria autorizar; sem ela, o que passar de 8 horas por dia é hora extra.</span></p></div>
+<div class="q q5"><p class="qt"><i class="num">5</i>Intervalo para descanso e refeição</p>
+<div class="seg" id="ivMode" role="radiogroup" aria-label="Como definir o intervalo"><button type="button" data-m="auto" role="radio">Sistema decide</button><button type="button" data-m="ini" role="radio">A partir das</button><button type="button" data-m="dur" role="radio">Duração</button></div>
+<div id="iiWrap" class="half"><label class="sl" for="ii">Intervalo a partir das</label><div class="tm" data-k="ii" id="iiBox"><input id="ii" inputmode="numeric" maxlength="5" autocomplete="off"><span class="ar"><button type="button" data-k="ii" data-d="1" aria-label="Intervalo mais tarde"><svg><use href="#up"/></svg></button><button type="button" data-k="ii" data-d="-1" aria-label="Intervalo mais cedo"><svg><use href="#dn"/></svg></button></span></div></div>
+<div id="ivWrap" class="half"><label class="sl" for="iv">Duração do intervalo</label><div class="tm" data-k="iv" id="ivBox"><input id="iv" inputmode="numeric" maxlength="5" autocomplete="off"><span class="ar"><button type="button" data-k="iv" data-d="1" aria-label="Aumentar intervalo"><svg><use href="#up"/></svg></button><button type="button" data-k="iv" data-d="-1" aria-label="Diminuir intervalo"><svg><use href="#dn"/></svg></button></span></div></div>
+<p class="note" id="ivN"></p>
+<label class="chk" id="revL"><input type="checkbox" id="rev"><span>Revezar intervalos (a loja nunca fica vazia)</span></label>
+<div class="mlw" id="mlW"><span class="sl" style="margin:0">Mínimo na loja durante os intervalos</span><div class="step sm"><button type="button" id="mlM" aria-label="Menos um">−</button><input type="number" id="mlI" min="1" inputmode="numeric" aria-label="Mínimo de funcionários na loja durante os intervalos"><button type="button" id="mlP" aria-label="Mais um">+</button></div></div></div>
+<button type="button" class="apl" id="aplicar"><svg><use href="#sp"/></svg>Aplicar e ajustar à lei</button>
+</section>
+
+<section class="res" aria-live="polite">
+<div class="rh"><h2 id="tit">Prévia da escala</h2><div id="adj"></div><span id="tsub"></span></div>
+<p class="limtx" id="limTx"></p>
+<div class="figs" id="figs"></div>
+<div id="alert1"></div>
+<div id="out"></div>
+</section>
+</main>
+</div>
+
+<script>
+{
+const DOW=['Seg','Ter','Qua','Qui','Sex','Sáb','Dom'];
+const DOWF=['segunda','terça','quarta','quinta','sexta','sábado','domingo'];
+const FIX={'01-01':'Confraternização Universal','04-21':'Tiradentes','05-01':'Dia do Trabalho','09-07':'Independência','10-12':'N. Sra. Aparecida','11-02':'Finados','11-15':'Proclamação da República','11-20':'Consciência Negra','12-25':'Natal'};
+const DAY=864e5,T1=Date.UTC(2026,11,16),T2=Date.UTC(2027,11,16);
+const $=s=>document.querySelector(s);
+const pad=n=>String(n).padStart(2,'0');
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const toMin=t=>{const m=/^(\d{1,2}):(\d{2})/.exec(t||'');return m?(+m[1])*60+(+m[2]):null};
+const fH=m=>{m=Math.round(m);const n=m<0;m=Math.abs(m);return(n?'-':'')+Math.floor(m/60)+'h'+pad(m%60)};
+const fD=ms=>{const d=new Date(ms);return pad(d.getUTCDate())+'/'+pad(d.getUTCMonth()+1)};
+const fDA=ms=>{const d=new Date(ms);return fD(ms)+'/'+d.getUTCFullYear()};
+const iso=s=>{const m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(s||'');return m?Date.UTC(+m[1],m[2]-1,+m[3]):null};
+const limFor=ms=>ms<T1?44:ms<T2?42:40;
+const brl=v=>v.toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
+
+
+/* ---------- cálculo de um turno ---------- */
+function calc(sh){
+ const s=toMin(sh.ent),e0=toMin(sh.sai);
+ if(s==null||e0==null||s===e0)return{ok:false,err:'horário de entrada ou saída inválido'};
+ const e=e0<s?e0+1440:e0,bd=Math.max(0,Math.round(+sh.id||0));let err=null,bs;
+ if(bd>=e-s)return{ok:false,err:'o intervalo é maior que o turno'};
+ const ii=toMin(sh.ii);
+ if(bd>0&&ii!=null){bs=ii<s?ii+1440:ii;if(bs+bd>e){err='o intervalo termina depois da saída';bs=s+Math.round((e-s-bd)/30)*15}}
+ else bs=s+Math.round((e-s-bd)/30)*15;
+ const W=[[0,300],[1320,1740],[2760,3180]],ov=(a,b)=>W.reduce((t,[x,y])=>t+Math.max(0,Math.min(b,y)-Math.max(a,x)),0);
+ const worked=e-s-bd,night=Math.max(0,ov(s,e)-(bd>0&&!err?ov(bs,bs+bd):0));
+ return{ok:true,err,s,e,bs,bd,worked,night,seg1:bs-s,seg2:e-bs-bd,comp:worked+night*(60/52.5-1)};
+}
+
+/* ---------- calendário ---------- */
+function buildDays(){
+ const mm=/^(\d{4})-(\d{2})$/.exec(S.mes||'')||[0,2026,12],Y=+mm[1],M=+mm[2]-1;
+ let st=Date.UTC(Y,M,1);st-=((new Date(st).getUTCDay()+6)%7)*DAY;
+ let en=Date.UTC(Y,M+1,0);en+=((7-new Date(en).getUTCDay())%7)*DAY;
+ NW=Math.round((en-st)/DAY+1)/7;
+ const rec={},spec={};
+ (S.ferloc||'').split(/[,;\s]+/).forEach(x=>{const m=/^(\d{1,2})\/(\d{1,2})(?:\/(\d{4}))?$/.exec(x.trim());if(!m)return;const k=pad(m[2])+'-'+pad(m[1]);if(m[3])spec[m[3]+'-'+k]=1;else rec[k]=1});
+ const D=[];
+ for(let i=0;i<NW*7;i++){
+  const ms=st+i*DAY,d=new Date(ms),k=pad(d.getUTCMonth()+1)+'-'+pad(d.getUTCDate()),dow=i%7;
+  const hol=FIX[k]||(rec[k]||spec[d.getUTCFullYear()+'-'+k]?'Feriado local':null);
+  const reg=!!S.abre[dow];
+  D.push({ms,dow,w:Math.floor(i/7),hol,reg,open:reg&&!(hol&&S.fecha),out:d.getUTCMonth()!==M});
+ }
+ return D;
+}
+const domN=f=>f.r386&&S.u386?2:+S.domN;
+
+/* ---------- geração das folgas ---------- */
+function gerar(){
+ const D=buildDays(),F=S.funcs,n=F.length;
+ const off=F.map(()=>new Array(D.length).fill(false));
+ const since=F.map((f,e)=>domN(f)?e%domN(f):0),prev=F.map(()=>new Set()),tail=F.map(()=>0);
+ for(let w=0;w<NW;w++){
+  const idx=[0,1,2,3,4,5,6].map(k=>w*7+k),el=idx.filter(i=>D[i].open),sun=w*7+6;
+  const closedReg=idx.filter(i=>!D[i].reg).length;
+  const fixed=F.map(f=>[f.f1].filter(x=>x!=='').map(Number).map(k=>w*7+k).filter(i=>D[i].open));
+  const A=F.map(()=>new Set()),cnt={};el.forEach(i=>cnt[i]=n);
+  const combos=e=>{const fx=new Set(fixed[e]),k=Math.max(0,2-closedReg-fx.size),c=el.filter(i=>!fx.has(i)),out=[];
+   if(k<=0)out.push([]);else if(c.length<=k)out.push(c);else if(k===1)c.forEach(i=>out.push([i]));else for(let a=0;a<c.length;a++)for(let b=a+1;b<c.length;b++)out.push([c[a],c[b]]);
+   return out.map(x=>new Set([...fx,...x]))};
+  const score=(e,set)=>{let p=0;const N=domN(F[e]),must=N>0&&D[sun].open&&since[e]>=N-1;
+   for(const i of el){const oth=cnt[i]-(A[e].has(i)?0:1),st=oth+(set.has(i)?0:1);p+=1000*Math.max(0,S.minimo[D[i].dow]-st);
+    if(set.has(i)){p+=3*(n-1-oth);if(prev[e].has(D[i].dow))p-=5;p+=((i+e*3)%7)*.01}}
+   if(D[sun].open){if(must&&!set.has(sun))p+=5000;if(!must&&set.has(sun))p+=15*Math.max(0,(N||3)-1-since[e])}
+   let run=tail[e];for(const i of idx){if(D[i].open&&!set.has(i)){if(++run>6)p+=3000}else run=0}
+   if(S.consec){const r=idx.filter(i=>set.has(i)||!D[i].reg);if(r.length>=2&&r.some((i,j)=>j&&i-r[j-1]===1))p-=30}
+   return p};
+  for(let pass=0;pass<5;pass++)for(let e=0;e<n;e++){
+   A[e].forEach(i=>cnt[i]++);A[e]=new Set();
+   let best=null,bp=Infinity;for(const c of combos(e)){const p=score(e,c);if(p<bp){bp=p;best=c}}
+   A[e]=best||new Set();A[e].forEach(i=>cnt[i]--);
+  }
+  for(let e=0;e<n;e++){A[e].forEach(i=>off[e][i]=true);prev[e]=new Set([...A[e]].map(i=>D[i].dow));
+   for(const i of idx)tail[e]=D[i].open&&!A[e].has(i)?tail[e]+1:0;
+   if(D[sun].reg&&D[sun].open)since[e]=A[e].has(sun)?0:since[e]+1;else since[e]=0}
+ }
+ R={D,off};
+}
+function plan(e,i){
+ const o=O[e+'|'+i],d=R.D[i];
+ if(o)return o.t==='f'?{t:'f',m:1}:{t:'w',sh:o.sh,m:1};
+ if(!d.open)return{t:d.reg?'h':'c'};
+ if(!R.off[e])return{t:'c'};
+ if(R.off[e][i])return{t:'f'};
+ const f=S.funcs[e],sp=S.perP&&S.perP[perD(d)];return{t:'w',sh:sp?{...f,ent:sp.ent||f.ent,sai:sp.sai,id:sp.id}:f};
+}
+/* período legal da semana, pelo último dia dela: 0 = regra anterior, 1 = transição (42h), 2 = definitivo (40h) */
+function perD(d){return d.ms<T1?0:d.ms<T2?1:2}
+function perW(w){return perD(R.D[Math.min(R.D.length-1,w*7)])}
+
+/* ---------- conferência ---------- */
+function validar(){
+ const D=R.D,F=S.funcs,L=[],cell={},sum=[];
+ const add=(lv,e,i,msg)=>{L.push({lv,e,i,msg});if(i!=null){const k=e+'|'+i;if(lv==='err'||!cell[k])cell[k]=lv}};
+ const nm=e=>'<strong>'+esc(F[e].nome)+'</strong>',G=new Map();
+ const addD=(lv,e,i,msg)=>{const k=lv+'|'+e+'|'+msg;if(!G.has(k)){G.set(k,{lv,e,msg,ds:[]})}G.get(k).ds.push(i);const c=e+'|'+i;if(lv==='err'||!cell[c])cell[c]=lv};
+ const dt=i=>DOWF[D[i].dow]+', '+fD(D[i].ms);
+ F.forEach((f,e)=>{
+  const wk=[],N=domN(f);let run=0,sunRun=0,night=0,sunOff=0,prevC=null;
+  for(let i=0;i<D.length;i++){
+   const d=D[i],p=plan(e,i);let c=null;
+   if(d.dow===0)wk[d.w]={h:0,dsr:0,lim:limFor(d.ms)};
+   if(p.t==='w'){c=calc(p.sh);
+    if(!c.ok){addD('err',e,i,c.err+'.');prevC=null;run++;continue}
+    if(c.err)addD('err',e,i,c.err+'.');
+    wk[d.w].h+=c.comp;night+=c.night;
+    {const pw=perD(d),mx=S.cct?(pw===0?528:pw===1?504:480):480;
+     if(c.comp>mx+0.5){if(c.comp>600.5)addD('err',e,i,fH(c.comp)+' no dia, acima de 10 horas (CLT, art. 59).');
+      else if(!S.cct)addD('err',e,i,fH(c.comp)+' no dia, acima do limite de 8 horas (CF, art. 7º, XIII). Só acordo ou convenção coletiva autoriza ampliar.');
+      else addD('err',e,i,fH(c.comp)+' no dia, acima do máximo de '+fH(mx)+' permitido com acordo ou convenção neste dia'+(pw===2?' (a partir de 16/12/2027 o limite é de 8 horas)':pw===1?' (EC 141/2026, art. 7º)':' (CLT, art. 59, § 2º)')+'.')}}
+    const mi=S.int30?30:60;
+    if(c.worked>360&&c.bd<mi)addD('err',e,i,'intervalo de '+c.bd+' min para jornada acima de 6 horas; o mínimo é '+mi+' min (CLT, art. 71'+(S.int30?', e norma coletiva':'')+').');
+    else if(c.worked>360&&c.bd>120)addD('warn',e,i,'intervalo acima de 2 horas exige acordo escrito ou norma coletiva (CLT, art. 71).');
+    else if(c.worked>240&&c.worked<=360&&c.bd<15)addD('err',e,i,'jornada acima de 4 horas exige intervalo de 15 min (CLT, art. 71, § 1º).');
+    if(c.bd>0&&!c.err&&(c.seg1<60||c.seg2<60))addD('warn',e,i,'intervalo na primeira ou na última hora do turno não cumpre a finalidade de descanso e refeição (CLT, art. 71); prefira o meio da jornada.');
+    else if(c.bd>0&&!c.err&&Math.max(c.seg1,c.seg2)>360)addD('warn',e,i,'mais de 6 horas seguidas de trabalho antes ou depois do intervalo; recomenda-se posicioná-lo mais perto do meio do turno.');
+    if(prevC&&i>0){const rest=i*1440+c.s-((i-1)*1440+prevC.e);if(rest<660)addD('err',e,i,'só '+fH(rest)+' de descanso desde o turno anterior; o mínimo é 11 horas (CLT, art. 66).')}
+    if(d.hol)addD('warn',e,i,'trabalho em feriado: exige folga compensatória ou pagamento em dobro'+'; no comércio, depende ainda de convenção coletiva (Lei 10.101/2000, art. 6º-A)'+'.');
+    if(++run===7)addD('err',e,i,'sétimo dia seguido de trabalho sem folga (OJ 410 da SDI-1 do TST).');
+    if(d.dow===6){if(++sunRun===N&&N>0)addD(S.atividade==='comercio'||(f.r386&&S.u386)?'err':'warn',e,i,N+' domingos seguidos de trabalho; '+(f.r386?'o revezamento quinzenal exige folga a cada 2 domingos (CLT, art. 386).':S.atividade==='comercio'?'a folga deve cair no domingo ao menos a cada 3 semanas (obrigatório no comércio, Lei 10.101/2000, art. 6º, p. ú.).':'a regra de folga dominical escolhida não foi atendida.'))}
+    prevC=c;
+   }else{run=0;prevC=null;if(p.t!=='h')wk[d.w].dsr++;if(d.dow===6){sunRun=0;sunOff++}}
+  }
+  const gw={};const gp=(k,w)=>{(gw[k]=gw[k]||[]).push(w+1)};
+  wk.forEach((x,w)=>{if(x.h>x.lim*60+0.5)gp('h|'+fH(x.h)+'|'+x.lim,w);if(x.dsr<2)gp('d|'+x.dsr,w)});
+  Object.entries(gw).forEach(([k,ws])=>{const q=k.split('|'),sm=(ws.length>1?'semanas ':'semana ')+ws.join(', ');
+   add('err',e,null,q[0]==='h'?nm(e)+', '+sm+': '+q[1]+' de trabalho por semana, acima do limite de '+q[2]+' horas; o excesso é hora extra.':nm(e)+', '+sm+': só '+q[1]+' folga(s); a lei garante 2 dias de repouso semanal (CF, art. 7º, XV). Folga em feriado não substitui o repouso.')});
+  if(night>0)add('info',e,null,nm(e)+' tem '+fH(night)+' em horário noturno no período (22h às 5h): hora reduzida e adicional mínimo de 20% (CLT, art. 73).');
+  sum.push({wk,night,sunOff});
+ });
+ G.forEach(g=>{const d=g.ds.slice(0,6).map(i=>DOW[D[i].dow].toLowerCase()+' '+fD(D[i].ms)).join(', ')+(g.ds.length>6?' e mais '+(g.ds.length-6)+' dia(s)':'');L.push({lv:g.lv,e:g.e,msg:nm(g.e)+' ('+d+'): '+g.msg})});
+ const cov=[];
+ D.forEach((d,i)=>{let c=0;F.forEach((f,e)=>{if(plan(e,i).t==='w')c++});cov[i]=c;
+  if(S.cov&&d.open&&c<S.minimo[d.dow])add('warn',null,null,'<strong>'+DOWF[d.dow]+', '+fD(d.ms)+'</strong>: '+c+' em serviço, abaixo do mínimo de '+S.minimo[d.dow]+'. Inclua funcionários ou reduza a cobertura.')});
+ return{L,cell,sum,cov};
+}
+
+
+/* ---------- estado ---------- */
+const nextMes=()=>{const d=new Date(),y=d.getFullYear(),m=d.getMonth()+1,t=m===12?(y+1)+'-01':y+'-'+pad(m+1);return t<'2026-12'?'2026-12':t};
+const S={mes:nextMes(),abre:[1,1,1,1,1,1,0],qtd:4,ent:'08:00',sai:'17:00',ivm:'auto',dur:60,ii:'',id:60,cct:false,rev:true,minLoja:null,
+ fer:false,minimo:[0,0,0,0,0,0,0],fecha:true,ferloc:'',domN:3,u386:false,consec:true,int30:false,atividade:'comercio',cov:false,funcs:[]};
+let R=null,LEAD=null,V=null,ADJ=null;
+try{const j=JSON.parse(localStorage.getItem('escala5x2s')||'null');if(j&&j.mes){Object.assign(S,j)}LEAD=JSON.parse(localStorage.getItem('rusemberg_lead')||'null')}catch(e){}
+const save=()=>{try{const{mes,abre,qtd,ent,sai,ivm,dur,ii,fer,cct,rev,minLoja}=S;localStorage.setItem('escala5x2s',JSON.stringify({mes,abre,qtd,ent,sai,ivm,dur,ii,fer,cct,rev,minLoja}))}catch(e){}};
+const O={};
+const MES=['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'];
+const hm=m=>{m=((Math.round(m)%1440)+1440)%1440;return pad(Math.floor(m/60))+':'+pad(m%60)};
+const dd=m=>m<59.5?Math.round(m)+' min':fH(m);
+const fIv=m=>Math.floor(m/60)+'h'+pad(m%60);
+const pIv=t=>{t=String(t||'').toLowerCase().replace(/\s|min/g,'');let m=null;
+ if(/^\d+$/.test(t))m=+t;else{const x=/^(\d{1,2})[h:](\d{0,2})$/.exec(t);if(x)m=(+x[1])*60+(+(x[2]||0))}
+ return m==null||isNaN(m)?null:Math.min(240,Math.max(0,m))};
+const norm=t=>{t=String(t||'').replace(/[^\d:]/g,'');let h,m;
+ if(t.includes(':')){[h,m]=t.split(':')}else if(t.length<=2){h=t;m='0'}else{h=t.slice(0,t.length-2);m=t.slice(-2)}
+ h=parseInt(h,10);m=parseInt(m||'0',10);if(isNaN(h)||isNaN(m)||h>24||m>59)return null;if(h===24)h=0;return pad(h)+':'+pad(m)};
+function autoIv(){const a=toMin(S.ent),b=toMin(S.sai);if(a==null||b==null||a===b)return 60;const sp=(b-a+1440)%1440;
+ if(sp<=240)return 0;if(sp<=375)return 15;if(sp<=420)return Math.ceil((sp-360)/5)*5;return 60}
+const midIi=(id)=>{const a=toMin(S.ent),b=toMin(S.sai);if(a==null||b==null)return '12:00';const sp=(b-a+1440)%1440;return hm(a+Math.round((sp-id)/30)*15)};
+const auto=()=>S.ivm==='auto';
+/* revezamento: distribui os intervalos em turmas para a loja nunca ficar vazia */
+function turmas(iiEf){
+ const n=S.qtd,id=S.id,s0=toMin(S.ent),e0=toMin(S.sai);
+ const one={k:1,starts:[iiEf],slot:Array(n).fill(iiEf),min:n-n};
+ if(!S.rev||n<2||!id||s0==null||e0==null)return one;
+ const e=e0<=s0?e0+1440:e0;let lo=s0+60,hi=e-60-id;
+ const lo2=Math.max(lo,e-id-360),hi2=Math.min(hi,s0+360);if(lo2<=hi2){lo=lo2;hi=hi2}
+ if(hi<lo)return one;
+
+ let cand=[];
+ if(S.ivm==='ini'){let a=toMin(S.ii)??lo;if(a<s0)a+=1440;a=Math.min(Math.max(a,lo),hi);const stp=Math.ceil(id/15)*15;for(let t=a;t<=hi&&cand.length<n;t+=stp)cand.push(t);
+  for(let t=a-stp;t>=lo&&cand.length<n;t-=stp)cand.push(t)}
+ else{let c=toMin(iiEf);if(c<s0)c+=1440;c=Math.min(Math.max(c,lo),hi);const stp=Math.ceil(id/15)*15,all=[c];for(let j=1;j<12;j++){all.push(c+j*stp,c-j*stp)}
+  cand=all.filter(t=>t>=lo&&t<=hi).slice(0,n)}
+ const m=cand.length;if(m<2)return one;
+ const pmax=n-Math.ceil(n/m),want=S.minLoja==null?pmax:Math.min(Math.max(1,+S.minLoja),n-1);
+ const need=Math.ceil(n/(n-want)),k=Math.max(1,Math.min(need,m)),short=need>m;
+ if(k<2)return{...one,min:n-n,pmax,want,short};
+ const st=cand.slice(0,k).sort((a,b)=>a-b),starts=st.map(hm);
+ /* cada horário recebe até (total − mínimo desejado) pessoas, para ficarem na loja exatamente quantas o dono pediu */
+ const cap=short?Math.ceil(n/k):n-want,size=Array(k).fill(0);let left=n;
+ for(let j=0;j<k;j++){size[j]=short?Math.min(cap,Math.ceil(left/(k-j))):Math.min(cap,left-(k-j-1));left-=size[j]}
+ const grp=[];size.forEach((z,j)=>{for(let x=0;x<z;x++)grp.push(j)});
+ const ord=[...Array(n)].map((_,i)=>i).sort((a,b)=>(a%k)-(b%k)||a-b),slotIdx=Array(n);ord.forEach((emp,pos)=>slotIdx[emp]=grp[pos]);
+ const slot=slotIdx.map(j=>starts[j]),mx=Math.max(...size);
+ return{k,starts,slot,slotIdx,min:n-mx,s0,e,id,raw:st,pmax,want,short}}
+/* rótulos do eixo: tenta tudo numa linha; o que encostar desce para a 2ª linha; se ainda faltar espaço, encurta "chegada"/"saída" para só o horário */
+function axFit(el){const ax=el.querySelector('.ax');if(!ax)return;const bs=[...ax.querySelectorAll('b')],e0=bs[0],e1=bs[bs.length-1],mk=bs.slice(1,-1);
+ const run=short=>{e0.textContent=short?e0.dataset.s:e0.dataset.s+' chegada';e1.textContent=short?e1.dataset.s:'saída '+e1.dataset.s;
+  mk.forEach(x=>{x.classList.remove('r2');x.style.visibility=''});
+  const a=e0.getBoundingClientRect(),z=e1.getBoundingClientRect(),G=5;let last=[a.right,-1e9],ok=true,two=false;
+  mk.forEach(x=>{const r=x.getBoundingClientRect();
+   if(r.left>=last[0]+G&&r.right<=z.left-G){last[0]=r.right;return}
+   if(r.left>=Math.max(last[1]+G,a.left)&&r.right<=z.right){x.classList.add('r2');last[1]=r.right;two=true;return}
+   x.style.visibility='hidden';ok=false});
+  ax.classList.toggle('two',two);return ok};
+ if(!run(false))run(true)}
+function drawTl(T){const el=$('#tl');if(!el)return;if(!T||T.k<2){el.innerHTML='';return}
+ /* escala do eixo: o trecho dos descansos ganha a maior parte da largura; o trabalho antes e depois é encurtado (com marca de corte) */
+ const ra=Math.min(...T.raw),rz=Math.max(...T.raw)+T.id,span=T.e-T.s0,pre=ra-T.s0,post=T.e-rz,CAP=.11;
+ let fp=pre/span,fq=post/span;const cp=fp>CAP,cq=fq>CAP;if(cp)fp=CAP;if(cq)fq=CAP;const fm=1-fp-fq;
+ const X=t=>t<=ra?(pre?fp*(t-T.s0)/pre:0):t>=rz?fp+fm+(post?fq*(t-rz)/post:0):fp+fm*(t-ra)/(rz-ra);
+ const pc=t=>(X(t)*100).toFixed(2)+'%',BH=Math.min(S.funcs.length,6,R.off.length)*20-4,brk=(cp?`<em class="brk" style="left:${(fp*50).toFixed(2)}%;height:${BH}px"></em>`:'')+(cq?`<em class="brk" style="left:${((1-fq/2)*100).toFixed(2)}%;height:${BH}px"></em>`:''),lab=t=>{const x=hm(t);return x.endsWith(':00')?String(+x.slice(0,2))+'h':x.replace(':','h')};
+ const rows=Math.min(S.funcs.length,6,R.off.length),ts=new Set();
+ let L='',B='';
+ for(let i=0;i<rows;i++){const t=T.raw[T.slotIdx?T.slotIdx[i]:i%T.k];ts.add(t);ts.add(t+T.id);
+  L+=`<span>Func. ${i+1}</span>`;
+  B+=`<div class="b" title="Func. ${i+1}: intervalo das ${hm(t)} às ${hm(t+T.id)}"><i style="left:${pc(t)};width:${((X(t+T.id)-X(t))*100).toFixed(2)}%"></i></div>`}
+ const marks=[...ts].sort((a,b)=>a-b);
+ el.innerHTML=`<div class="lb">${L}<span></span></div><div class="trk">${B}${brk}`+marks.map(t=>`<em class="ln" style="left:${pc(t)};bottom:auto;height:${BH+4}px"></em>`).join('')+
+  `<div class="ax"><b class="e0" style="left:0;transform:none" data-s="${S.ent}">${S.ent} chegada</b>`+marks.map(t=>`<b style="left:${pc(t)}">${lab(t)}</b>`).join('')+`<b class="e1" style="left:auto;right:0;transform:none" data-s="${S.sai}">saída ${S.sai}</b></div></div>`+(S.funcs.length>rows?`<p class="tlm">Os demais funcionários seguem o mesmo revezamento.</p>`:'');
+ axFit(el);
+ $('#tlH').innerHTML=`Horário de descanso <b>· sempre ${T.min} de ${S.qtd} na loja</b><span class="lg"><i class="lw"></i>Trabalho<i class="ld"></i>Descanso</span>`+(T.short?`<span class="tls"> · com este turno, o máximo possível é ${T.pmax}</span>`:'')}
+function prep(){
+ S.id=S.idFix!=null?S.idFix:S.ivm==='dur'?+S.dur:autoIv();
+ const iiEf=S.ivm==='ini'&&S.ii?S.ii:midIi(S.id);
+ [['iv',fIv(S.id)],['ii',iiEf]].forEach(([k,v])=>{const el=$('#'+k);if(document.activeElement!==el)el.value=v});
+ document.querySelectorAll('#ivMode button').forEach(b=>b.setAttribute('aria-checked',b.dataset.m===S.ivm));
+ $('#iiWrap').hidden=S.ivm!=='ini';$('#ivWrap').hidden=S.ivm!=='dur';
+ const fim=hm(toMin(iiEf)+S.id);
+ $('#ivN').textContent=S.perP?'Intervalo '+Object.keys(S.perP).sort().map(k=>fIv(S.perP[k].id)+(k==='0'?' até 15/12/2026':k==='1'?(S.perP[0]?' a partir de 16/12/2026':' até 15/12/2027'):' a partir de 16/12/2027')).join(' e ')+', ajustado para a jornada máxima da lei.':S.idFix!=null?fIv(S.id)+' de intervalo, ajustado para a jornada máxima da lei.':S.id===0?'Turno de até 4 horas: sem intervalo obrigatório.':fIv(S.id)+(S.ivm==='dur'?' de intervalo':' de intervalo, o mínimo da lei')+(S.rev&&S.qtd>1?'':', das '+iiEf+' às '+fim)+'.';
+ const T=turmas(iiEf);S.T=T;
+ S.funcs=[...Array(S.qtd)].map((_,i)=>({nome:'Funcionário '+(i+1),ent:S.ent,sai:S.sai,id:S.id,ii:S.id?T.slot[i]:'',f1:'',r386:false}));
+ $('#revL').hidden=S.qtd<2||S.id===0;$('#rev').checked=!!S.rev;$('#mlW').hidden=$('#revL').hidden||!S.rev;{const el=$('#mlI');el.max=S.qtd-1;if(document.activeElement!==el)el.value=T.k>1?T.min:(T.want??1)}
+ S.fecha=!S.fer;
+ const open=S.abre.filter(Boolean).length,closed=7-open,work=Math.max(0,open-Math.max(0,2-closed));
+ const avg=open?S.qtd*work/open:0;S.minimo=S.abre.map(a=>a?Math.floor(avg):0);
+}
+const shNow=()=>S.funcs[0]||{ent:S.ent,sai:S.sai,id:S.id};
+const cellTxt=(e,i,v,hide)=>{const p=plan(e,i),lv=v.cell[e+'|'+i]||'';
+ if(p.t==='w')return`<div class="c ${lv}">${hide?'••:•• – ••:••':esc(p.sh.ent)+'–'+esc(p.sh.sai)}</div>`;
+ if(p.t==='f')return`<div class="c f">Folga</div>`;return`<div class="c x">${p.t==='h'?'Feriado':'Fechado'}</div>`};
+function weekHTML(w,v,hide){
+ const D=R.D,idx=[0,1,2,3,4,5,6].map(k=>w*7+k),lim=limFor(D[idx[0]].ms);
+ return`<div class="week"><h3>Semana ${w+1}<small>${fD(D[idx[0]].ms)} a ${fD(D[idx[6]].ms)} · limite de ${lim} horas</small></h3><div class="scroll"><table class="g"><thead><tr><th class="n">Funcionário</th>`+
+ idx.map(i=>`<th class="${D[i].out?'out':''}${D[i].hol?' hol':D[i].dow===6?' sun':''}">${DOW[D[i].dow]} ${fD(D[i].ms)}${D[i].hol?'<span class="hol">'+esc(D[i].hol)+'</span>':''}</th>`).join('')+'<th>Total</th></tr></thead><tbody>'+
+ S.funcs.map((f,e)=>`<tr><td class="n">${esc(f.nome)}</td>`+idx.map(i=>`<td class="${D[i].out?'out':''}${D[i].hol?' hol':D[i].dow===6?' sun':''}">${cellTxt(e,i,v,hide)}</td>`).join('')+`<td class="tot">${hide?'••h':fH(v.sum[e].wk[w].h)}</td></tr>`).join('')+'</tbody></table></div></div>'}
+const ICK='<svg><use href="#ck"/></svg>';
+function render(){
+ prep();gerar();const v=validar(),m=S.mes.split('-');V=v;
+ const ne=v.L.filter(x=>x.lv==='err').length,nw=v.L.filter(x=>x.lv==='warn').length;
+ renderAdj();
+ const c=calc(shNow()),hs=Math.max(...v.sum.map(x=>Math.max(...x.wk.map(y=>y.h))),0);
+ {const ps=[...new Set(R.D.filter(d=>!d.out).map(perD))].sort(),TX={0:'44h semanais até 15/12/2026',1:ps.includes(0)?'42h semanais a partir de 16/12/2026':ps.includes(2)?'42h semanais até 15/12/2027':'42h semanais (transição)',2:'40h semanais a partir de 16/12/2027'};
+  $('#limTx').innerHTML='<b>Limites da lei neste mês:</b> '+ps.map(x=>TX[x]).join(' · ')+(S.cct?'. Com acordo ou convenção, até '+(ps.includes(0)?'8h48 por dia até 15/12/2026 e ':'')+(ps.includes(1)?'8h24 por dia na transição':'8h por dia')+'.':'. Sem acordo de compensação, o máximo é de 8h por dia (40h em 5 dias).')}
+ $('#tit').textContent='Escala de '+MES[+m[1]-1]+' de '+m[0];
+ $('#tsub').textContent=S.qtd+(S.qtd>1?' funcionários':' funcionário')+' · '+NW+' semanas';
+ const seg=S.perP?Object.keys(S.perP).map(Number).sort().map(pp=>{const cc=calc({...(S.funcs[0]||{}),...S.perP[pp]});const wd=Math.min(5,Math.max(0,S.abre.filter(Boolean).length-Math.max(0,2-(7-S.abre.filter(Boolean).length))));return{pp,d:cc.ok?cc.comp:0,w:(cc.ok?cc.comp:0)*wd}}).filter((x,i,a)=>i===0||x.d!==a[i-1].d):null;
+ const QUANDO={0:['até 15/12/2026','a partir de 16/12/2026'],1:['até 15/12/2027','a partir de 16/12/2027']};
+ const split=seg&&seg.length>1?seg:null,ate=split?QUANDO[split[0].pp]:null;
+ $('#figs').innerHTML=(split?`<div class="fig"><b>${fH(split[0].d)} · ${fH(split[1].d)}</b><span>por dia: ${fH(split[0].d)} ${ate[0]} e ${fH(split[1].d)} ${ate[1]}, já descontado o intervalo</span></div>`+
+  `<div class="fig"><b>${fH(split[0].w)} · ${fH(split[1].w)}</b><span>por semana completa: ${fH(split[0].w)} ${ate[0]} e ${fH(split[1].w)} ${ate[1]}</span></div>`:
+  `<div class="fig"><b>${c.ok?fH(c.comp):'—'}</b><span>por dia, já descontado o intervalo</span></div>`+
+  `<div class="fig"><b>até ${fH(hs)}</b><span>por semana, por funcionário</span></div>`)+
+  `<div class="fig ${ne?'err':'ok'}"><b>${ne?ne+' problema'+(ne>1?'s':''):'Dentro da lei'}</b><span>${ne?'encontrados na escala':nw?nw+' ponto(s) de atenção':'jornada, folgas e intervalos'}</span></div>`;
+ $('#madr').textContent=(S.perP?Object.keys(S.perP).sort().filter(k=>S.perP[k].sai!==S.sai).map(k=>(k==='0'?'Até 15/12/2026':'Até 15/12/2027')+': saída às '+S.perP[k].sai+'. ').join(''):'')+(c.ok&&c.e>1440?'O turno termina no dia seguinte'+(c.night?', com '+fH(c.night)+' em horário noturno (22h às 5h): hora reduzida e adicional de 20%.':'.'):'');
+ const first=v.L.find(x=>x.lv==='err')||v.L.find(x=>x.lv==='warn');
+ $('#alert1').innerHTML=first&&!ADJ?`<p class="al ${first.lv}">${first.msg}${v.L.filter(x=>x.lv!=='info').length>1?' <b>Os demais pontos vão na escala completa.</b>':''}</p>`:'';
+ const unlocked=!!(LEAD&&LEAD.ok);let h='';
+ if(unlocked){
+  h+=`<div class="sent">${ICK.replace('<svg>','<svg style="width:20px;height:20px;color:var(--ok);flex:none">')}<span><b>Escala completa liberada.</b> Veja abaixo o mês inteiro e baixe o documento em PDF, com a grade do mês e o horário de cada funcionário. <span id="copiaSt">${LEAD.st||''}</span></span><button type="button" class="go pdfb" id="pdfB">Baixar a escala em PDF</button></div>`;
+  h+='<div class="full">';for(let w=0;w<NW;w++)h+=weekHTML(w,v,false);
+  h+=`<div class="week"><h3>Todos os pontos conferidos</h3>`+(v.L.length?v.L.map(x=>`<p class="al ${x.lv}">${x.msg}</p>`).join(''):'<p class="al info">Nenhuma irregularidade encontrada.</p>')+'</div>';
+  h+=`<div class="week"><h3>Resumo por funcionário</h3><div class="scroll"><table class="sum"><tr><th>Funcionário</th>${[...Array(NW)].map((_,w)=>`<th>Sem. ${w+1}</th>`).join('')}<th>Domingos de folga</th></tr>`+
+   S.funcs.map((f,e)=>`<tr><td>${esc(f.nome)}</td>${v.sum[e].wk.map(x=>`<td>${fH(x.h)}</td>`).join('')}<td>${v.sum[e].sunOff}</td></tr>`).join('')+'</table></div></div>';
+  h+=`<div class="week law"><h3>Regras aplicadas</h3>
+<p><b>Jornada:</b> até 8 horas por dia e 40 por semana (CF, art. 7º, XIII, com a EC 141/2026). Na transição, o teto semanal é de 42 horas a partir de 16/12/2026 e de 40 horas a partir de 16/12/2027; só a norma coletiva permite ampliar a jornada diária para distribuir as 42 horas (EC 141/2026, art. 7º).</p>
+<p><b>Folgas:</b> dois dias de repouso por semana, um deles preferencialmente no domingo (CF, art. 7º, XV). A escala garante folga no domingo ao menos a cada 3 semanas, regra obrigatória no comércio (Lei 10.101/2000, art. 6º, p. ú.), e nunca mais de 6 dias seguidos de trabalho (OJ 410 da SDI-1 do TST).</p>
+<p><b>Intervalos:</b> acima de 6 horas, intervalo de 1 a 2 horas; de 4 a 6 horas, 15 minutos (CLT, art. 71); redução para 30 minutos só com norma coletiva (CLT, art. 611-A, III). Entre um dia e outro, 11 horas de descanso (CLT, art. 66).</p>
+<p><b>Noturno e feriados:</b> entre 22h e 5h, hora reduzida e adicional mínimo de 20% (CLT, art. 73). Feriado trabalhado sem folga compensatória é pago em dobro (Lei 605/1949, art. 9º; Súmula 146 do TST).</p>
+<p class="note">Ferramenta de apoio ao planejamento. A norma coletiva da categoria, as portarias do Ministério do Trabalho sobre regimes especiais e casos particulares podem exigir ajustes.</p></div></div>`;
+ }else{
+  h+='<div class="week pvc"><h3 id="pvT"></h3><div class="pv" id="pv"></div><div class="tlw"><p class="tlh" id="tlH"></p><div class="tl" id="tl" aria-hidden="true"></div></div><p class="more" id="pvN"></p></div>';
+  h+=chkHTML(v);
+  h+=`<form class="gate2" id="gate" novalidate><div><div class="gi"><svg><use href="#ml"/></svg></div><h3>Veja a escala completa e baixe em PDF</h3>
+<ul><li>${ICK}O mês inteiro, dia a dia, com as folgas</li><li>${ICK}Chegada, descanso e saída de cada funcionário</li><li>${ICK}Conferência pela nova lei, em PDF</li></ul></div>
+<div><div class="gf"><div><label class="l" for="gEmail">E-mail</label><input type="email" id="gEmail" autocomplete="email" required placeholder="seuemail@empresa.com.br" value="${esc(LEAD&&LEAD.email||'')}"></div>
+<div><label class="l" for="gNome">Nome (opcional)</label><input id="gNome" autocomplete="name" value="${esc(LEAD&&LEAD.nome||'')}"></div>
+<div><label class="l" for="gPerfil">Quem é você?</label><select id="gPerfil"><option value="empresario">Empresário ou gestor</option><option value="rh">RH ou DP</option><option value="contador">Contador</option><option value="advogado">Advogado</option><option value="publico">Trabalhador ou outro</option></select></div></div>
+<label class="chk"><input type="checkbox" id="gOk"><span>Autorizo o uso do meu e-mail pelo escritório para receber conteúdos informativos; posso cancelar quando quiser (<a href="https://www.rusemberg.adv.br/politica-de-privacidade.html" target="_blank" rel="noopener">Política de Privacidade</a>).</span></label>
+<button class="go" type="submit">Ver a escala completa</button><div class="err-t" id="gErr" role="alert"></div></div></form>`;
+ }
+ $('#out').innerHTML=h;if(!unlocked){drawPv();drawTl(S.T)}
+ if(!unlocked&&LEAD&&LEAD.perfil)$('#gPerfil').value=LEAD.perfil;
+ save();
+}
+function chkHTML(v){
+ const has=(lv,re)=>v.L.some(x=>(lv==='any'||x.lv===lv)&&re.test(x.msg.replace(/<[^>]+>/g,'')));
+ const st=(re)=>has('err',re)?'err':has('warn',re)?'warn':'ok';
+ const T=S.T||{k:1},lim=S.cct?'8h24':'8h',noite=has('info',/horário noturno/);
+ const c0=calc(S.funcs[0]||{ent:S.ent,sai:S.sai,id:S.id}),dia=c0.ok?c0.comp:0;
+ let pior=null;v.sum.forEach(x=>x.wk.forEach(y=>{if(y.h>y.lim*60+.5&&(!pior||y.h-y.lim*60>pior.h-pior.lim*60))pior=y}));
+ const pM=R?perW(NW-1):1,mxD=S.cct?(pM===0?528:pM===1?504:480):480;let jd=st(/no dia,/);if(S.cct&&dia>mxD+.5&&jd!=='err')jd='err';
+ /* [título, texto quando conforme, situação, condição quando "pode com condição", correção] */
+ const C=[
+  ['Jornada diária',`até ${S.cct&&mxD>480?fH(mxD)+' por dia, com acordo':'8h por dia'}`,jd,'Pode, se o acordo ou a convenção da categoria autorizar','jor',`Chega a ${fH(dia)} por dia; o máximo é ${S.cct&&mxD>480?fH(mxD)+' com acordo ou convenção':'8h'}`],
+  ['Limite semanal','42h na transição, 40h depois',st(/por semana, acima/),'','jor',pior?`Chega a ${fH(pior.h)} na semana; o limite é ${pior.lim}h`:''],
+  ['2 folgas por semana','repouso semanal remunerado',st(/folga\(s\); a lei garante/),'','folga'],
+  ['Intervalo de descanso','mínimo legal e bem posicionado',st(/intervalo|jornada acima de 4 horas/),'Pode, mas o ideal é no meio do turno','iv'],
+  ['11h entre jornadas','descanso de um dia para o outro',st(/descanso desde o turno anterior/),'','inter'],
+  ['Até 6 dias seguidos','folga antes do 7º dia',st(/sétimo dia/),'','folga'],
+  ['Folga no domingo','ao menos a cada 3 semanas',st(/domingos seguidos/),'Pode fora do comércio; no comércio, não','folga'],
+  ['Feriados',S.fer?'trabalho com compensação':'sem expediente',st(/feriado/),'Pode, com folga compensatória ou pagamento em dobro; no comércio, com convenção coletiva','fer'],
+  ['Horário noturno',noite?'':'não há trabalho noturno',noite?'warn':'ok','Pode, com adicional de 20% e hora reduzida de 52min30s',''],
+  ['Loja coberta',T.k>1?`sempre ${T.min} de ${S.qtd} nos intervalos`:S.qtd>1?'':'um funcionário',T.short?'warn':T.k>1||S.qtd<2?'ok':'warn',T.short?`Pode, mas o máximo possível é ${T.pmax} na loja`:'Pode, mas a loja fica vazia no intervalo','rev']];
+ const ic={ok:'<svg><use href="#ck"/></svg>',warn:'<svg><use href="#inf"/></svg>',err:'<svg><use href="#inf"/></svg>'};
+ const nOk=C.filter(c=>c[2]==='ok').length,nE=C.filter(c=>c[2]==='err').length;
+ return`<div class="week chks"><h3>Conferência pela lei <small>${nOk} de ${C.length} conformes${nE?' · clique em <b>Corrigir</b> e o sistema ajusta pela lei':''} · os detalhes vão na escala completa</small></h3><div class="cg">`+
+  C.map(([t,d,k,cond,fx,et])=>{const txt=k==='ok'?d:k==='warn'?cond:(et||'Fora do que a lei permite')+'. Clique em Corrigir',bt=k==='err'&&fx?'Corrigir':k==='warn'&&(fx==='iv'||fx==='rev'||fx==='fer')?'Opções':'',lab=k==='ok'?'Conforme':k==='warn'?'Com condição':'Irregular';
+   return`<${bt?'button type="button" data-fix="'+fx+'"':'div'} class="ci ${k}${bt?' fx':''}" title="${esc(txt)}">${ic[k]}<div><b>${t}</b><span>${txt}</span></div><em>${bt||lab}</em></${bt?'button':'div'}>`}).join('')+'</div></div>'}
+function corrigir(fx){
+ if(fx==='rev'){const base={ent:S.ent,sai:S.sai,ivm:S.ivm,dur:S.dur,ii:S.ii};S.rev=true;S.minLoja=null;fill();prep();
+  const T=S.T;ADJ={base,tit:'O sistema revezou os intervalos',mud:[],itens:['Os intervalos passaram a ser revezados entre os funcionários, para a loja não ficar vazia.'],resumo:`Intervalos revezados: sempre <b>${T.min} de ${S.qtd}</b> na loja.`};render();return}
+ if(fx==='iv'){S.ivm='auto';S.ii=''}
+ aplicar();
+}
+function drawPv(){
+ const el=$('#pv');if(!el||!R)return;const D=R.D,W=el.clientWidth||600,sm=W<420,nameW=sm?26:84;
+ el.classList.toggle('sm',sm);const n=7;
+ const i0=D.findIndex(d=>!d.out),days=D.slice(i0,i0+n).map((d,k)=>i0+k),rows=Math.min(S.funcs.length,6,R.off.length);
+ el.style.gridTemplateColumns=nameW+'px repeat('+n+',minmax(0,1fr))';
+ const dc=i=>D[i].hol?' hol':D[i].dow===6?' sun':'';
+ let h='<div></div>'+days.map(i=>`<div class="h${dc(i)}"${D[i].hol?` title="${esc(D[i].hol)}"`:''}>${D[i].hol?'Feriado':DOW[D[i].dow]}<small>${pad(new Date(D[i].ms).getUTCDate())}</small></div>`).join('');
+ for(let e=0;e<rows;e++){h+=`<div class="n">${sm?'F'+(e+1):'Func. '+(e+1)}</div>`;
+  days.forEach(i=>{const p=plan(e,i),bad=V.cell[e+'|'+i]==='err'?' e':'';
+   if(p.t==='w'){const c=calc(p.sh);h+=`<div class="w${dc(i)}${bad}">${c.ok?fH(c.comp).replace('h00','h'):'–'}</div>`}
+   else if(p.t==='f')h+='<div class="f">Folga</div>';else h+=`<div class="x${dc(i)}">${p.t==='h'?'Fechado':'—'}</div>`})}
+ el.innerHTML=h;
+ $('#pvT').innerHTML='Primeiros '+n+' dias de '+MES[+S.mes.split('-')[1]-1]+'<span class="dl"><i class="df"></i>Folga<i class="dd"></i>Domingo<i class="dh"></i>Feriado</span>';
+ const c=calc(shNow()),f=S.funcs[0]||{};
+ const T=S.T||{k:1};$('#pvN').innerHTML=`<svg><use href="#ml"/></svg>Mais ${NW*7-n} dias${S.funcs.length>rows?' e '+(S.funcs.length-rows)+' funcionário(s)':''} na escala completa por e-mail`+(T.k<2&&S.id?` · intervalo das ${f.ii} às ${hm(toMin(f.ii)+S.id)}`:'');
+}
+new ResizeObserver(()=>{if(V&&!(LEAD&&LEAD.ok)){drawPv();axFit($('#tl'))}}).observe(document.querySelector('.res'));
+/* Integração no site: gravar o cadastro no Supabase e pedir o envio do e-mail com a escala completa. */
+/* cadastro: grava no mesmo banco dos e-books (o escritório recebe o aviso por e-mail automaticamente) */
+const SB_URL='https://nbhgumvxbjaosdupxzph.supabase.co',SB_CHAVE='sb_publishable_T2tLyvBffPszI9rSGF-FfA_kPJTzpGn';/* chave pública: só permite chamar a função de registro */
+const CONSENT='Autorizo o uso do meu e-mail pelo escritório para receber conteúdos informativos; posso cancelar quando quiser (Política de Privacidade).';
+const PERF={empresario:['empresario','Empresário ou gestor'],rh:['outro_profissional','RH ou DP'],contador:['outro_profissional','Contador'],advogado:['advogado','Advogado'],publico:['publico','Trabalhador ou outro']};
+const estadoPDF=()=>{const o={};['mes','abre','qtd','ent','sai','ivm','dur','ii','id','idFix','perP','cct','rev','minLoja','fer'].forEach(k=>{if(S[k]!==undefined)o[k]=S[k]});return o};
+async function enviarCopia(email,nome){const r=await fetch(SB_URL+'/functions/v1/enviar-escala',{method:'POST',headers:{'Content-Type':'application/json',apikey:SB_CHAVE},body:JSON.stringify({email,nome,estado:estadoPDF()})});const j=await r.json().catch(()=>({}));if(!r.ok||!j.ok)throw new Error(j.erro||('HTTP '+r.status));return j}
+async function enviarLead(d){const pf=PERF[d.perfil]||['publico','Outro'],e=d.escala,mm=e.mes.split('-');
+ const desc=`Simulador escala 5x2 · ${MES[+mm[1]-1].slice(0,3)}/${mm[0]} · ${e.qtd} func. · ${e.ent}–${e.sai}${e.cct?' · com acordo':''} · ${pf[1]}`.slice(0,160);
+ const r=await fetch(SB_URL+'/rest/v1/rpc/registrar_download_ebook',{method:'POST',headers:{apikey:SB_CHAVE,Authorization:'Bearer '+SB_CHAVE,'Content-Type':'application/json'},
+  body:JSON.stringify({p_email:d.email,p_nome:d.nome||null,p_perfil:pf[0],p_ebook:desc,p_consentimento:true,p_consentimento_texto:CONSENT,p_pagina:(location.href||'').slice(0,300),p_user_agent:(navigator.userAgent||'').slice(0,300)})});
+ if(!r.ok)throw new Error('HTTP '+r.status);return true}
+/* PDF no próprio navegador: abre a impressão do documento, onde o visitante escolhe "Salvar como PDF" */
+function baixarPDF(btn){const html=window.__pdfHTML(LEAD);const f=document.createElement('iframe');f.setAttribute('aria-hidden','true');
+ f.style.cssText='position:fixed;right:0;bottom:0;width:1px;height:1px;border:0;opacity:0';document.body.appendChild(f);
+ const d=f.contentDocument;d.open();d.write(html);d.close();if(btn){btn.disabled=true;btn.dataset.t=btn.textContent;btn.textContent='Preparando…'}
+ const go=()=>{try{f.contentWindow.focus();f.contentWindow.print()}catch(e){const w=window.open('','_blank');if(w){w.document.write(html);w.document.close();setTimeout(()=>w.print(),800)}}
+  if(btn){btn.disabled=false;btn.textContent=btn.dataset.t}setTimeout(()=>f.remove(),60000)};
+ (f.contentDocument.fonts?f.contentDocument.fonts.ready:Promise.resolve()).then(()=>setTimeout(go,300))}
+
+/* ---------- ajuste à lei ---------- */
+function renderAdj(){const el=$('#adj');
+ if(!ADJ){el.innerHTML='';$('#tsub').hidden=false;return}
+ el.innerHTML=`<div class="adj1"><svg><use href="#sp"/></svg><span class="t">${ADJ.resumo}</span><details><summary>Detalhes</summary><div class="pop"><h4>${ADJ.tit||(ADJ.mud.length?'O sistema ajustou a escala':'Seus dados já estão no máximo da lei')}</h4><ul>${ADJ.itens.map(x=>`<li>${x}</li>`).join('')}</ul></div></details>${ADJ.mud.length||ADJ.tit?'<button type="button" id="desfaz">Desfazer</button>':''}</div>`;
+ const d=$('#desfaz');if(d)d.addEventListener('click',()=>{Object.assign(S,ADJ.base);S.perP=ADJ.base.perP;S.idFix=ADJ.base.idFix;if(ADJ.tit)S.rev=false;fill();ADJ=null;render()});$('#tsub').hidden=!!ADJ}
+/* estratégias de ajuste à lei:
+   auto = mantém chegada e saída mexendo no intervalo (até 2h); se não der, muda a saída
+   iv   = só o intervalo; sai = só a saída (intervalo fixo); ent = só a chegada (intervalo fixo) */
+function solver(strat,bdFix){
+ const s0=toMin(S.ent),e0=toMin(S.sai);if(s0==null||e0==null)return null;
+ const D=buildDays(),pers=[...new Set(D.filter(d=>!d.out).map(perD))].sort();
+ const alvoP=pp=>pp===0?(S.cct?528:480):pp===1?(S.cct?504:480):480,pMain=pers[pers.length-1];
+ const span=((e0-s0)+1440)%1440||1440,minB=a=>a>360?60:a>240?15:0;
+ const mk=(ent,sai,id)=>calc({ent,sai,id});const sol={};
+ pers.forEach(pp=>{const a=alvoP(pp);
+  if(strat==='auto'||strat==='iv'){for(let b=minB(a);b<=120;b++){const c=mk(S.ent,S.sai,b);if(c.ok&&c.comp<=a+0.01){if(a-c.comp<=1.2)sol[pp]={ent:S.ent,sai:S.sai,id:b};break}}if(sol[pp])return}
+  const b=bdFix!=null?bdFix:(strat==='auto'&&span-120>a?120:minB(a));
+  if(strat==='ent'){let best=null;for(let k=1;k<=900;k++){const st=hm(e0-k),c=mk(st,S.sai,b);if(c.ok&&c.comp<=a+0.01)best=st}sol[pp]={ent:best,sai:S.sai,id:b};return}
+  let best=null;for(let sp=1;sp<=900;sp++){const c=mk(S.ent,hm(s0+sp),b);if(c.ok&&c.comp<=a+0.01)best=sp}
+  sol[pp]={ent:S.ent,sai:hm(s0+best),id:b}});
+ return{sol,pers,pMain,alvoP}}
+function aplicar(strat='auto',bdFix=null){
+ const base={ent:S.ent,sai:S.sai,ivm:S.ivm,dur:S.dur,ii:S.ii,perP:S.perP||null,idFix:S.idFix??null,cct:S.cct};
+ S.perP=null;S.idFix=null;prep();
+ const antes=calc(shNow()),antesId=S.id;
+ const keepDur=S.ivm==='dur'&&strat==='auto';
+ let ivMsg=null,durU=null;
+ if(keepDur){durU=+S.dur;if(durU<60){ivMsg=`<span class="ba"><s>Intervalo ${fIv(durU)}</s>→ ${fIv(60)}</span>. Em jornada acima de 6 horas, a CLT exige no mínimo 1 hora (art. 71); com ${fIv(durU)}, o tempo que falta seria pago como hora extra.`;durU=60}
+  if(durU>120){ivMsg=`<span class="ba"><s>Intervalo ${fIv(durU)}</s>→ ${fIv(120)}</span>. Acima de 2 horas, o intervalo só vale com acordo escrito ou norma coletiva (CLT, art. 71).`;durU=120}}
+ const R0=solver(keepDur?'sai':strat,keepDur?durU:bdFix);if(!R0)return;
+ const{sol,pers,pMain,alvoP}=R0,alvo=alvoP(pMain),alvoT=fH(alvo),trans=S.cct&&pMain===1;
+ const s0=toMin(base.ent);
+ const apply=()=>{const m=sol[pMain];S.ent=m.ent;S.sai=m.sai;if(S.ivm==='dur')S.dur=m.id;else S.idFix=m.id;
+  const dif=pers.some(pp=>sol[pp].sai!==m.sai||sol[pp].id!==m.id||sol[pp].ent!==m.ent);S.perP=dif?JSON.parse(JSON.stringify(sol)):null;fill();prep()};
+ let iiMsg=null;
+ if(S.ivm==='ini'&&S.ii){const m=sol[pMain],a0=toMin(m.ent),t=(toMin(S.ii)-a0+1440)%1440,sp=(toMin(m.sai)-a0+1440)%1440;
+  if(t<60||t+m.id>sp-60){const novo=hm(a0+Math.round((sp-m.id)/30)*15);iiMsg=`<span class="ba"><s>Intervalo às ${esc(S.ii)}</s>→ às ${novo}</span>. No horário informado, o intervalo ficaria fora do turno ou colado no início ou no fim, sem cumprir a finalidade de descanso.`;S.ii=novo}}
+ apply();
+ const worst=pp=>Math.max(...S.funcs.map(f=>{const cc=calc({...f,ent:sol[pp].ent,sai:sol[pp].sai,id:sol[pp].id});return cc.ok?cc.comp:0}));
+ for(let g=0;g<150;g++){let ch=false;
+  pers.forEach(pp=>{if(worst(pp)>alvoP(pp)+0.01){const s=sol[pp];
+   if((strat==='auto'||strat==='iv')&&!keepDur&&s.sai===base.sai&&s.ent===base.ent&&s.id<120)s.id++;else if(strat==='ent')s.ent=hm(toMin(s.ent)+1);else s.sai=hm(toMin(s.sai)-1);ch=true}});
+  if(!ch)break;apply()}
+ gerar();const v=validar(),m=sol[pMain],depois=calc(shNow());
+ const sem=Math.max(...v.sum.map(x=>Math.max(...x.wk.map(y=>y.h))),0);
+ const LAB=pp=>pp===0?'até 15/12/2026':pp===1?(pers.includes(0)?'a partir de 16/12/2026':pers.includes(2)?'até 15/12/2027':'na transição'):'a partir de 16/12/2027';
+ const SEMN={0:44,1:42,2:40},uni=pers.every(pp=>sol[pp].sai===m.sai&&sol[pp].id===m.id&&sol[pp].ent===m.ent);
+ const uniI=pers.every(pp=>sol[pp].id===m.id),PI=uniI?[pMain]:pers,LI=pp=>uniI?'':' '+LAB(pp);
+ const itens=[],mud=[],res=[];
+ const saiMud=pers.some(pp=>sol[pp].sai!==base.sai),entMud=pers.some(pp=>sol[pp].ent!==base.ent),ivMud=pers.some(pp=>sol[pp].id!==antesId);
+ const ivTx=PI.map(pp=>fIv(sol[pp].id)+LI(pp)).join(' e ');
+ const dif=antes.ok?antes.comp-alvo:null,porque=antes.ok?(dif>0.5?` Com os dados informados, o trabalhador laboraria ${fH(antes.comp)} por dia, <b>${dd(dif)} acima</b> do limite de ${alvoT} diárias${trans?' admitido pelo acordo ou convenção':' (CF, art. 7º, XIII)'}; o excesso seria hora extra.`:dif<-0.5?` Com os dados informados, o trabalhador laboraria ${fH(antes.comp)} por dia, <b>${dd(-dif)} a menos</b> do que a lei permite (${alvoT} diárias).`:''):'';
+ if(ivMud&&!saiMud&&!entMud){mud.push('iv');itens.push(`<b>Mantidas a chegada às ${base.ent} e a saída às ${base.sai}.</b> Ajustado só o intervalo, que pode ter até 2 horas sem acordo (CLT, art. 71): ${ivTx}.`+porque);res.push(`Mantido ${base.ent}–${base.sai}; intervalo de <b>${ivTx}</b>`)}
+ if(saiMud){mud.push('sai');itens.push(`<span class="ba"><s>Saída ${esc(base.sai)}</s>→ saída ${m.sai}</span>, mantida a chegada às ${m.ent}`+(ivMud?`, com intervalo de ${ivTx}`:'')+'.'+porque);res.push(`Saída ${esc(base.sai)} → <b>${m.sai}</b>`+(ivMud?`, intervalo de ${ivTx}`:''))}
+ if(entMud){mud.push('ent');itens.push(`<span class="ba"><s>Chegada ${esc(base.ent)}</s>→ chegada ${m.ent}</span>, mantida a saída às ${m.sai}`+(ivMud?`, com intervalo de ${ivTx}`:'')+'.'+porque);res.push(`Chegada ${esc(base.ent)} → <b>${m.ent}</b>`+(ivMud?`, intervalo de ${ivTx}`:''))}
+ if(!uni)itens.push('<b>Por período:</b> '+pers.map(pp=>{const s=sol[pp],cc=calc(s);return`${LAB(pp)}, ${s.ent} às ${s.sai} com ${fIv(s.id)} de intervalo = ${fH(cc.comp)} por dia (limite de ${SEMN[pp]}h semanais)`}).join('; ')+'. A regra nova só vale a partir de 16/12; os dias anteriores seguem a regra em vigor.');
+ if(ivMsg){mud.push('iv');itens.push(ivMsg)}
+ if(iiMsg){mud.push('ii');itens.push(iiMsg)}
+ if(base.cct!==S.cct)itens.push('Marcada a opção de acordo ou convenção coletiva. Confirme que a norma da categoria autoriza essa jornada.');
+ if(depois.night>0)itens.push(`O turno tem ${fH(depois.night)} em horário noturno (22h às 5h). Nesse período a hora vale 52min30s (CLT, art. 73), por isso o relógio marca menos tempo que a jornada computada, e há adicional noturno mínimo de 20%.`);
+ itens.push(`<b>Jornada final:</b> `+(!uni?pers.map(pp=>`${fH(calc(sol[pp]).comp)} por dia ${LAB(pp)}`).join(' e '):`${fH(depois.comp)} por dia`)+`, em 5 dias de trabalho e 2 folgas. `+(S.cct?'Com o acordo ou a convenção, a jornada diária pode passar de 8 horas: 8h48 pela regra atual (44h semanais, CLT, art. 59, § 2º) e 8h24 na transição (42h semanais, EC 141/2026, art. 7º); a partir de 16/12/2027, o limite é de 8 horas.':'Sem acordo de compensação, o máximo é de 8 horas por dia, o que dá 40 horas em 5 dias, abaixo dos 44h ou 42h semanais da lei.'));
+ if(S.abre.filter(Boolean).length<5)itens.push('Como a empresa abre menos de 5 dias por semana, o trabalhador fica abaixo do máximo semanal. Para chegar a ele, seria preciso abrir mais dias.');
+ if(ivMsg)res.push('intervalo corrigido para '+fIv(durU));if(iiMsg)res.push('intervalo movido para o meio do turno');
+ res.push(!uni?pers.map(pp=>`<b>${fH(calc(sol[pp]).comp)}</b> por dia ${LAB(pp)}`).join(' e '):`jornada de <b>${fH(depois.comp)}</b> por dia e até <b>${fH(sem)}</b> por semana`);
+ ADJ={base,itens,mud,resumo:res.join(' · ').replace(/^./,x=>x.toUpperCase())+'.'};render();
+ mud.forEach(k=>{const el=document.querySelector('.tm[data-k="'+k+'"]');if(el){el.classList.remove('fl');void el.offsetWidth;el.classList.add('fl')}});
+ if(innerWidth<900)$('#adj').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+/* ---------- menu de opções de correção ---------- */
+function prever(strat,bdFix,extra){
+ const keep=JSON.stringify(S);let txt='';
+ try{if(extra)extra();S.perP=null;S.idFix=null;prep();const r=solver(strat,bdFix);if(!r)return'';const m=r.sol[r.pMain],c=calc(m);
+  txt=`${m.ent} às ${m.sai}, intervalo de ${fIv(m.id)} = ${fH(c.comp)} por dia`;
+  const ps=r.pers.filter(pp=>pp!==r.pMain&&(r.sol[pp].sai!==m.sai||r.sol[pp].id!==m.id||r.sol[pp].ent!==m.ent));
+  if(ps.length)txt+=' (até 15/12: '+ps.map(pp=>{const s=r.sol[pp];return`${s.ent}–${s.sai}, ${fIv(s.id)}`}).join('; ')+')';
+ }finally{Object.assign(S,JSON.parse(keep));prep()}return txt}
+function opcoes(cat){
+ const L=[],ok=(t,d,run,rec)=>{if(d!==null)L.push({t,d,run,rec})};
+ const v=V,has=re=>v.L.some(x=>re.test(x.msg.replace(/<[^>]+>/g,'')));
+ if(cat==='jor'||cat==='inter'){
+  const ivPrev=prever('iv',null),ivOk=ivPrev&&ivPrev.startsWith(S.ent+' às '+S.sai);
+  if(ivOk&&cat==='jor')ok('Aumentar o intervalo','Mantém chegada e saída. '+ivPrev,()=>aplicar('iv'),true);
+  if(!ivOk&&cat==='jor'){const ap=prever('auto',null);if(ap&&!ap.startsWith(S.ent+' às '+S.sai)&&ap.includes('intervalo de 2h00'))ok('Intervalo de 2 horas e saída mais cedo','Usa o intervalo máximo sem acordo e antecipa a saída só o necessário. '+ap,()=>aplicar('auto'),true)}
+  ok('Antecipar a saída','Mantém chegada e intervalo. '+prever('sai',Math.max(S.id||0,60)),()=>aplicar('sai',Math.max(S.id||0,60)),cat==='inter');
+  ok('Atrasar a chegada','Mantém saída e intervalo. '+prever('ent',Math.max(S.id||0,60)),()=>aplicar('ent',Math.max(S.id||0,60)));
+  if(!S.cct&&cat==='jor'){const c=calc(shNow()),pm=R?perW(NW-1):2;if(pm<2&&c.ok&&c.comp<=(pm===0?528:504)+.5)ok('Tenho acordo ou convenção coletiva','A norma permite até '+(pm===0?'8h48':'8h24')+' por dia neste período. Marque só se a sua categoria tiver essa autorização.',()=>{S.cct=true;fill();$('#cctW').hidden=false;aplicar('auto')})}}
+ if(cat==='iv'){
+  const curto=has(/intervalo de \d+ min para jornada|exige intervalo de 15/),longo=has(/acima de 2 horas exige/),pos=has(/primeira ou na última hora|mais de 6 horas seguidas/);
+  if(curto||longo){ok('Ajustar o intervalo e manter a jornada máxima','Corrige o intervalo e ajusta o horário. '+prever('auto',null,()=>{S.ivm='auto';S.ii=''}),()=>{S.ivm='auto';S.ii='';aplicar('auto')},true);
+   ok('Ajustar o intervalo e manter a saída','O intervalo vai ao mínimo legal; a jornada pode ficar menor. ',()=>{S.ivm='auto';S.ii='';S.perP=null;S.idFix=null;render()})}
+  if(pos||(!curto&&!longo))ok('Mover o intervalo para o meio do turno','O sistema escolhe o melhor horário de descanso, sem mudar a duração.',()=>{S.ivm=S.ivm==='ini'?'auto':S.ivm;S.ii='';render()},!curto&&!longo)}
+ if(cat==='rev'){ok('Revezar os intervalos','O sistema escalona os descansos para manter o máximo de pessoas na loja.',()=>corrigir('rev'),true);
+  ok('Escolher quantos ficam na loja','Liga o revezamento e abre o campo "Mínimo na loja durante os intervalos".',()=>{S.rev=true;fill();render();setTimeout(()=>{$('#mlI').focus();$('#mlI').select()},150)})}
+ if(cat==='folga'){ok('Refazer as folgas automaticamente','O sistema redistribui as duas folgas de cada um, com domingo a cada 3 semanas.',()=>{for(const k in O)delete O[k];render()},true);
+  if(S.abre[6])ok('Fechar aos domingos','Com a equipe atual, fechar aos domingos facilita as folgas dominicais.',()=>{S.abre[6]=0;fill();render()})}
+ if(cat==='fer'){ok('Não abrir nos feriados','Os feriados ficam sem expediente, sem necessidade de compensação.',()=>{S.fer=false;fill();render()},true);
+  ok('Manter aberto nos feriados','Quem trabalhar no feriado tem folga compensatória ou pagamento em dobro; no comércio, depende de convenção coletiva.',()=>fecharOp())}
+ return L}
+function fecharOp(){const m=$('#opm');if(m)m.remove()}
+function abrirOp(cat,el){
+ fecharOp();const L=opcoes(cat);if(!L.length)return;
+ if(L.length&&!L.some(x=>x.rec))L[0].rec=true;
+ const box=document.createElement('div');box.id='opm';box.className='opm';box.setAttribute('role','dialog');box.setAttribute('aria-label','Opções de correção');
+ box.innerHTML=`<div class="oh"><b>Como corrigir?</b><button type="button" class="ox" aria-label="Fechar">×</button></div>`+L.map((o,i)=>`<button type="button" class="oi${o.rec?' rec':''}" data-i="${i}"><b>${o.t}${o.rec?'<em>Recomendado</em>':''}</b><span>${o.d}</span></button>`).join('');
+ document.body.appendChild(box);
+ const r=el.getBoundingClientRect(),w=Math.min(360,innerWidth-20);box.style.width=w+'px';
+ let left=Math.min(Math.max(10,r.left),innerWidth-w-10),top=r.bottom+6;const h=box.offsetHeight;if(top+h>innerHeight-10)top=Math.max(10,r.top-h-6);
+ box.style.left=left+'px';box.style.top=top+'px';
+ box.addEventListener('click',ev=>{if(ev.target.closest('.ox')){fecharOp();return}const b=ev.target.closest('.oi');if(!b)return;const o=L[+b.dataset.i];fecharOp();o.run()});
+ box.querySelector('.oi').focus()}
+document.addEventListener('keydown',ev=>{if(ev.key==='Escape')fecharOp()});
+document.addEventListener('click',ev=>{const m=$('#opm');if(m&&!m.contains(ev.target)&&!ev.target.closest('[data-fix]'))fecharOp()});
+
+/* ---------- eventos ---------- */
+let tm=null;const refresh=()=>{ADJ=null;S.perP=null;S.idFix=null;clearTimeout(tm);tm=setTimeout(render,120)};
+const fill=()=>{$('#mes').value=S.mes;$('#qtd').value=S.qtd;$('#ent').value=S.ent;$('#sai').value=S.sai;$('#fer').checked=!!S.fer;$('#cct').checked=!!S.cct;$('#cctW').hidden=!S.cct;
+ $('#dias').innerHTML=DOW.map((d,k)=>`<button type="button" data-k="${k}" aria-pressed="${!!S.abre[k]}">${d}</button>`).join('')};
+$('#mes').addEventListener('change',ev=>{if(/^\d{4}-\d{2}$/.test(ev.target.value)){S.mes=ev.target.value;refresh()}});
+$('#dias').addEventListener('click',ev=>{const b=ev.target.closest('[data-k]');if(!b)return;const k=+b.dataset.k;S.abre[k]=S.abre[k]?0:1;b.setAttribute('aria-pressed',!!S.abre[k]);refresh()});
+const setQ=q=>{S.qtd=Math.min(50,Math.max(1,q||1));$('#qtd').value=S.qtd;refresh()};
+$('#menos').addEventListener('click',()=>setQ(S.qtd-1));$('#mais').addEventListener('click',()=>setQ(S.qtd+1));
+$('#qtd').addEventListener('input',ev=>{const q=parseInt(ev.target.value);if(q>=1&&q<=50){S.qtd=q;refresh()}});
+$('#qtd').addEventListener('change',ev=>setQ(parseInt(ev.target.value)));
+$('#fer').addEventListener('input',ev=>{S.fer=ev.target.checked;refresh()});
+$('#cct').addEventListener('input',ev=>{S.cct=ev.target.checked;$('#cctW').hidden=!S.cct;refresh()});
+$('#rev').addEventListener('input',ev=>{S.rev=ev.target.checked;refresh()});
+const setML=v=>{S.minLoja=Math.min(Math.max(1,v||1),Math.max(1,S.qtd-1));refresh()};
+$('#mlM').addEventListener('click',()=>setML((+$('#mlI').value||1)-1));$('#mlP').addEventListener('click',()=>setML((+$('#mlI').value||1)+1));
+$('#mlI').addEventListener('change',ev=>setML(parseInt(ev.target.value)));
+$('#ivMode').addEventListener('click',ev=>{const b=ev.target.closest('[data-m]');if(!b)return;S.ivm=b.dataset.m;if(S.ivm==='ini'&&!S.ii)S.ii=midIi(autoIv());if(S.ivm==='dur')S.dur=S.id;refresh();prep()});
+const toManual=()=>{};
+const step=(k,d)=>{
+ if(k==='iv'){const m=+S.dur||0,n=Math.min(240,Math.max(0,d>0?Math.floor(m/15)*15+15:Math.ceil(m/15)*15-15));S.dur=n}
+ else if(k==='ii'){const t=toMin(S.ii)??toMin(midIi(S.id));S.ii=hm(d>0?Math.floor(t/15)*15+15:Math.ceil(t/15)*15-15)}
+ else{const t=toMin(S[k])??480;S[k]=hm(d>0?Math.floor(t/30)*30+30:Math.ceil(t/30)*30-30);$('#'+k).value=S[k]}
+ refresh();if(k==='iv'||k==='ii'){prep()}};
+['ent','sai','ii'].forEach(k=>{const el=$('#'+k);
+ el.addEventListener('input',()=>{if(/^\d{1,2}:\d{2}$/.test(el.value)){const n=norm(el.value);if(n){if(k==='ii')toManual();S[k]=n;refresh()}}});
+ el.addEventListener('blur',()=>{const n=norm(el.value);if(n){if(k==='ii'&&n!==el.dataset.v)toManual();S[k]=n;refresh()}setTimeout(prep,130);if(k!=='ii')el.value=S[k]});
+ el.addEventListener('focus',()=>{el.dataset.v=el.value;el.select()})});
+{const el=$('#iv');
+ el.addEventListener('input',()=>{const m=pIv(el.value);if(m!=null&&/(h|:)\d{2}$|^\d{2,3}$/.test(el.value)){S.dur=m;refresh()}});
+ el.addEventListener('blur',()=>{const m=pIv(el.value);if(m!=null&&el.value!==el.dataset.v){S.dur=m;refresh()}setTimeout(prep,130)});
+ el.addEventListener('focus',()=>{el.dataset.v=el.value;el.select()})}
+document.querySelectorAll('.tm input').forEach(el=>el.addEventListener('keydown',ev=>{const k=el.closest('.tm').dataset.k;
+ if(ev.key==='ArrowUp'||ev.key==='ArrowDown'){ev.preventDefault();step(k,ev.key==='ArrowUp'?1:-1)}if(ev.key==='Enter')el.blur()}));
+let hold=null;document.querySelectorAll('.tm button').forEach(b=>{
+ const go=()=>step(b.dataset.k,+b.dataset.d);
+ b.addEventListener('pointerdown',ev=>{ev.preventDefault();go();clearInterval(hold);hold=setTimeout(()=>{hold=setInterval(go,140)},450)});
+ ['pointerup','pointerleave','pointercancel'].forEach(x=>b.addEventListener(x,()=>{clearTimeout(hold);clearInterval(hold)}));
+ b.addEventListener('keydown',ev=>{if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();go()}})});
+$('#aplicar').addEventListener('click',()=>aplicar('auto'));
+$('#out').addEventListener('click',ev=>{const b=ev.target.closest('[data-fix]');if(b){ev.stopPropagation();abrirOp(b.dataset.fix,b)}});
+$('#out').addEventListener('submit',async ev=>{ev.preventDefault();
+ const email=$('#gEmail').value.trim(),nome=$('#gNome').value.trim(),perfil=$('#gPerfil').value,err=$('#gErr');
+ if(!/^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i.test(email)){err.textContent='Informe um e-mail válido.';$('#gEmail').focus();return}
+ if(!$('#gOk').checked){err.textContent='Para liberar a escala, marque a autorização acima.';return}
+ err.textContent='Liberando…';
+ try{await enviarLead({email,nome,perfil,escala:{mes:S.mes,abre:S.abre,qtd:S.qtd,ent:S.ent,sai:S.sai,id:S.id,ii:S.funcs[0]&&S.funcs[0].ii,ivm:S.ivm,fer:S.fer,cct:S.cct}});
+  LEAD={email,nome,perfil,ok:true};try{localStorage.setItem('rusemberg_lead',JSON.stringify({email,nome,perfil}))}catch(e){}
+  LEAD.st='Enviando uma cópia em PDF para '+esc(email)+'…';render();$('#out').scrollIntoView({behavior:'smooth',block:'start'});
+  const st=m=>{LEAD.st=m;const el=$('#copiaSt');if(el)el.innerHTML=m};
+  enviarCopia(email,nome).then(()=>st('Uma cópia em PDF foi enviada para <b>'+esc(email)+'</b>; se não chegar em alguns minutos, confira o spam.'),()=>st('Não foi possível enviar a cópia por e-mail agora; use o botão para baixar o PDF.'))
+ }catch(e){err.textContent='Não foi possível liberar agora. Tente de novo em instantes.'}});
+$('#out').addEventListener('click',ev=>{const b=ev.target.closest('#pdfB');if(b)baixarPDF(b)});
+/* ---------- documento PDF enviado ao visitante ---------- */
+window.__pdfHTML=function(lead){
+ prep();gerar();const v=validar(),D=R.D,F=S.funcs,mm=S.mes.split('-'),mesN=MES[+mm[1]-1]+' de '+mm[0];
+ const hoje=new Date(),hj=pad(hoje.getDate())+'/'+pad(hoje.getMonth()+1)+'/'+hoje.getFullYear();
+ const T=S.T||{k:1},ne=v.L.filter(x=>x.lv==='err').length;
+ const idx=D.map((d,i)=>i).filter(i=>!D[i].out);
+ const INI=['S','T','Q','Q','S','S','D'];
+ /* códigos de turno: cada combinação chegada/descanso/saída vira uma letra */
+ const cod=new Map(),LET='ABCDEFGHJKLMNPRSTUVWXYZ';
+ const keyOf=sh=>{const c=calc(sh);const di=c.ok&&c.bd?hm(c.bs%1440):'';return[sh.ent,sh.sai,di,c.bd||0].join('|')};
+ const linhas=F.map((f,e)=>idx.map(i=>{const p=plan(e,i);if(p.t!=='w')return p;const k=keyOf(p.sh);if(!cod.has(k)){const c=calc(p.sh);cod.set(k,{l:LET[cod.size]||'?',sh:p.sh,c,dias:[]})}cod.get(k).dias.push(i);return{t:'w',k,c:calc(p.sh)}}));
+ const TONS=['#e9eef5','#e7f1ea','#f6ebe4','#efe9f5','#e6f1f3','#f3efe2','#f5e6ea','#eaf0e1'];
+ const cods=[...cod.values()];cods.forEach((x,j)=>{x.cor=TONS[j%TONS.length]});
+ /* período de cada código (para mostrar "até 15/12" etc.) */
+ const perTx=x=>{const ps=[...new Set(x.dias.map(i=>perD(D[i])))],all=[...new Set(idx.map(i=>perD(D[i])))];if(all.length<2)return'';return ps.length>1?'':ps[0]===0?'até 15/12/2026':ps[0]===1?(all.includes(0)?'a partir de 16/12/2026':'até 15/12/2027'):'a partir de 16/12/2027'};
+ const t1=idx.findIndex(i=>D[i].ms===T1),t2=idx.findIndex(i=>D[i].ms===T2),corte=t1>=0?t1:t2;
+ /* tabela do mês */
+ const th=idx.map((i,j)=>{const d=D[i],dt=new Date(d.ms).getUTCDate();return`<th class="${d.dow===6?'dom':''}${d.hol?' fer':''}${j===corte?' corte':''}"${d.hol?` title="${esc(d.hol)}"`:''}><b>${dt}</b><i>${d.hol?'FER':INI[d.dow]}</i></th>`}).join('');
+ /* horário de cada funcionário: chegada, descanso e saída (uma linha por período, se mudar no dia 16) */
+ const allP=[...new Set(idx.map(i=>perD(D[i])))].sort();
+ const horTx=e=>{const g=new Map();linhas[e].forEach((p,j)=>{if(p.t!=='w')return;const x=cod.get(p.k),pp=perD(D[idx[j]]);if(!g.has(p.k))g.set(p.k,{x,ps:new Set()});g.get(p.k).ps.add(pp)});
+  const L=[...g.values()];return L.map(({x,ps})=>{const c=x.c,di=c.bd?`${hm(c.bs%1440)}–${hm((c.bs+c.bd)%1440)}`:'sem intervalo',pl=[...ps];
+   const pre=L.length>1&&allP.length>1?(pl.length>1?'':pl[0]===0?'até 15/12 · ':pl[0]===1?(allP.includes(0)?'de 16/12 · ':'até 15/12 · '):'de 16/12 · '):'';
+   return`<small>${pre}<b>${x.sh.ent}–${x.sh.sai}</b> · ${L.length>1&&allP.length>1?'desc.':'descanso'} ${di}</small>`}).join('')};
+ const corpo=F.map((f,e)=>{let h=0,tr=0,fo=0;const tds=linhas[e].map((p,j)=>{const d=D[idx[j]],cl=(d.dow===6?' dom':'')+(d.hol?' fer':'')+(j===corte?' corte':'');
+   if(p.t==='w'){h+=p.c.comp;tr++;return`<td class="w${cl}"></td>`}
+   if(p.t==='f'){fo++;return`<td class="f${cl}">F</td>`}
+   return`<td class="x${cl}">${p.t==='h'?'—':'·'}</td>`}).join('');
+  const hs=[...new Set(linhas[e].filter(p=>p.t==='w').map(p=>cod.get(p.k).sh.ent+'–'+cod.get(p.k).sh.sai))];return`<tr><th class="nm${hs.length<2&&F.length>5?' one':''}"><b>${esc(f.nome)}</b><small>${hs.join(' · ')}</small></th>${tds}<td class="tt">${tr}</td><td class="tt">${fo}</td><td class="tt hr">${fH(h)}</td></tr>`}).join('');
+ const cobert=idx.map((i,j)=>{const d=D[i];return`<td class="cv${d.dow===6?' dom':''}${d.hol?' fer':''}${j===corte?' corte':''}">${d.open||v.cov[i]?v.cov[i]:''}</td>`}).join('');
+ /* legenda dos códigos */
+ const leg=cods.map(x=>{const c=x.c,di=c.bd?`${hm(c.bs%1440)}–${hm((c.bs+c.bd)%1440)}`:'sem intervalo',pt=perTx(x);
+  return`<div class="lg"><span class="chip" style="background:${x.cor}">${x.l}</span><div><p><b>${x.sh.ent}</b> chegada <span>·</span> descanso <b>${di}</b> <span>·</span> saída <b>${x.sh.sai}</b></p><small>${fH(c.comp)} de trabalho${c.night?` · ${fH(c.night)} noturnas`:''}${pt?' · '+pt:''}</small></div></div>`}).join('');
+ const limTx=(()=>{const ps=[...new Set(idx.map(i=>perD(D[i])))].sort();const tx={0:'44h semanais até 15/12/2026',1:ps.includes(0)?'42h semanais a partir de 16/12/2026':ps.includes(2)?'42h semanais até 15/12/2027':'42h semanais (transição)',2:'40h semanais a partir de 16/12/2027'};return ps.map(x=>tx[x]).join(' · ')})();
+ /* página 2 */
+ const tmp=document.createElement('div');tmp.innerHTML=chkHTML(v);
+ const chk=[...tmp.querySelectorAll('.ci')].map(ci=>{const k=ci.classList.contains('err')?'err':ci.classList.contains('warn')?'warn':'ok';return`<li class="${k}"><i>${k==='ok'?'✓':'!'}</i><b>${ci.querySelector('b').textContent}</b><span>${k==='ok'?'Conforme':k==='warn'?ci.querySelector('span').textContent:'Irregular'}</span></li>`}).join('');
+ const pts=v.L.filter(x=>x.lv!=='info');
+ const resumo=`<table class="rs"><thead><tr><th>Funcionário</th>${[...Array(NW)].map((_,w)=>`<th>Sem. ${w+1}<small>${fD(D[w*7].ms)}</small></th>`).join('')}<th>Domingos de folga</th></tr></thead><tbody>`+
+  F.map((f,e)=>`<tr><td>${esc(f.nome)}</td>${v.sum[e].wk.map(x=>`<td>${fH(x.h)}</td>`).join('')}<td>${v.sum[e].sunOff}</td></tr>`).join('')+'</tbody></table>';
+ const dias=DOW.filter((d,k)=>S.abre[k]).join(', ');
+ const n=F.length,um=n<=8,multi=allP.length>1&&S.perP,rowH=n<=3?40:n<=5?32:n<=8?22:Math.max(18,Math.min(30,Math.floor(400/n)));
+ const LOGO='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9Ijk4Mi45IDcxOS45IDMzODAuNiAxMjcwLjEiPjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDAsMCkgc2NhbGUoMSkiPjxwYXRoIGQ9Ik0xMjg1LjAsMTcyNC42QzEyODUuMCwxNzE1LjEgMTI4NS4yLDE3MTQuMiAxMjg3LjAsMTcxMy43QzEyODguOSwxNzEzLjIgMTI4OS4wLDE3MTMuNyAxMjg5LjAsMTcyMi4xTDEyODkuMCwxNzMxLjBMMTY0NS41LDE3MzEuMEwyMDAyLjAsMTczMS4wTDIwMDIuMCwxNTM5LjFDMjAwMi4wLDEzNjUuMCAyMDAyLjEsMTM0Ny4yIDIwMDMuNiwxMzQ2LjZDMjAwNC41LDEzNDYuMyAyMDA1LjQsMTM0Ni4wIDIwMDUuNiwxMzQ2LjBDMjAwNS44LDEzNDYuMCAyMDA2LjAsMTQzMy41IDIwMDYuMCwxNTQwLjVMMjAwNi4wLDE3MzUuMEwxNjQ1LjUsMTczNS4wTDEyODUuMCwxNzM1LjBMMTI4NS4wLDE3MjQuNlogTTEzNzcuMCwxNjcyLjBDMTM4MC40LDE2NzAuMSAxMzg2LjUsMTY3MC4xIDE2NjAuMiwxNjcwLjBMMTk0MC4wLDE2NzAuMEwxOTQwLjAsMTUyMy4wQzE5NDAuMCwxMzc4LjggMTk0MC4wLDEzNzYuMSAxOTQxLjksMTM3NS4wQzE5NDMuMCwxMzc0LjUgMTk0NC4xLDEzNzQuMCAxOTQ0LjQsMTM3NC4wQzE5NDQuNywxMzc0LjAgMTk0NS4wLDE0NDEuNSAxOTQ1LjAsMTUyNC4wTDE5NDUuMCwxNjc0LjBMMTY1OS4yLDE2NzQuMEMxMzc3LjEsMTY3My45IDEzNzMuNSwxNjczLjkgMTM3Ny4wLDE2NzIuMFogTTEyMjMuMCwxMjk4LjVMMTIyMy4wLDk1My4wTDE1ODQuMCw5NTMuMEwxOTQ1LjAsOTUzLjBMMTk0NS4wLDk4My41TDE5NDUuMCwxMDE0LjBMMTk3NS41LDEwMTQuMEwyMDA2LjAsMTAxNC4wTDIwMDYuMCwxMDUyLjlDMjAwNi4wLDEwODcuNCAyMDA1LjgsMTA5MS45IDIwMDQuNCwxMDkyLjRDMjAwMy41LDEwOTIuNyAyMDAyLjYsMTA5My4wIDIwMDIuNCwxMDkzLjBDMjAwMi4yLDEwOTMuMCAyMDAyLjAsMTA3Ni4xIDIwMDIuMCwxMDU1LjVMMjAwMi4wLDEwMTcuOUwxOTcxLjgsMTAxOC4wQzE5NDQuMiwxMDE4LjAgMTk0MS4wLDEwMTcuOSAxOTM1LjUsMTAxNi4xTDE5MjkuNSwxMDE0LjFMMTkzNC44LDEwMTQuMUwxOTQwLjAsMTAxNC4wTDE5NDAuMCw5ODUuNUwxOTQwLjAsOTU3LjBMMTU4NC4wLDk1Ny4wTDEyMjguMCw5NTcuMEwxMjI4LjAsMTIyMS4yQzEyMjguMCwxMzY2LjYgMTIyOC4wLDE1MTkuOCAxMjI4LjAsMTU2MS44QzEyMjguMCwxNjMyLjUgMTIyNy45LDE2MzguMyAxMjI2LjMsMTY0MS4xQzEyMjUuMywxNjQyLjcgMTIyNC4yLDE2NDQuMCAxMjIzLjgsMTY0NC4wQzEyMjMuNCwxNjQ0LjAgMTIyMy4wLDE0ODguNSAxMjIzLjAsMTI5OC41WiBNMTI4NS4zLDE1MzMuMEMxMjg1LjUsMTQ5OS4yIDEyODUuNiwxNDk2LjUgMTI4Ny4yLDE0OTYuMkMxMjg4LjksMTQ5NS45IDEyODkuMCwxNDk4LjAgMTI4OS4wLDE1MzAuM0MxMjg5LjAsMTU2My4yIDEyODguOSwxNTY0LjkgMTI4Ny4wLDE1NjcuMUMxMjg1LjEsMTU2OS41IDEyODUuMSwxNTY5LjUgMTI4NS4zLDE1MzMuMFogTTEyODUuMCwxMzk4LjFDMTI4NS4wLDEzNDcuMCAxMjg1LjAsMTM0Ni4xIDEyODcuMCwxMzQ1LjBDMTI4OS4wLDEzNDMuOSAxMjg5LjAsMTM0NC4xIDEyODguOCwxMzk2LjdDMTI4OC41LDE0NDYuMCAxMjg4LjQsMTQ0OS41IDEyODYuOCwxNDQ5LjhDMTI4NS4xLDE0NTAuMSAxMjg1LjAsMTQ0Ny4xIDEyODUuMCwxMzk4LjFaIE0xOTQwLjAsMTI1My4yTDE5NDAuMCwxMTcyLjNMMTk0Mi41LDExNzEuMkwxOTQ1LjAsMTE3MC4wTDE5NDUuMCwxMjUxLjRDMTk0NS4wLDEzMzcuNiAxOTQ1LjIsMTMzNC4wIDE5NDAuOSwxMzM0LjBDMTk0MC40LDEzMzQuMCAxOTQwLjAsMTMwMS42IDE5NDAuMCwxMjUzLjJaIE0yMDAyLjAsMTIyNS41QzIwMDIuMCwxMTQ0LjEgMjAwMi4wLDExNDMuMSAyMDA0LjAsMTE0Mi4wQzIwMDYuMCwxMTQwLjkgMjAwNi4wLDExNDEuMiAyMDA2LjAsMTIyMy45QzIwMDYuMCwxMjk4LjYgMjAwNS44LDEzMDYuOCAyMDA0LjQsMTMwNy40QzIwMDMuNSwxMzA3LjcgMjAwMi42LDEzMDguMCAyMDAyLjQsMTMwOC4wQzIwMDIuMiwxMzA4LjAgMjAwMi4wLDEyNzAuOSAyMDAyLjAsMTIyNS41WiBNMTI4NS4wLDExNjAuMEwxMjg1LjAsMTAxNC4wTDE1NzQuMiwxMDE0LjFDMTg1OC42LDEwMTQuMiAxODYzLjMsMTAxNC4yIDE4NTMuNSwxMDE2LjBDMTg0My45LDEwMTcuOCAxODMxLjUsMTAxNy45IDE1NjYuMiwxMDE3LjlMMTI4OS4wLDEwMTguMEwxMjg5LjAsMTE2MC44QzEyODkuMCwxMzAyLjQgMTI4OS4wLDEzMDMuNSAxMjg3LjAsMTMwNC44QzEyODUuMCwxMzA2LjAgMTI4NS4wLDEzMDUuOCAxMjg1LjAsMTE2MC4wWiBNMTk0MC4wLDExMTQuOEMxOTQwLjEsMTExMS4wIDE5NDIuNSwxMTA2LjAgMTk0NC40LDExMDYuMEMxOTQ0LjcsMTEwNi4wIDE5NDUuMCwxMTA4LjcgMTk0NS4wLDExMTEuOUMxOTQ1LjAsMTExNi4zIDE5NDQuNiwxMTE3LjkgMTk0My40LDExMTguNEMxOTQwLjUsMTExOS41IDE5NDAuMCwxMTE5LjAgMTk0MC4wLDExMTQuOFoiIGZpbGw9IiM4NDg2ODgiIGZpbGwtcnVsZT0iZXZlbm9kZCIvPjwvZz48ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgwLDApIHNjYWxlKDEpIj48cGF0aCBkPSJNMTIzMC41LDE3MTIuMUMxMjI0LjksMTcxMC41IDEyMjIuNSwxNzA5LjIgMTIxOS41LDE3MDYuMEMxMjE2LjcsMTcwMy4wIDEyMTYuNSwxNzAyLjQgMTIxNi41LDE2OTQuNkMxMjE2LjUsMTY4Ni40IDEyMTYuNiwxNjg2LjIgMTIyMi44LDE2NzMuOUMxMjM5LjYsMTY0MC43IDEyODQuMywxNTg3LjggMTM2Mi4xLDE1MDguOUMxMzcyLjgsMTQ5OC4xIDEzODkuMywxNDgxLjggMTM5OC44LDE0NzIuNkwxNDE2LjAsMTQ1Ni4wTDE0MDguMSwxNDU2LjBDMTM5OS40LDE0NTYuMCAxMzgzLjQsMTQ1Ny40IDEzNzIuNSwxNDU5LjFDMTM2NC42LDE0NjAuNCAxMzQ2LjMsMTQ2NS4xIDEzMTMuMCwxNDc0LjVDMTI2NS40LDE0ODcuOSAxMjQ3LjUsMTQ5MS4zIDEyNDIuNSwxNDg3LjZDMTI0MC43LDE0ODYuMyAxMjQwLjcsMTQ4Ni4xIDEyNDIuMywxNDgzLjZDMTI0NC44LDE0NzkuOSAxMjQ4LjIsMTQ3OC40IDEyODAuOSwxNDY2LjVDMTM5OC42LDE0MjMuOSAxNDk0LjYsMTM3NS45IDE2MTIuMCwxMzAxLjFDMTY3NS4yLDEyNjAuOCAxNzUyLjEsMTIwNS4wIDE4MTkuMCwxMTUxLjFDMTg2MS41LDExMTYuNyAxOTAwLjgsMTA4MC45IDE5MDQuMiwxMDczLjNDMTkwOC42LDEwNjMuMyAxOTAwLjAsMTA2MS4xIDE4NzAuNSwxMDY0LjVDMTgxNS42LDEwNzAuOSAxNzI5LjksMTA5NC4zIDE2NDIuMCwxMTI2LjhDMTU4Mi4zLDExNDguOSAxNTUyLjEsMTE2Mi43IDE0OTIuMSwxMTk1LjBDMTQwOC42LDEyMzkuOSAxMzg0LjksMTI1NC45IDEzMTUuMCwxMzA2LjlDMTI1OS40LDEzNDguMiAxMjU4LjcsMTM0OC42IDEyOTIuMCwxMzE5LjJDMTMzMi45LDEyODMuMiAxMzYxLjMsMTI2Mi4wIDE0MjcuMywxMjE4LjJDMTQ4MS4yLDExODIuNCAxNTEyLjMsMTE2NS4wIDE1ODUuNSwxMTI5LjdDMTc2MC41LDEwNDUuMiAxODgyLjYsMTAxMC44IDE5MzYuMiwxMDMwLjlDMTk0OC43LDEwMzUuNyAxOTU1LjAsMTA0My42IDE5NTUuMCwxMDU0LjdDMTk1NS4wLDEwNjUuNiAxOTQ5LjgsMTA3Ni42IDE5MzcuNiwxMDkxLjhDMTkyNC42LDExMDcuOCAxODgyLjEsMTE0NS4wIDE4NDAuMiwxMTc2LjlDMTgzMy41LDExODIuMSAxODI4LjAsMTE4Ni40IDE4MjguMCwxMTg2LjdDMTgyOC4wLDExODYuOSAxODI5LjIsMTE4Ni40IDE4MzAuOCwxMTg1LjZDMTg0MC43LDExODAuNiAxODk1LjMsMTE1NS4xIDE5MTkuNSwxMTQ0LjJDMjAwMi45LDExMDYuOSAyMDk3LjMsMTA2OS41IDIxODkuMCwxMDM3LjNDMjIyMC4zLDEwMjYuMyAyMjc4LjMsMTAwNy4wIDIyNzguNywxMDA3LjNDMjI3OC44LDEwMDcuNSAyMjQ4LjEsMTAyMC42IDIyMTAuMiwxMDM2LjVDMTk0OC4xLDExNDYuNCAxNzcxLjIsMTIzNi41IDE2MjAuMSwxMzM3LjNDMTU3OS4wLDEzNjQuNyAxNTM0LjcsMTM5Ny4yIDE0OTguNywxNDI2LjNDMTQ4MC4yLDE0NDEuMyAxNDgwLjcsMTQ0MC4xIDE0OTIuNSwxNDQxLjVDMTUyMS45LDE0NDUuMiAxNTU2LjEsMTQ1NS41IDE1ODIuNSwxNDY4LjhDMTU5My4zLDE0NzQuMiAxNjA4LjQsMTQ4My41IDE2MTkuOSwxNDkxLjhMMTYzMC4yLDE0OTkuM0wxNjQ4LjIsMTQ5MC40TDE2NjYuMiwxNDgxLjVMMTY2NS41LDE0NjMuNUMxNjY0LjQsMTQzMy42IDE2NjcuOCwxMzQyLjIgMTY3MC44LDEzMjEuNEMxNjcxLjUsMTMxNi41IDE2NzYuNywxNDE2LjEgMTY3Ny44LDE0NTUuOEMxNjc4LjAsMTQ2Ni4zIDE2NzguNCwxNDc1LjAgMTY3OC42LDE0NzUuMEMxNjc4LjgsMTQ3NS4wIDE3MDMuMiwxNDYyLjkgMTczMi44LDE0NDguMUMxOTE3LjIsMTM1NS45IDIwNDIuMywxMzAyLjQgMjE3Mi41LDEyNjAuMUMyMjEyLjQsMTI0Ny4yIDIyNjUuNywxMjMxLjQgMjI2Ni42LDEyMzIuMkMyMjY2LjcsMTIzMi40IDIyNTcuMSwxMjM1LjYgMjI0NS4yLDEyMzkuNEMyMTcxLjMsMTI2Mi42IDIwODEuMiwxMjk3LjEgMTk5Ny4wLDEzMzQuNUMxOTE5LjAsMTM2OS4xIDE4MTEuMiwxNDIyLjggMTcwOS4wLDE0NzcuOEwxNjc5LjUsMTQ5My42TDE2NzkuOCwxNTA1LjZDMTY4MC4yLDE1MjEuMCAxNjgwLjgsMTUyNi4wIDE2ODguMiwxNTcyLjBDMTY5Mi4zLDE1OTcuOSAxNjk0LjEsMTYxMS43IDE2OTMuNywxNjE0LjFDMTY5Mi43LDE2MTkuMiAxNjg3LjcsMTYyNC4wIDE2ODMuMiwxNjI0LjBDMTY3Ny41LDE2MjQuMCAxNjczLjMsMTYxOC42IDE2NjcuMSwxNjAzLjRDMTY1OC42LDE1ODIuNyAxNjQ5LjgsMTU2Ny4zIDE2MzcuMiwxNTUxLjVDMTYzMC42LDE1NDMuMiAxNjE3LjAsMTUyOS4wIDE2MTUuNywxNTI5LjBDMTYxNS4yLDE1MjkuMCAxNTk1LjYsMTUzOS41IDE1NzIuMSwxNTUyLjRDMTQ2OC4zLDE2MDkuMyAxNDM0LjUsMTYyNy4yIDEzNzMuNSwxNjU3LjVDMTMyNS44LDE2ODEuMiAxMjg1LjAsMTcwMC4xIDEyNzAuMiwxNzA1LjRDMTI1NC4xLDE3MTEuMSAxMjM3LjMsMTcxNC4wIDEyMzAuNSwxNzEyLjFaIE0xMjkwLjUsMTY2My43QzEzMzEuMiwxNjQ1LjkgMTM2NS43LDE2MzAuMSAxNDE3LjgsMTYwNS40QzE0NTYuMSwxNTg3LjIgMTU5OS4wLDE1MTYuMCAxNTk5LjAsMTUxNS4xQzE1OTkuMCwxNTE0LjcgMTU5Ni4yLDE1MTIuMyAxNTkyLjgsMTUwOS44QzE1NTkuMywxNDg1LjUgMTUxMS4yLDE0NjYuMiAxNDY4LjIsMTQ2MC4wTDE0NjAuMCwxNDU4LjhMMTQ1NC42LDE0NjMuNEMxNDI5LjMsMTQ4NS4wIDEzODAuNSwxNTMzLjQgMTMyNS44LDE1OTEuM0MxMjk0LjEsMTYyNC44IDEyNjkuNiwxNjU0LjQgMTI1NS41LDE2NzYuM0wxMjUzLjcsMTY3OS4xTDEyNjAuMSwxNjc2LjdDMTI2My42LDE2NzUuMyAxMjc3LjMsMTY2OS41IDEyOTAuNSwxNjYzLjdaIE0xNjY3LjAsMTUyMC4yQzE2NjYuNiwxNTEwLjEgMTY2Ni4xLDE1MDEuNyAxNjY1LjksMTUwMS41QzE2NjUuNywxNTAxLjQgMTY2MC45LDE1MDMuNyAxNjU1LjMsMTUwNi44TDE2NDUuMiwxNTEyLjRMMTY1Mi4zLDE1MjAuNUMxNjU2LjMsMTUyNC45IDE2NjEuMywxNTMwLjkgMTY2My40LDE1MzMuN0MxNjY1LjYsMTUzNi42IDE2NjcuNSwxNTM4LjkgMTY2Ny42LDE1MzguN0MxNjY3LjcsMTUzOC42IDE2NjcuNSwxNTMwLjMgMTY2Ny4wLDE1MjAuMlogTTE0MTguMCwxNDM5LjBDMTQzMy41LDE0MzguMSAxNDM2LjgsMTQzNy42IDE0MzguNSwxNDM2LjFDMTQ0NC40LDE0MzAuOCAxNDY0LjEsMTQxNC4zIDE0NzQuOCwxNDA1LjZDMTQ4MS41LDE0MDAuMiAxNDg3LjAsMTM5NS42IDE0ODcuMCwxMzk1LjRDMTQ4Ny4wLDEzOTQuOSAxNDY4LjAsMTQwNC4wIDE0MzAuMCwxNDIyLjlDMTQwOS45LDE0MzIuOCAxMzk0LjgsMTQ0MC44IDEzOTYuNSwxNDQwLjVDMTM5OC4yLDE0NDAuMiAxNDA3LjgsMTQzOS42IDE0MTguMCwxNDM5LjBaIiBmaWxsPSIjRENCNjUxIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiLz48L2c+PHJlY3QgeD0iMjQzMiIgeT0iOTY4LjY0IiB3aWR0aD0iOSIgaGVpZ2h0PSI3NTAuNzE5OTk5OTk5OTk5OSIgZmlsbD0iI0RDQjY1MSIvPjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDIwMzkuNzQzMzMzMzMzMzMzMywtMTM4OS4wOSkgc2NhbGUoMS4zMDMzMzMzMzMzMzMzMzMyKSI+PHBhdGggZD0iTTE1MjEuNiwyMDk2LjRDMTUwOS4xLDIwOTMuNiAxNTAwLjcsMjA4OC4xIDE0OTYuOSwyMDgwLjRDMTQ5NC4yLDIwNzQuNyAxNDk0LjYsMjA2NS42IDE0OTcuOSwyMDU5LjJDMTUwMC4yLDIwNTQuNyAxNTA2LjMsMjA0OC4xIDE1MTIuMCwyMDQzLjlMMTUxNS41LDIwNDEuM0wxNTA5LjYsMjAzNC4xQzE1MDYuNCwyMDMwLjEgMTUwMy41LDIwMjUuNyAxNTAzLjEsMjAyNC4yQzE1MDEuNSwyMDE4LjYgMTUwMi43LDIwMTcuOCAxNTE5LjEsMjAxMi42QzE1MzQuMiwyMDA3LjggMTUzOC40LDIwMDYuMCAxNTM0LjQsMjAwNi4wQzE1MzEuOCwyMDA2LjAgMTUyMi44LDIwMDEuNyAxNTE4LjQsMTk5OC40QzE1MDMuNCwxOTg2LjkgMTQ5Ny42LDE5NTguNyAxNTA2LjQsMTkzOS41QzE1MTEuMywxOTI4LjggMTUyMC43LDE5MjAuNSAxNTMxLjgsMTkxNi45QzE1MzcuOSwxOTE0LjkgMTU0MS4yLDE5MTQuNyAxNTcxLjIsMTkxNC4yTDE2MDQuMCwxOTEzLjhMMTYwNC4wLDE5MTcuMEwxNjA0LjAsMTkyMC4yTDE1ODcuOCwxOTE5LjZDMTU3NC41LDE5MTkuMSAxNTcxLjksMTkxOS4yIDE1NzMuNSwxOTIwLjJDMTU3NC41LDE5MjAuOSAxNTc3LjgsMTkyMy43IDE1ODAuNywxOTI2LjRDMTU4OC4xLDE5MzMuMiAxNTkyLjcsMTk0Mi43IDE1OTQuMSwxOTU0LjBDMTU5Ny43LDE5ODMuNiAxNTgxLjEsMjAwNS4wIDE1NTIuNSwyMDA3LjZDMTU0My4wLDIwMDguNCAxNTI0LjMsMjAxNC41IDE1MjIuOSwyMDE3LjNDMTUyMC42LDIwMjEuNSAxNTIzLjMsMjAyMi4wIDE1NDkuNiwyMDIyLjBDMTU3MS4xLDIwMjIuMCAxNTc0LjUsMjAyMi4yIDE1ODAuNCwyMDI0LjBDMTU5Mi42LDIwMjcuOCAxNjAwLjgsMjAzNi42IDE2MDMuMCwyMDQ4LjZDMTYwNC42LDIwNTYuNyAxNjAzLjcsMjA2Mi45IDE1OTkuOSwyMDcwLjdDMTU5NC42LDIwODEuOCAxNTgyLjAsMjA5MC41IDE1NjQuOCwyMDk1LjFDMTU1NC42LDIwOTcuOSAxNTMxLjEsMjA5OC42IDE1MjEuNiwyMDk2LjRaIE0xNTY3LjQsMjA4OS41QzE1NzkuNSwyMDg3LjIgMTU4Ni44LDIwODMuNCAxNTkxLjcsMjA3Ni44QzE1OTkuNSwyMDY2LjEgMTU5NS4yLDIwNTEuMyAxNTgyLjMsMjA0NC45QzE1NzcuNiwyMDQyLjYgMTU3Ni43LDIwNDIuNSAxNTQ3LjksMjA0Mi4yTDE1MTguMywyMDQxLjlMMTUxNi43LDIwNDUuMkMxNTEzLjUsMjA1MS45IDE1MTIuOSwyMDU0LjYgMTUxMi45LDIwNjAuOEMxNTEyLjksMjA2OC40IDE1MTYuMywyMDc2LjMgMTUyMS4yLDIwODAuNUMxNTMxLjgsMjA4OS41IDE1NDkuNiwyMDkyLjkgMTU2Ny40LDIwODkuNVogTTU0NS41LDIwMzYuNEM1MzUuMCwyMDMzLjggNTI4LjIsMjAyOS42IDUyMy43LDIwMjIuNkM1MTguMSwyMDE0LjEgNTE4LjAsMjAxMi44IDUxOC4wLDE5NzAuMUM1MTguMCwxOTI1LjMgNTE4LjAsMTkyNS4zIDUxMC44LDE5MjIuMEM1MDguNCwxOTIwLjkgNTA1LjcsMTkyMC4wIDUwNC44LDE5MjAuMEM1MDMuOCwxOTIwLjAgNTAzLjAsMTkxOS4zIDUwMy4wLDE5MTguNUM1MDMuMCwxOTE3LjIgNTA1LjYsMTkxNy4wIDUyMC41LDE5MTcuMEw1MzguMCwxOTE3LjBMNTM4LjAsMTk2MC44QzUzOC4wLDE5ODguOCA1MzguNCwyMDA1LjkgNTM5LjEsMjAwOC41QzU0MS44LDIwMTguNyA1NDkuNywyMDI1LjAgNTYxLjAsMjAyNS44QzU2Ni43LDIwMjYuMiA1NjguNiwyMDI1LjkgNTczLjIsMjAyMy44QzU3Ni4yLDIwMjIuNCA1ODAuMywyMDE5LjggNTgyLjMsMjAxOC4wTDU4Ni4wLDIwMTQuOEw1ODYuMCwxOTcwLjlMNTg2LjAsMTkyNi45TDU4My42LDE5MjQuNUM1ODIuMiwxOTIzLjEgNTc5LjEsMTkyMS41IDU3Ni42LDE5MjAuOEM1NzQuMSwxOTIwLjEgNTcyLjAsMTkxOS4wIDU3Mi4wLDE5MTguM0M1NzIuMCwxOTE3LjMgNTc1LjksMTkxNy4wIDU4OS41LDE5MTcuMEw2MDcuMCwxOTE3LjBMNjA3LjAsMTk3MC42TDYwNy4wLDIwMjQuMkw2MDkuOCwyMDI3LjBDNjExLjQsMjAyOC42IDYxNC42LDIwMzAuMyA2MTYuOCwyMDMxLjBDNjI1LjAsMjAzMy4xIDYyMS4yLDIwMzQuMCA2MDMuNSwyMDM0LjBMNTg2LjAsMjAzNC4wTDU4Ni4wLDIwMjcuNUw1ODYuMCwyMDIwLjlMNTc5LjgsMjAyNi4xQzU3MC45LDIwMzMuNSA1NjQuMywyMDM2LjMgNTU1LjAsMjAzNi42QzU1MC45LDIwMzYuOCA1NDYuNiwyMDM2LjcgNTQ1LjUsMjAzNi40WiBNNjc2LjgsMjAzNS40QzY3Mi42LDIwMzQuNiA2NjUuOCwyMDMzLjAgNjYxLjgsMjAzMS43TDY1NC41LDIwMjkuNEw2NTQuMiwyMDE0LjJDNjUzLjksMTk5Ni4wIDY1NC43LDE5OTUuMSA2NjAuNCwyMDA3LjJDNjY3LjQsMjAyMi4yIDY3OC44LDIwMzAuOSA2OTMuNCwyMDMyLjZDNzA0LjQsMjAzMy45IDcxNS40LDIwMjguOCA3MTkuMSwyMDIwLjdDNzIzLjEsMjAxMS43IDcyMC42LDIwMDIuNCA3MTIuMSwxOTk0LjhDNzA3LjEsMTk5MC40IDcwNC44LDE5ODguOSA2ODQuNSwxOTc3LjVDNjcxLjEsMTk3MC4wIDY2Mi45LDE5NjIuOSA2NTkuNywxOTU2LjBDNjU3LjIsMTk1MC41IDY1Ny4wLDE5NDAuMyA2NTkuMywxOTM0LjhDNjYxLjYsMTkyOS4zIDY2OS40LDE5MjEuNSA2NzQuOSwxOTE5LjJDNjg3LjMsMTkxMy44IDcwNi4wLDE5MTQuNCA3MjQuMiwxOTIwLjdDNzI5LjAsMTkyMi40IDcyOS4wLDE5MjIuNCA3MjkuMCwxOTI3LjBDNzI5LjAsMTkzNy4zIDcyNy43LDE5NTAuMCA3MjYuNiwxOTUwLjBDNzI2LjAsMTk1MC4wIDcyMy44LDE5NDYuMyA3MjEuNywxOTQxLjdDNzE3LjMsMTkzMi4xIDcxMS41LDE5MjQuOCA3MDUuNiwxOTIxLjdDNzAyLjUsMTkyMC4xIDY5OS43LDE5MTkuNiA2OTQuMCwxOTE5LjVDNjgxLjQsMTkxOS41IDY3NS4xLDE5MjQuMyA2NzQuMiwxOTM0LjZDNjczLjMsMTk0NS4xIDY3OS45LDE5NTEuOCA3MDMuNiwxOTY0LjdDNzI2LjIsMTk3Ny4wIDczNC41LDE5ODQuOCA3MzcuNiwxOTk3LjBDNzM4LjksMjAwMi4yIDczOS4wLDIwMDQuNCA3MzguMSwyMDA4LjlDNzM1LjMsMjAyMi45IDcyNi43LDIwMzEuMyA3MTAuOSwyMDM1LjVDNzA0LjEsMjAzNy4zIDY4Ny4xLDIwMzcuMyA2NzYuOCwyMDM1LjRaIE04MTIuMCwyMDM1LjZDNzkwLjYsMjAzMS4wIDc3Ni4wLDIwMTIuMCA3NzIuOCwxOTg0LjdDNzY5LjMsMTk1NS4wIDc4MC41LDE5MjguOCA4MDEuMCwxOTE4LjdDODA2LjgsMTkxNS44IDgwOC41LDE5MTUuNSA4MTguMSwxOTE1LjJDODMzLjUsMTkxNC42IDg0Mi4zLDE5MTcuNSA4NTEuMywxOTI1LjlDODU5LjUsMTkzMy42IDg2NC4yLDE5NDMuMiA4NjUuNiwxOTU1LjBMODY2LjMsMTk2MS4wTDgyOS40LDE5NjEuMkw3OTIuNSwxOTYxLjVMNzkyLjcsMTk3MS44Qzc5My4yLDIwMDIuMyA4MDYuNCwyMDIyLjAgODI4LjAsMjAyNC42QzgzOC4xLDIwMjUuOCA4NTEuNiwyMDIxLjEgODU5LjAsMjAxMy45Qzg2MS45LDIwMTEuMCA4NjMuNSwyMDEwLjIgODY0LjYsMjAxMC44Qzg2NS45LDIwMTEuNSA4NjUuNSwyMDEyLjUgODYyLjIsMjAxNi42Qzg0OC45LDIwMzMuNCA4MzEuNywyMDM5LjkgODEyLjAsMjAzNS42WiBNMTE1NC41LDIwMzUuMUMxMTUxLjgsMjAzNC4xIDExNDcuMCwyMDMxLjggMTE0NC4wLDIwMzAuMUMxMTM2LjMsMjAyNS44IDExMzIuMCwyMDI1LjkgMTEyOC4zLDIwMzAuNUMxMTI2LjgsMjAzMi40IDExMjQuOSwyMDM0LjAgMTEyNC4yLDIwMzQuMEMxMTIzLjMsMjAzNC4wIDExMjMuMCwyMDE2LjcgMTEyMy4wLDE5NTAuOUwxMTIzLjAsMTg2Ny44TDExMjAuMiwxODY1LjBDMTExOC42LDE4NjMuNSAxMTE1LjUsMTg2MS42IDExMTMuMiwxODYwLjlDMTExMC45LDE4NjAuMiAxMTA5LjAsMTg1OS4xIDExMDkuMCwxODU4LjNDMTEwOS4wLDE4NTcuMyAxMTEyLjQsMTg1Ny4wIDExMjYuMCwxODU3LjBMMTE0My4wLDE4NTcuMEwxMTQzLjAsMTg5NC4wQzExNDMuMCwxOTE0LjMgMTE0My4zLDE5MzEuMCAxMTQzLjYsMTkzMS4wQzExNDMuOSwxOTMxLjAgMTE0Ni43LDE5MjguNyAxMTQ5LjgsMTkyNi4wQzExNTMuMCwxOTIzLjIgMTE1OC4wLDE5MTkuNyAxMTYxLjAsMTkxOC4yQzExNjUuOSwxOTE1LjggMTE2Ny43LDE5MTUuNSAxMTc2LjUsMTkxNS41QzExODYuMCwxOTE1LjUgMTE4Ni44LDE5MTUuNyAxMTkyLjgsMTkxOC45QzEyMDQuMCwxOTI1LjAgMTIxMS42LDE5MzUuNyAxMjE2LjIsMTk1MS43QzEyMTguMSwxOTU4LjMgMTIxOC40LDE5NjIuMCAxMjE4LjUsMTk3NS41QzEyMTguNSwxOTg5LjUgMTIxOC4yLDE5OTIuNCAxMjE2LjIsMTk5OS4wQzEyMTAuMiwyMDE4LjEgMTE5Ny43LDIwMzEuMyAxMTgxLjUsMjAzNS42QzExNzQuMSwyMDM3LjYgMTE2MC42LDIwMzcuMyAxMTU0LjUsMjAzNS4xWiBNMTI5MC45LDIwMzUuMkMxMjc0LjAsMjAzMC43IDEyNjEuOCwyMDE4LjAgMTI1NS44LDE5OTkuMEMxMjUzLjgsMTk5Mi4zIDEyNTMuNSwxOTg5LjYgMTI1My41LDE5NzQuNUMxMjUzLjYsMTk1OC44IDEyNTMuOCwxOTU2LjkgMTI1Ni4zLDE5NDkuNEMxMjYyLjAsMTkzMi4yIDEyNzIuOSwxOTIwLjcgMTI4Ny41LDE5MTYuNUMxMjkxLjgsMTkxNS4yIDEyOTYuMCwxOTE0LjkgMTMwMy45LDE5MTUuMkMxMzEzLjIsMTkxNS41IDEzMTUuMywxOTE1LjkgMTMyMS4xLDE5MTguN0MxMzM1LjcsMTkyNS41IDEzNDUuOSwxOTQxLjEgMTM0Ni4wLDE5NTYuOEwxMzQ2LjAsMTk2MS4wTDEzMDkuNSwxOTYxLjBMMTI3My4wLDE5NjEuMEwxMjczLjAsMTk3MC45QzEyNzMuMCwxOTk5LjQgMTI4NC41LDIwMTguOCAxMzA0LjMsMjAyMy42QzEzMTAuMSwyMDI1LjEgMTMxMi4xLDIwMjUuMSAxMzE3LjksMjAyNC4xQzEzMjYuNywyMDIyLjUgMTMzMy44LDIwMTkuMiAxMzM5LjUsMjAxMy45QzEzNDIuOSwyMDEwLjggMTM0NC40LDIwMTAuMCAxMzQ1LjIsMjAxMC44QzEzNDYuMCwyMDExLjYgMTM0NS4yLDIwMTMuNCAxMzQyLjAsMjAxNy41QzEzMzYuNywyMDI0LjQgMTMyNy44LDIwMzEuMiAxMzIwLjIsMjAzNC4wQzEzMTIuMywyMDM3LjEgMTI5OS42LDIwMzcuNiAxMjkwLjksMjAzNS4yWiBNNDY3LjAsMjAzMy45QzQ2MC42LDIwMzIuOCA0NTIuNywyMDI5LjMgNDQ4LjQsMjAyNS43QzQ0Ni43LDIwMjQuMyA0MzMuOSwyMDA2LjQgNDE5LjksMTk4Ni4xTDM5NC41LDE5NDkuMUwzODguMiwxOTQ5LjBMMzgyLjAsMTk0OS4wTDM4Mi4wLDE5ODUuNUMzODIuMCwyMDE2LjMgMzgyLjIsMjAyMi42IDM4My41LDIwMjUuMEMzODUuMSwyMDI4LjAgMzg4LjQsMjAzMC4yIDM5My4yLDIwMzEuNEMzOTQuOCwyMDMxLjcgMzk2LjAsMjAzMi41IDM5Ni4wLDIwMzMuMEMzOTYuMCwyMDMzLjYgMzg2LjgsMjAzNC4wIDM3MS41LDIwMzQuMEMzNTguMCwyMDM0LjAgMzQ3LjAsMjAzMy42IDM0Ny4wLDIwMzMuMUMzNDcuMCwyMDMyLjcgMzQ5LjAsMjAzMS43IDM1MS40LDIwMzEuMEMzNTYuNiwyMDI5LjYgMzU5LjcsMjAyNi43IDM2MS4wLDIwMjEuOUMzNjIuMSwyMDE4LjIgMzYyLjQsMTg3Ny4xIDM2MS40LDE4NzAuOEMzNjAuNiwxODY2LjAgMzU3LjIsMTg2Mi42IDM1MS41LDE4NjEuMEMzNDkuMCwxODYwLjMgMzQ3LjAsMTg1OS4xIDM0Ny4wLDE4NTguNEMzNDcuMCwxODU3LjIgMzUyLjYsMTg1Ny4wIDM3OS4yLDE4NTcuMEM0MjYuMSwxODU3LjEgNDM0LjIsMTg1OC4yIDQ0Ny40LDE4NjYuMEM0NTUuNSwxODcwLjkgNDYyLjIsMTg3OS42IDQ2NS4xLDE4ODkuMUM0NjcuOSwxODk4LjIgNDY3LjQsMTkxMS42IDQ2NC4wLDE5MjAuMEM0NTguMCwxOTM1LjEgNDQyLjgsMTk0Ni4yIDQyNC43LDE5NDguNkM0MjEuMywxOTQ5LjEgNDIwLjAsMTk0OS43IDQyMC40LDE5NTAuNkM0MjEuMiwxOTUyLjYgNDY0LjcsMjAxNS43IDQ2OC44LDIwMjAuN0M0NzIuNywyMDI1LjYgNDgwLjMsMjAzMC43IDQ4NC45LDIwMzEuNkM0ODYuNiwyMDMyLjAgNDg3LjksMjAzMi44IDQ4Ny43LDIwMzMuNEM0ODcuMiwyMDM0LjggNDc0LjQsMjAzNS4xIDQ2Ny4wLDIwMzMuOVogTTg5OS4wLDIwMzMuMUM4OTkuMCwyMDMyLjcgOTAxLjAsMjAzMS43IDkwMy41LDIwMzEuMEM5MDguOSwyMDI5LjUgOTEyLjUsMjAyNi4xIDkxMy40LDIwMjEuOUM5MTQuNSwyMDE2LjQgOTE0LjEsMTkzMi44IDkxMi45LDE5MjguN0M5MTEuOCwxOTI0LjUgOTA3LjgsMTkyMS40IDkwMi4yLDE5MjAuNEM5MDAuNCwxOTIwLjAgODk5LjAsMTkxOS4yIDg5OS4wLDE5MTguNEM4OTkuMCwxOTE3LjMgOTAyLjIsMTkxNy4wIDkxNi41LDE5MTcuMEw5MzQuMCwxOTE3LjBMOTM0LjAsMTkyMy41TDkzNC4wLDE5MzAuMUw5MzkuOSwxOTI1LjJDOTQ4LjcsMTkxNy44IDk1NC4wLDE5MTUuNiA5NjMuNywxOTE1LjJDOTc3LjMsMTkxNC42IDk4OC44LDE5MTkuNCA5OTUuMiwxOTI4LjRMOTk4LjMsMTkzMi45TDEwMDQuOCwxOTI3LjBDMTAxNC4wLDE5MTguNyAxMDIwLjUsMTkxNS44IDEwMzAuNywxOTE1LjJDMTA1MS4wLDE5MTQuMSAxMDY1LjQsMTkyNS4wIDEwNjguMSwxOTQzLjNDMTA2OC42LDE5NDYuNyAxMDY5LjAsMTk2Ni4zIDEwNjkuMCwxOTg2LjhMMTA2OS4wLDIwMjQuMkwxMDcxLjgsMjAyNy4wQzEwNzMuNCwyMDI4LjYgMTA3Ni42LDIwMzAuMyAxMDc4LjgsMjAzMS4wQzEwODcuNiwyMDMzLjMgMTA4Mi45LDIwMzQuMCAxMDU4LjUsMjAzNC4wQzEwMzQuMSwyMDM0LjAgMTAyOS40LDIwMzMuMyAxMDM4LjIsMjAzMS4wQzEwNDAuNCwyMDMwLjMgMTA0My42LDIwMjguNiAxMDQ1LjIsMjAyNy4wTDEwNDguMCwyMDI0LjJMMTA0OC4wLDE5ODQuOEMxMDQ4LjAsMTk2MC4wIDEwNDcuNiwxOTQ0LjEgMTA0Ni45LDE5NDEuNkMxMDQ1LjUsMTkzNi41IDEwMzguOSwxOTI5LjUgMTAzMy41LDE5MjcuNEMxMDMwLjQsMTkyNi4zIDEwMjcuMSwxOTI1LjkgMTAyMi4zLDE5MjYuMkMxMDE0LjgsMTkyNi42IDEwMTAuMCwxOTI4LjYgMTAwNC41LDE5MzMuM0wxMDAwLjgsMTkzNi41TDEwMDAuOSwxOTc2LjBDMTAwMS4wLDE5OTcuNyAxMDAxLjMsMjAxNy42IDEwMDEuNiwyMDIwLjJDMTAwMi40LDIwMjYuMSAxMDA1LjMsMjAyOS4zIDEwMTEuNSwyMDMxLjBDMTAxNC4wLDIwMzEuNyAxMDE2LjAsMjAzMi43IDEwMTYuMCwyMDMzLjFDMTAxNi4wLDIwMzMuNiAxMDA1LjAsMjAzNC4wIDk5MS41LDIwMzQuMEM5NjcuMiwyMDM0LjAgOTYyLjUsMjAzMy4zIDk3MS4wLDIwMzEuMEM5NzMuMiwyMDMwLjQgOTc2LjIsMjAyOC45IDk3Ny43LDIwMjcuNkw5ODAuNSwyMDI1LjJMOTgwLjUsMTk4My44Qzk4MC41LDE5NDMuMiA5ODAuNSwxOTQyLjQgOTc4LjMsMTkzOC40Qzk3MC41LDE5MjMuOCA5NDkuNywxOTIxLjQgOTM2LjcsMTkzMy44TDkzMy45LDE5MzYuNEw5MzQuMiwxOTgwLjhMOTM0LjUsMjAyNS4yTDkzNy4zLDIwMjcuNkM5MzguOCwyMDI4LjkgOTQxLjgsMjAzMC40IDk0NC4wLDIwMzEuMEM5NTIuNSwyMDMzLjMgOTQ3LjgsMjAzNC4wIDkyMy41LDIwMzQuMEM5MTAuMCwyMDM0LjAgODk5LjAsMjAzMy42IDg5OS4wLDIwMzMuMVogTTExNzcuOCwyMDMxLjFDMTE4Ni4wLDIwMjYuOSAxMTkzLjQsMjAxNC40IDExOTYuNiwxOTk5LjVDMTE5OC45LDE5ODguMyAxMTk5LjAsMTk2NS45IDExOTYuNiwxOTU2LjVDMTE5MS44LDE5MzYuNyAxMTgxLjIsMTkyNS44IDExNjcuMCwxOTI1LjlDMTE1OS42LDE5MjUuOSAxMTUzLjcsMTkyOC40IDExNDcuNiwxOTM0LjBMMTE0My4wLDE5MzguM0wxMTQzLjAsMTk3My4wQzExNDMuMCwyMDEzLjggMTE0My41LDIwMTYuOSAxMTUxLjUsMjAyNS44QzExNTguOCwyMDM0LjAgMTE2OC40LDIwMzUuOSAxMTc3LjgsMjAzMS4xWiBNMTM4MC4wLDIwMzMuMEMxMzgwLjAsMjAzMi41IDEzODEuOCwyMDMxLjYgMTM4NC4wLDIwMzEuMEMxMzg2LjIsMjAzMC40IDEzODkuMiwyMDI4LjkgMTM5MC43LDIwMjcuNkwxMzkzLjUsMjAyNS4yTDEzOTMuOCwxOTc2LjdMMTM5NC4xLDE5MjguMkwxMzkxLjYsMTkyNS4yQzEzOTAuMCwxOTIzLjUgMTM4Ny4zLDE5MjEuOCAxMzg0LjUsMTkyMS4wQzEzODIuMCwxOTIwLjMgMTM4MC4wLDE5MTkuMSAxMzgwLjAsMTkxOC40QzEzODAuMCwxOTE3LjMgMTM4My4zLDE5MTcuMCAxMzk3LjAsMTkxNy4wTDE0MTQuMCwxOTE3LjBMMTQxNC4wLDE5MjguNUMxNDE0LjAsMTkzNC44IDE0MTQuNCwxOTQwLjAgMTQxNC44LDE5NDAuMEMxNDE1LjIsMTk0MC4wIDE0MTYuNCwxOTM4LjYgMTQxNy40LDE5MzYuOUMxNDIwLjQsMTkzMS44IDE0MzEuMCwxOTIxLjEgMTQzNS45LDE5MTguMkMxNDQwLjAsMTkxNS44IDE0NDEuNSwxOTE1LjUgMTQ0OS42LDE5MTUuNUMxNDU3LjYsMTkxNS41IDE0NTkuMSwxOTE1LjggMTQ2Mi4zLDE5MTguMEMxNDY2LjYsMTkyMC45IDE0NjkuNCwxOTI2LjkgMTQ2OC41LDE5MzEuMUMxNDY3LjYsMTkzNS4yIDE0NjIuNiwxOTM5LjAgMTQ1OC4zLDE5MzkuMEMxNDU1LjIsMTkzOS4wIDE0NTMuOSwxOTM4LjEgMTQ0OC45LDE5MzMuMEMxNDQzLjYsMTkyNy41IDE0NDIuOCwxOTI3LjAgMTQzOC44LDE5MjcuMEMxNDMyLjEsMTkyNy4wIDE0MjYuOCwxOTMxLjAgMTQxOC4zLDE5NDIuNEwxNDE0LjAsMTk0OC4yTDE0MTQuMCwxOTgyLjBDMTQxNC4wLDIwMDAuNSAxNDE0LjMsMjAxNy44IDE0MTQuNiwyMDIwLjRDMTQxNS40LDIwMjYuMSAxNDE4LjQsMjAyOS4zIDE0MjQuNSwyMDMxLjBDMTQyNy4wLDIwMzEuNyAxNDI5LjAsMjAzMi43IDE0MjkuMCwyMDMzLjFDMTQyOS4wLDIwMzMuNiAxNDE4LjAsMjAzNC4wIDE0MDQuNSwyMDM0LjBDMTM4OS41LDIwMzQuMCAxMzgwLjAsMjAzMy42IDEzODAuMCwyMDMzLjBaIE0xNTU1LjEsMjAwMi44QzE1NjAuOSwyMDAxLjEgMTU2Ni4zLDE5OTUuOSAxNTY5LjMsMTk4OS4zQzE1NzMuMSwxOTgwLjggMTU3NC4zLDE5NzEuNyAxNTczLjgsMTk1Ni42QzE1NzMuNCwxOTQ1LjkgMTU3Mi44LDE5NDIuMyAxNTcwLjgsMTkzNi44QzE1NjYuMCwxOTI0LjAgMTU1OS41LDE5MTguNiAxNTQ4LjUsMTkxOC41QzE1MzcuNSwxOTE4LjUgMTUyOS4yLDE5MjUuOCAxNTI1LjQsMTkzOC44QzE1MjEuNiwxOTUxLjcgMTUyMS45LDE5NzMuMiAxNTI2LjAsMTk4NS42QzE1MzAuNywxOTk5LjcgMTU0Mi40LDIwMDYuNyAxNTU1LjEsMjAwMi44WiBNODQ1LjcsMTk1MS4yQzg0NC43LDE5MzguNyA4MzkuMiwxOTI3LjEgODMyLjEsMTkyMi4zQzgyMS4wLDE5MTQuOCA4MDkuMCwxOTE4LjIgODAxLjIsMTkzMS4xQzc5Ny43LDE5MzYuOSA3OTQuNywxOTQ1LjYgNzkzLjYsMTk1My4yTDc5Mi45LDE5NTguMEw4MTkuNiwxOTU4LjBMODQ2LjMsMTk1OC4wTDg0NS43LDE5NTEuMlogTTEzMjYuNiwxOTUyLjJDMTMyNS4xLDE5NDAuMSAxMzIxLjUsMTkzMC45IDEzMTUuOSwxOTI1LjJDMTMxMS4yLDE5MjAuNCAxMzA3LjMsMTkxOC43IDEzMDEuMCwxOTE4LjZDMTI5MS40LDE5MTguNiAxMjg1LjEsMTkyMy41IDEyNzkuNSwxOTM1LjVDMTI3Ni4zLDE5NDIuNCAxMjc0LjAsMTk1MC43IDEyNzQuMCwxOTU1LjVMMTI3NC4wLDE5NTguMEwxMzAwLjYsMTk1OC4wTDEzMjcuMiwxOTU4LjBMMTMyNi42LDE5NTIuMlogTTQyMi4yLDE5NDMuMUM0MzUuMCwxOTM4LjIgNDQzLjksMTkyNS44IDQ0Ni4yLDE5MTAuMUM0NDkuMSwxODg5LjMgNDM5LjgsMTg3MC40IDQyMy40LDE4NjQuMEM0MTguMiwxODYxLjkgNDE1LjQsMTg2MS42IDM5OS44LDE4NjEuMkwzODIuMCwxODYwLjhMMzgyLjAsMTkwMy41TDM4Mi4wLDE5NDYuM0wzOTkuMiwxOTQ1LjhDNDEzLjgsMTk0NS4zIDQxNy40LDE5NDQuOSA0MjIuMiwxOTQzLjFaIiBmaWxsPSIjMUUyMjI3IiBmaWxsLXJ1bGU9ImV2ZW5vZGQiLz48L2c+PGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMjY0LjYwMzMzMzMzMzMzMzQ3LC0xMDQ4LjkyKSBzY2FsZSgxLjMwMzMzMzMzMzMzMzMzMzIpIj48cGF0aCBkPSJNMTg5Ni45LDIwMzUuMkMxODgwLjAsMjAzMC43IDE4NjcuOCwyMDE4LjAgMTg2MS44LDE5OTkuMEMxODU5LjgsMTk5Mi4zIDE4NTkuNSwxOTg5LjYgMTg1OS41LDE5NzQuNUMxODU5LjYsMTk1OC44IDE4NTkuOCwxOTU2LjkgMTg2Mi4zLDE5NDkuNEMxODY4LjAsMTkzMi4yIDE4NzguOSwxOTIwLjcgMTg5My41LDE5MTYuNUMxODk3LjgsMTkxNS4yIDE5MDIuMCwxOTE0LjkgMTkwOS45LDE5MTUuMkMxOTE5LjIsMTkxNS41IDE5MjEuMywxOTE1LjkgMTkyNy4xLDE5MTguN0MxOTQxLjcsMTkyNS41IDE5NTEuOSwxOTQxLjEgMTk1Mi4wLDE5NTYuOEwxOTUyLjAsMTk2MS4wTDE5MTUuNSwxOTYxLjBMMTg3OS4wLDE5NjEuMEwxODc5LjAsMTk3MC45QzE4NzkuMCwxOTk5LjQgMTg5MC41LDIwMTguOCAxOTEwLjMsMjAyMy42QzE5MTYuMSwyMDI1LjEgMTkxOC4xLDIwMjUuMSAxOTIzLjksMjAyNC4xQzE5MzIuNywyMDIyLjUgMTkzOS44LDIwMTkuMiAxOTQ1LjUsMjAxMy45QzE5NDguOSwyMDEwLjggMTk1MC40LDIwMTAuMCAxOTUxLjIsMjAxMC44QzE5NTIuOCwyMDEyLjQgMTk0NS41LDIwMjEuNyAxOTM4LjEsMjAyNy4zQzE5MzQuNywyMDI5LjggMTkyOS40LDIwMzIuOCAxOTI2LjIsMjAzNC4wQzE5MTguMywyMDM3LjEgMTkwNS42LDIwMzcuNiAxODk2LjksMjAzNS4yWiBNMjI3OC41LDIwMzYuMEMyMjY0LjgsMjAzMi42IDIyNTYuOCwyMDIzLjMgMjI1Ni43LDIwMTAuN0MyMjU2LjcsMTk5My40IDIyNjQuNywxOTg1LjAgMjI5My41LDE5NzEuOEMyMzA5LjIsMTk2NC42IDIzMTguMiwxOTU4LjkgMjMyMy4wLDE5NTMuM0MyMzI2LjEsMTk0OS42IDIzMjYuMSwxOTQ5LjMgMjMyNS44LDE5NDEuMEMyMzI1LjIsMTkyOC4yIDIzMjAuOSwxOTIxLjQgMjMxMi4xLDE5MTkuMEMyMzAyLjQsMTkxNi40IDIyOTUuOCwxOTIyLjcgMjI5MC4xLDE5NDAuMkMyMjg3LjUsMTk0OC4wIDIyODMuNywxOTUyLjAgMjI3OC42LDE5NTIuMEMyMjY3LjUsMTk1Mi4wIDIyNjYuMywxOTM2LjcgMjI3Ni42LDE5MjYuM0MyMjg0LjAsMTkxOS4wIDIyOTUuNiwxOTE1LjAgMjMwOS43LDE5MTUuMEMyMzIyLjEsMTkxNS4wIDIzMzAuMCwxOTE3LjkgMjMzNy4xLDE5MjUuMEMyMzQ2LjQsMTkzNC4yIDIzNDYuMywxOTMzLjggMjM0Ni44LDE5ODEuNUMyMzQ3LjEsMjAxNy4yIDIzNDcuMywyMDIyLjcgMjM0OC43LDIwMjQuMkMyMzUxLjAsMjAyNi44IDIzNTUuNywyMDI2LjUgMjM1OC4zLDIwMjMuN0MyMzYwLjYsMjAyMS4yIDIzNjMuMCwyMDIxLjIgMjM2My4wLDIwMjMuNkMyMzYzLjAsMjAyNS44IDIzNTUuOSwyMDMzLjIgMjM1Mi4zLDIwMzQuN0MyMzQ3LjYsMjAzNi42IDIzMzkuNiwyMDM2LjMgMjMzNS4wLDIwMzQuMEMyMzMwLjgsMjAzMS44IDIzMjcuMCwyMDI3LjMgMjMyNy4wLDIwMjQuM0MyMzI3LjAsMjAyMC44IDIzMjUuOCwyMDIxLjAgMjMyMC42LDIwMjUuNEMyMzEzLjgsMjAzMS4xIDIzMDkuNiwyMDMzLjUgMjMwMy4xLDIwMzUuNEMyMjk3LjQsMjAzNy4xIDIyODQuMCwyMDM3LjQgMjI3OC41LDIwMzYuMFogTTI1NzYuNywyMDM2LjBDMjU3MC40LDIwMzQuNCAyNTY0LjgsMjAzMS4wIDI1NTkuNSwyMDI1LjZDMjU1My4yLDIwMTkuMSAyNTQ5LjksMjAxMi45IDI1NDYuNCwyMDAxLjVDMjU0NC4wLDE5OTMuNSAyNTQzLjcsMTk5MC44IDI1NDMuNiwxOTc3LjVDMjU0My41LDE5NjAuNiAyNTQ0LjcsMTk1NC41IDI1NTAuNSwxOTQyLjJDMjU1NC43LDE5MzMuMyAyNTYzLjksMTkyMy43IDI1NzIuMCwxOTE5LjhDMjU4NC41LDE5MTMuOCAyNjAwLjAsMTkxMy41IDI2MTEuNSwxOTE4LjhDMjYxNS4yLDE5MjAuNiAyNjE4LjQsMTkyMi4wIDI2MTguNiwxOTIyLjBDMjYxOS4zLDE5MjIuMCAyNjE5LjAsMTg3My41IDI2MTguNCwxODcwLjFDMjYxNy41LDE4NjUuOSAyNjEzLjUsMTg2Mi4yIDI2MDguMywxODYwLjlDMjYwNS44LDE4NjAuMiAyNjA0LjAsMTg1OS4yIDI2MDQuMCwxODU4LjRDMjYwNC4wLDE4NTcuMyAyNjA3LjMsMTg1Ny4wIDI2MjEuNSwxODU3LjBMMjYzOS4wLDE4NTcuMEwyNjM5LjAsMTkzOS41QzI2MzkuMCwyMDExLjQgMjYzOS4yLDIwMjIuNSAyNjQwLjUsMjAyNS4wQzI2NDIuMSwyMDI4LjAgMjY0NS40LDIwMzAuMiAyNjUwLjIsMjAzMS40QzI2NTEuOCwyMDMxLjcgMjY1My4wLDIwMzIuNSAyNjUzLjAsMjAzMy4wQzI2NTMuMCwyMDMzLjYgMjY0Ni40LDIwMzQuMCAyNjM2LjAsMjAzNC4wTDI2MTkuMCwyMDM0LjBMMjYxOS4wLDIwMjYuOUwyNjE5LjAsMjAxOS44TDI2MTMuNCwyMDI1LjBDMjYwNC45LDIwMzIuNiAyNTk3LjMsMjAzNi4xIDI1ODguMSwyMDM2LjZDMjU4My45LDIwMzYuOCAyNTc4LjgsMjAzNi41IDI1NzYuNywyMDM2LjBaIE0yNzIwLjAsMjAzNS4yQzI3MDMuMiwyMDMwLjggMjY5MS4xLDIwMTguMSAyNjg1LjAsMTk5OC41QzI2ODEuOSwxOTg4LjYgMjY4MS4xLDE5NjkuNCAyNjgzLjQsMTk1OC4wQzI2ODYuOSwxOTM5LjkgMjY5Ny4yLDE5MjUuMSAyNzEwLjcsMTkxOC43QzI3MTcuMywxOTE1LjYgMjcxNy45LDE5MTUuNSAyNzMwLjUsMTkxNS41QzI3NDMuMCwxOTE1LjUgMjc0My43LDE5MTUuNiAyNzUwLjAsMTkxOC42QzI3NjUuMCwxOTI1LjggMjc3My4zLDE5MzguMSAyNzc1LjQsMTk1Ni4yTDI3NzYuMCwxOTYxLjBMMjczOS4yLDE5NjEuMkwyNzAyLjUsMTk2MS41TDI3MDIuMiwxOTY5LjBDMjcwMS40LDE5ODUuOSAyNzA2LjYsMjAwMy4yIDI3MTUuMywyMDEyLjdDMjcyMS4xLDIwMTkuMCAyNzI5LjIsMjAyMy40IDI3MzYuOSwyMDI0LjVDMjc0Ny4wLDIwMjUuOSAyNzYwLjMsMjAyMS40IDI3NjguNSwyMDEzLjlDMjc3MS44LDIwMTAuOCAyNzczLjQsMjAxMC4wIDI3NzQuMiwyMDEwLjhDMjc3Ni40LDIwMTMuMCAyNzY3LjYsMjAyMy4zIDI3NTguNiwyMDI5LjJDMjc0Ny4wLDIwMzYuNyAyNzMzLjcsMjAzOC44IDI3MjAuMCwyMDM1LjJaIE0yODMxLjAsMjAzNS4zQzI4MjYuMywyMDM0LjUgMjgxOS42LDIwMzIuOCAyODE2LjAsMjAzMS43TDI4MDkuNSwyMDI5LjVMMjgwOS4yLDIwMTQuMkMyODA5LjEsMjAwNS4yIDI4MDkuMywxOTk5LjAgMjgwOS45LDE5OTkuMEMyODEwLjQsMTk5OS4wIDI4MTIuNywyMDAyLjggMjgxNC45LDIwMDcuNEMyODIxLjcsMjAyMS40IDI4MzEuMSwyMDI5LjIgMjg0NC41LDIwMzIuMEMyODU1LjMsMjAzNC4yIDI4NjQuNiwyMDMxLjYgMjg3MC44LDIwMjQuNkMyODc0LjMsMjAyMC42IDI4NzUuNSwyMDE2LjEgMjg3NC44LDIwMDkuMEMyODczLjgsMTk5OS4yIDI4NjcuNSwxOTkzLjQgMjg0My4yLDE5ODAuMEMyODE5LjcsMTk2Ny4xIDI4MTIuMCwxOTU4LjcgMjgxMi4wLDE5NDYuMEMyODEyLjAsMTkyMC42IDI4MzcuNywxOTA5LjMgMjg3My4wLDE5MTkuMUMyODg0LjIsMTkyMi4yIDI4ODMuNSwxOTIxLjIgMjg4My4yLDE5MzMuN0MyODgyLjksMTk0Ni43IDI4ODIuMywxOTUwLjAgMjg4MC40LDE5NTAuMEMyODc5LjYsMTk1MC4wIDI4NzkuMCwxOTQ5LjQgMjg3OS4wLDE5NDguNkMyODc5LjAsMTk0Ny45IDI4NzcuMiwxOTQzLjYgMjg3NS4wLDE5MzkuMkMyODcwLjMsMTkyOS45IDI4NjIuNiwxOTIyLjEgMjg1Ni4zLDE5MjAuMkMyODQ3LjQsMTkxNy41IDI4MzguNCwxOTE5LjQgMjgzMi45LDE5MjQuOUMyODIyLjcsMTkzNS4xIDI4MjkuNCwxOTQ4LjggMjg1MC4wLDE5NjAuMkMyODcxLjEsMTk3MS43IDI4NzUuOCwxOTc0LjggMjg4Mi4xLDE5ODEuMEMyODkyLjYsMTk5MS4zIDI4OTUuNSwyMDAyLjMgMjg5MC45LDIwMTQuNkMyODg3LjAsMjAyNC44IDI4NzguMSwyMDMyLjIgMjg2NS41LDIwMzUuNUMyODU4LjEsMjAzNy40IDI4NDIuNCwyMDM3LjMgMjgzMS4wLDIwMzUuM1ogTTE3MDkuMCwyMDMzLjBDMTcwOS4wLDIwMzIuNSAxNzEwLjksMjAzMS42IDE3MTMuMiwyMDMxLjBDMTcxNS40LDIwMzAuMyAxNzE4LjYsMjAyOC42IDE3MjAuMiwyMDI3LjBMMTcyMy4wLDIwMjQuMkwxNzIzLjAsMTk0Ni4wTDE3MjMuMCwxODY3LjhMMTcyMC4yLDE4NjUuMEMxNzE4LjYsMTg2My41IDE3MTUuNSwxODYxLjYgMTcxMy4yLDE4NjAuOUMxNzEwLjksMTg2MC4yIDE3MDkuMCwxODU5LjEgMTcwOS4wLDE4NTguM0MxNzA5LjAsMTg1Ny4yIDE3MTguNCwxODU3LjAgMTc2NC4yLDE4NTcuMkwxODE5LjUsMTg1Ny41TDE4MjEuNiwxODcxLjBDMTgyNS40LDE4OTUuMSAxODI1LjMsMTg5NC4wIDE4MjMuNiwxODk0LjBDMTgyMi43LDE4OTQuMCAxODIyLjAsMTg5My4yIDE4MjIuMCwxODkyLjJDMTgyMi4wLDE4ODguNiAxODE2LjgsMTg3OS43IDE4MTEuOCwxODc0LjdDMTgwMS4xLDE4NjMuOSAxNzkwLjYsMTg2MS4wIDE3NjIuOCwxODYxLjBMMTc0NC4wLDE4NjEuMEwxNzQ0LjAsMTkwMS41TDE3NDQuMCwxOTQyLjBMMTc2MC4zLDE5NDIuMEMxNzc4LjEsMTk0Mi4wIDE3ODMuNywxOTQxLjAgMTc4OS40LDE5MzYuN0MxNzkzLjQsMTkzMy42IDE3OTguNCwxOTI0LjQgMTgwMC4xLDE5MTYuOEMxODAwLjksMTkxMy41IDE4MDIuMCwxOTExLjAgMTgwMi43LDE5MTEuMEMxODAzLjcsMTkxMS4wIDE4MDQuMCwxOTE3LjkgMTgwNC4wLDE5NDMuNUMxODA0LjAsMTk3MC4wIDE4MDMuOCwxOTc2LjAgMTgwMi43LDE5NzYuMEMxODAxLjksMTk3Ni4wIDE4MDAuOCwxOTczLjggMTgwMC4xLDE5NzAuNUMxNzk4LjIsMTk2Mi4xIDE3OTMuNCwxOTUzLjMgMTc4OC44LDE5NTAuMEMxNzgzLjQsMTk0Ni4wIDE3NzcuMywxOTQ1LjAgMTc1OS41LDE5NDUuMEwxNzQ0LjAsMTk0NS4wTDE3NDQuMCwxOTg0LjZMMTc0NC4wLDIwMjQuMkwxNzQ2LjgsMjAyNy4wQzE3NDguNCwyMDI4LjYgMTc1MS42LDIwMzAuMyAxNzUzLjgsMjAzMS4wQzE3NjIuNiwyMDMzLjMgMTc1Ny45LDIwMzQuMCAxNzMzLjUsMjAzNC4wQzE3MTguNSwyMDM0LjAgMTcwOS4wLDIwMzMuNiAxNzA5LjAsMjAzMy4wWiBNMTk4Ni4wLDIwMzMuMEMxOTg2LjAsMjAzMi41IDE5ODcuOCwyMDMxLjYgMTk5MC4wLDIwMzEuMEMxOTkyLjIsMjAzMC40IDE5OTUuMiwyMDI4LjkgMTk5Ni43LDIwMjcuNkwxOTk5LjUsMjAyNS4yTDE5OTkuOCwxOTc2LjdMMjAwMC4xLDE5MjguMkwxOTk3LjYsMTkyNS4yQzE5OTYuMCwxOTIzLjUgMTk5My4zLDE5MjEuOCAxOTkwLjUsMTkyMS4wQzE5ODguMCwxOTIwLjMgMTk4Ni4wLDE5MTkuMSAxOTg2LjAsMTkxOC40QzE5ODYuMCwxOTE3LjMgMTk4OS4zLDE5MTcuMCAyMDAzLjAsMTkxNy4wTDIwMjAuMCwxOTE3LjBMMjAyMC4wLDE5MjguNUMyMDIwLjAsMTkzNC44IDIwMjAuMywxOTQwLjAgMjAyMC44LDE5NDAuMEMyMDIxLjIsMTk0MC4wIDIwMjMuMCwxOTM3LjcgMjAyNC45LDE5MzUuMEMyMDMwLjAsMTkyNy40IDIwNDAuMCwxOTE4LjUgMjA0NS42LDE5MTYuNkMyMDU1LjUsMTkxMy4yIDIwNjguNSwxOTE1LjUgMjA3Mi4zLDE5MjEuM0MyMDc3LjcsMTkyOS42IDIwNzMuMiwxOTM5LjAgMjA2My44LDE5MzkuMEMyMDYxLjMsMTkzOS4wIDIwNTkuNSwxOTM3LjggMjA1NC45LDE5MzMuMEMyMDQ5LjYsMTkyNy41IDIwNDguOCwxOTI3LjAgMjA0NC44LDE5MjcuMEMyMDM4LjEsMTkyNy4wIDIwMzIuOCwxOTMxLjAgMjAyNC4zLDE5NDIuNEwyMDIwLjAsMTk0OC4yTDIwMjAuMCwxOTgyLjBDMjAyMC4wLDIwMDAuNSAyMDIwLjMsMjAxNy44IDIwMjAuNiwyMDIwLjRDMjAyMS40LDIwMjYuMSAyMDI0LjQsMjAyOS4zIDIwMzAuNSwyMDMxLjBDMjAzMy4wLDIwMzEuNyAyMDM1LjAsMjAzMi43IDIwMzUuMCwyMDMzLjFDMjAzNS4wLDIwMzMuNiAyMDI0LjAsMjAzNC4wIDIwMTAuNSwyMDM0LjBDMTk5NS41LDIwMzQuMCAxOTg2LjAsMjAzMy42IDE5ODYuMCwyMDMzLjBaIE0yMTA4LjAsMjAzMy4wQzIxMDguMCwyMDMyLjUgMjEwOS45LDIwMzEuNiAyMTEyLjIsMjAzMS4wQzIxMTQuNCwyMDMwLjMgMjExNy42LDIwMjguNiAyMTE5LjIsMjAyNy4wTDIxMjIuMCwyMDI0LjJMMjEyMi4wLDE5NzYuMkwyMTIyLjAsMTkyOC4yTDIxMTkuNCwxOTI1LjFDMjExNy43LDE5MjMuMSAyMTE1LjIsMTkyMS42IDIxMTIuNCwxOTIwLjlDMjEwOS44LDE5MjAuMiAyMTA4LjAsMTkxOS4yIDIxMDguMCwxOTE4LjRDMjEwOC4wLDE5MTcuMiAyMTExLjAsMTkxNy4wIDIxMjUuMiwxOTE3LjJMMjE0Mi41LDE5MTcuNUwyMTQyLjgsMTkyNC4yTDIxNDMuMSwxOTMwLjlMMjE0OC40LDE5MjYuNkMyMTYxLjksMTkxNS42IDIxNzYuNSwxOTEyLjMgMjE5MS4wLDE5MTcuMEMyMjAzLjMsMTkyMC45IDIyMTAuOSwxOTI5LjkgMjIxMy4wLDE5NDIuN0MyMjEzLjYsMTk0NS45IDIyMTQuMCwxOTY1LjUgMjIxNC4wLDE5ODYuM0wyMjE0LjAsMjAyNC4yTDIyMTYuOCwyMDI3LjBDMjIxOC40LDIwMjguNiAyMjIxLjYsMjAzMC4zIDIyMjMuOCwyMDMxLjBDMjIzMi42LDIwMzMuMyAyMjI3LjksMjAzNC4wIDIyMDMuNSwyMDM0LjBDMjE5MC4wLDIwMzQuMCAyMTc5LjAsMjAzMy42IDIxNzkuMCwyMDMzLjJDMjE3OS4wLDIwMzIuNyAyMTgwLjksMjAzMS44IDIxODMuMiwyMDMxLjFDMjE4NS41LDIwMzAuNCAyMTg4LjYsMjAyOC41IDIxOTAuMiwyMDI3LjBMMjE5My4wLDIwMjQuMkwyMTkzLjAsMTk4NC44QzIxOTMuMCwxOTYwLjIgMjE5Mi42LDE5NDQuMSAyMTkxLjksMTk0MS43QzIxOTAuNiwxOTM2LjggMjE4NC42LDE5MzAuMiAyMTc5LjUsMTkyNy45QzIxNzAuOCwxOTIzLjkgMjE1Ni41LDE5MjYuMiAyMTQ3LjEsMTkzMy4wTDIxNDMuMCwxOTM2LjBMMjE0My4wLDE5ODAuMUwyMTQzLjAsMjAyNC4yTDIxNDUuOCwyMDI3LjBDMjE0Ny40LDIwMjguNiAyMTUwLjYsMjAzMC4zIDIxNTIuOCwyMDMxLjBDMjE2MS42LDIwMzMuMyAyMTU2LjksMjAzNC4wIDIxMzIuNSwyMDM0LjBDMjExNy41LDIwMzQuMCAyMTA4LjAsMjAzMy42IDIxMDguMCwyMDMzLjBaIE0yMzk0LjAsMjAzMy4xQzIzOTQuMCwyMDMyLjYgMjM5NS4yLDIwMzEuOSAyMzk2LjgsMjAzMS41QzI0MDIuNSwyMDMwLjEgMjQwNi4zLDIwMjcuNiAyNDA3LjYsMjAyNC40QzI0MDguNywyMDIxLjcgMjQwOS4wLDIwMTIuMCAyNDA5LjAsMTk3Ni4wQzI0MDkuMCwxOTI0LjcgMjQwOS4xLDE5MjUuMyAyNDAxLjgsMTkyMi4wQzIzOTkuNCwxOTIwLjkgMjM5Ni43LDE5MjAuMCAyMzk1LjgsMTkyMC4wQzIzOTQuOCwxOTIwLjAgMjM5NC4wLDE5MTkuMyAyMzk0LjAsMTkxOC41QzIzOTQuMCwxOTE3LjIgMjM5Ni42LDE5MTcuMCAyNDExLjUsMTkxNy4wTDI0MjkuMCwxOTE3LjBMMjQyOS4wLDE5MjQuMUwyNDI5LjAsMTkzMS4xTDI0MzQuOCwxOTI2LjZDMjQzOC4wLDE5MjQuMiAyNDQzLjYsMTkyMC43IDI0NDcuMSwxOTE4LjlDMjQ1Mi41LDE5MTYuMSAyNDU0LjksMTkxNS41IDI0NjIuMSwxOTE1LjJDMjQ3Ni44LDE5MTQuNSAyNDg3LjcsMTkxOS4zIDI0OTQuMywxOTI5LjNDMjQ5OS45LDE5MzcuOSAyNTAwLjAsMTkzOS4xIDI1MDAuMCwxOTgyLjFDMjUwMC4wLDIwMjguNSAyNDk5LjgsMjAyNy4yIDI1MDkuMiwyMDMwLjVDMjUxMi40LDIwMzEuNiAyNTE1LjAsMjAzMi44IDI1MTUuMCwyMDMzLjJDMjUxNS4wLDIwMzMuNyAyNTAzLjgsMjAzNC4wIDI0OTAuMCwyMDM0LjBDMjQ2Ni45LDIwMzQuMCAyNDYwLjYsMjAzMy4zIDI0NjcuOCwyMDMxLjVDMjQ3My41LDIwMzAuMSAyNDc3LjMsMjAyNy42IDI0NzguNiwyMDI0LjRDMjQ3OS43LDIwMjEuOCAyNDgwLjAsMjAxMy40IDI0ODAuMCwxOTg0LjhDMjQ4MC4wLDE5NjMuNyAyNDc5LjUsMTk0Ni42IDI0NzguOSwxOTQ0LjBDMjQ3Ny41LDE5MzcuOSAyNDczLjksMTkzMi42IDI0NjguNywxOTI5LjNDMjQ2NC45LDE5MjYuNyAyNDYzLjcsMTkyNi41IDI0NTUuMCwxOTI2LjVDMjQ0Ni41LDE5MjYuNSAyNDQ0LjksMTkyNi44IDI0NDAuMSwxOTI5LjRDMjQzNy4xLDE5MzAuOSAyNDMzLjQsMTkzMy4xIDI0MzEuOCwxOTM0LjNMMjQyOS4wLDE5MzYuNEwyNDI5LjAsMTk3OC45QzI0MjkuMCwyMDI4LjkgMjQyOC43LDIwMjcuMiAyNDM4LjIsMjAzMC41QzI0NDEuNCwyMDMxLjYgMjQ0NC4wLDIwMzIuOCAyNDQ0LjAsMjAzMy4yQzI0NDQuMCwyMDMzLjcgMjQzMi44LDIwMzQuMCAyNDE5LjAsMjAzNC4wQzI0MDUuMCwyMDM0LjAgMjM5NC4wLDIwMzMuNiAyMzk0LjAsMjAzMy4xWiBNMjMxMC42LDIwMjcuNUMyMzEzLjMsMjAyNi4yIDIzMTcuOSwyMDIzLjAgMjMyMC44LDIwMjAuNEwyMzI2LjAsMjAxNS44TDIzMjYuMCwxOTg1LjdDMjMyNS45LDE5NjUuMSAyMzI1LjYsMTk1Ni4wIDIzMjQuOSwxOTU3LjJDMjMyMy4zLDE5NjAuMCAyMzEzLjIsMTk2Ny4yIDIzMDIuMSwxOTczLjZDMjI4My43LDE5ODQuMCAyMjc3LjAsMTk5Mi43IDIyNzcuMCwyMDA1LjlDMjI3Ny4wLDIwMTQuMiAyMjc4LjYsMjAxOC43IDIyODMuMywyMDIzLjRDMjI5MC40LDIwMzAuNCAyMzAxLjQsMjAzMi4xIDIzMTAuNiwyMDI3LjVaIE0yNjA3LjIsMjAyMy4xQzI2MDkuOCwyMDIxLjggMjYxMy41LDIwMTkuMCAyNjE1LjUsMjAxNy4wTDI2MTkuMSwyMDEzLjNMMjYxOC44LDE5NzUuOUMyNjE4LjUsMTkzOC44IDI2MTguNSwxOTM4LjUgMjYxNi4xLDE5MzMuNkMyNjA1LjcsMTkxMi40IDI1ODIuMiwxOTE0LjAgMjU3MC43LDE5MzYuN0MyNTY1LjYsMTk0Ni43IDI1NjIuNCwxOTY5LjQgMjU2NC4xLDE5ODUuMUMyNTY2LjEsMjAwNC43IDI1NzMuMCwyMDE3LjggMjU4NC4zLDIwMjMuNUMyNTkxLjAsMjAyNi45IDI2MDAuMCwyMDI2LjcgMjYwNy4yLDIwMjMuMVogTTE5MzIuNiwxOTUyLjJDMTkzMC43LDE5MzYuMyAxOTI0LjcsMTkyNS4wIDE5MTUuNiwxOTIwLjNDMTkxMS41LDE5MTguMiAxOTAyLjMsMTkxOC4yIDE4OTguNCwxOTIwLjJDMTg5My41LDE5MjIuOCAxODg5LjAsMTkyOC4wIDE4ODUuOSwxOTM0LjVDMTg4Mi44LDE5NDEuMSAxODgwLjAsMTk1MC45IDE4ODAuMCwxOTU1LjJMMTg4MC4wLDE5NTguMEwxOTA2LjYsMTk1OC4wTDE5MzMuMiwxOTU4LjBMMTkzMi42LDE5NTIuMlogTTI3NTYuMCwxOTU0LjJDMjc1Ni4wLDE5NDUuOCAyNzUxLjksMTkzMy44IDI3NDYuNiwxOTI2LjdDMjc0NC4wLDE5MjMuMSAyNzM3LjcsMTkxOS40IDI3MzIuOSwxOTE4LjVDMjcyNC4wLDE5MTYuOSAyNzE0LjMsMTkyMy40IDI3MDkuMCwxOTM0LjVDMjcwNi4xLDE5NDAuNiAyNzAzLjAsMTk1MS40IDI3MDMuMCwxOTU1LjhMMjcwMy4wLDE5NTguMEwyNzI5LjUsMTk1OC4wTDI3NTYuMCwxOTU4LjBMMjc1Ni4wLDE5NTQuMloiIGZpbGw9IiMxRTIyMjciIGZpbGwtcnVsZT0iZXZlbm9kZCIvPjwvZz48ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSg5NTYuNDgyNTAwMDAwMDAwMywtOTk5LjMyODE2NjY2NjY2NjIpIHNjYWxlKDEuMjM4MTY2NjY2NjY2NjY2NCkiPjxwYXRoIGQ9Ik0xNDQ3LjAsMjE5OS4zQzE0NDEuMiwyMTg0LjcgMTQzNS43LDIxNzAuNyAxNDM0LjcsMjE2OC4zTDE0MzMuMCwyMTYzLjlMMTQzNi43LDIxNjQuMkwxNDQwLjQsMjE2NC41TDE0NDguNiwyMTg2LjBDMTQ1My4yLDIxOTcuOCAxNDU3LjIsMjIwOC4xIDE0NTcuNywyMjA4LjlDMTQ1OC4zLDIyMDkuOCAxNDYwLjEsMjIwNi4yIDE0NjMuNCwyMTk3LjRDMTQ2Ni4xLDIxOTAuMyAxNDcwLjEsMjE3OS45IDE0NzIuMywyMTc0LjJMMTQ3Ni4yLDIxNjQuMEwxNDc5LjcsMjE2NC4wQzE0ODIuNiwyMTY0LjAgMTQ4My4xLDIxNjQuMyAxNDgyLjYsMjE2NS44QzE0NzguNywyMTc2LjIgMTQ1OC41LDIyMjYuMCAxNDU4LjEsMjIyNi4wQzE0NTcuOCwyMjI2LjAgMTQ1Mi44LDIyMTQuMCAxNDQ3LjAsMjE5OS4zWiBNMTI0NS4wLDIyMjMuM0MxMjQ1LjAsMjIyMS4yIDEyNzIuNCwyMTYxLjAgMTI3My4wLDIxNjEuN0MxMjczLjYsMjE2Mi4zIDEyODguOCwyMTk3LjQgMTI5OC43LDIyMjAuOEwxMzAwLjEsMjIyNC4xTDEyOTYuNCwyMjIzLjhDMTI5Mi44LDIyMjMuNSAxMjkyLjYsMjIyMy4zIDEyODkuMiwyMjE1LjJMMTI4NS44LDIyMDcuMEwxMjcyLjIsMjIwNy4wTDEyNTguNSwyMjA3LjBMMTI1NS4wLDIyMTUuM0MxMjUxLjcsMjIyMy4wIDEyNTEuMywyMjIzLjUgMTI0OC4yLDIyMjMuOEMxMjQ2LjUsMjIyNC4wIDEyNDUuMCwyMjIzLjggMTI0NS4wLDIyMjMuM1ogTTEzNDcuMCwyMTk0LjBMMTM0Ny4wLDIxNjQuMEwxMzU1LjksMjE2NC4wQzEzNzEuNiwyMTY0LjAgMTM4MS44LDIxNjguNyAxMzg3LjcsMjE3OC44QzEzODkuOSwyMTgyLjYgMTM5MC41LDIxODQuOSAxMzkwLjgsMjE5Mi4xQzEzOTEuMiwyMTk5LjggMTM5MC45LDIyMDEuNCAxMzg4LjgsMjIwNi4yQzEzODcuNCwyMjA5LjEgMTM4NS4wLDIyMTIuOCAxMzgzLjQsMjIxNC40QzEzNzcuMiwyMjIwLjUgMTM2Ni4xLDIyMjQuMCAxMzUyLjgsMjIyNC4wTDEzNDcuMCwyMjI0LjBMMTM0Ny4wLDIxOTQuMFogTTE1NDkuMywyMjIzLjBDMTU0MC4zLDIyMjEuMSAxNTMyLjEsMjIxNC45IDE1MjcuOCwyMjA2LjdDMTUyNC43LDIyMDAuOSAxNTI0LjYsMjE4Ny40IDE1MjcuNSwyMTgxLjVDMTUzMC42LDIxNzUuMiAxNTM3LjgsMjE2OC42IDE1NDQuMywyMTY2LjFDMTU2OC43LDIxNTcuMCAxNTkyLjYsMjE3OC4yIDE1ODUuNiwyMjAyLjVDMTU4My4zLDIyMTAuMSAxNTc1LjAsMjIxOC45IDE1NjcuNSwyMjIxLjNDMTU2MS4wLDIyMjMuNSAxNTU0LjUsMjIyNC4xIDE1NDkuMywyMjIzLjBaIE0xNjU5LjcsMjIyMy4wQzE2NDUuNiwyMjE5LjQgMTYzNi42LDIyMDguMCAxNjM2LjYsMjE5My41QzE2MzYuNiwyMTg1LjEgMTYzOS4yLDIxNzguOCAxNjQ1LjMsMjE3Mi43QzE2NTEuNSwyMTY2LjUgMTY1Ni45LDIxNjQuNSAxNjY3LjUsMjE2NC41QzE2NzcuNCwyMTY0LjUgMTY4MS41LDIxNjYuMCAxNjg4LjUsMjE3Mi4xTDE2OTIuMSwyMTc1LjNMMTY4OS45LDIxNzcuNkwxNjg3LjcsMjE3OS45TDE2ODMuMywyMTc2LjBDMTY3Ny43LDIxNzEuMSAxNjczLjQsMjE2OS43IDE2NjUuNSwyMTcwLjJDMTY1My4yLDIxNzEuMCAxNjQ0LjEsMjE3OS45IDE2NDMuMiwyMTkyLjFDMTY0Mi42LDIyMDAuMyAxNjQ0LjgsMjIwNS44IDE2NTEuMCwyMjExLjNDMTY2MC41LDIyMTkuOCAxNjcyLjcsMjIyMC4xIDE2ODEuMiwyMjEyLjJDMTY4My4zLDIyMTAuMiAxNjg1LjcsMjIwNi43IDE2ODYuNSwyMjA0LjVMMTY4Ny44LDIyMDAuNUwxNjc5LjIsMjIwMC4wQzE2NzAuNiwyMTk5LjUgMTY3MC41LDIxOTkuNSAxNjcwLjIsMjE5Ni44TDE2NjkuOSwyMTk0LjBMMTY4Mi40LDIxOTQuMEwxNjk1LjAsMjE5NC4wTDE2OTQuNCwyMTk4LjhDMTY5My41LDIyMDUuNCAxNjkwLjQsMjIxMi4yIDE2ODYuNywyMjE1LjhDMTY4MC40LDIyMjEuOSAxNjY4LjMsMjIyNS4xIDE2NTkuNywyMjIzLjBaIE0xNzM3LjAsMjIyMy4zQzE3MzcuMCwyMjIxLjIgMTc2NC40LDIxNjEuMCAxNzY1LjAsMjE2MS43QzE3NjUuNiwyMTYyLjMgMTc4MC44LDIxOTcuNCAxNzkwLjcsMjIyMC44TDE3OTIuMSwyMjI0LjFMMTc4OC40LDIyMjMuOEMxNzg0LjgsMjIyMy41IDE3ODQuNiwyMjIzLjMgMTc4MS4yLDIyMTUuMkwxNzc3LjgsMjIwNy4wTDE3NjQuMiwyMjA3LjBMMTc1MC41LDIyMDcuMEwxNzQ3LjAsMjIxNS4zQzE3NDMuNywyMjIzLjAgMTc0My4zLDIyMjMuNSAxNzQwLjIsMjIyMy44QzE3MzguNSwyMjI0LjAgMTczNy4wLDIyMjMuOCAxNzM3LjAsMjIyMy4zWiBNMTgzOS4wLDIxOTQuMEwxODM5LjAsMjE2My43TDE4NDkuOCwyMTY0LjJDMTg2NS42LDIxNjQuOSAxODc0LjAsMjE2OS4xIDE4NzkuNCwyMTc5LjBDMTg4NS41LDIxOTAuMyAxODgzLjcsMjIwNS4yIDE4NzUuMiwyMjEzLjlDMTg2OS4wLDIyMjAuMiAxODYyLjIsMjIyMi44IDE4NDkuMCwyMjIzLjZMMTgzOS4wLDIyMjQuM0wxODM5LjAsMjE5NC4wWiBNMTk1NS4zLDIyMjIuNUMxOTQxLjEsMjIxOC42IDE5MzIuNiwyMjA3LjcgMTkzMi42LDIxOTMuNUMxOTMyLjcsMjE4Mi4wIDE5MzguNCwyMTczLjAgMTk0OS4zLDIxNjcuMkMxOTUzLjgsMjE2NC45IDE5NTUuNiwyMTY0LjUgMTk2My41LDIxNjQuNUMxOTcxLjMsMjE2NC41IDE5NzMuMiwyMTY0LjkgMTk3Ny41LDIxNjcuMkMxOTg4LjUsMjE3My4wIDE5OTMuOSwyMTgxLjkgMTk5NC4wLDIxOTMuOUMxOTk0LjAsMjIwNS45IDE5ODguNSwyMjE0LjcgMTk3Ny43LDIyMTkuOUMxOTcwLjEsMjIyMy42IDE5NjIuNCwyMjI0LjUgMTk1NS4zLDIyMjIuNVogTTEzNzEuMywyMjE1LjJDMTM4NS43LDIyMDguOCAxMzg5LjcsMjE4OS4yIDEzNzguOSwyMTc3LjVDMTM3NC4xLDIxNzIuMyAxMzY4LjEsMjE3MC4wIDEzNTkuMywyMTcwLjBMMTM1My4wLDIxNzAuMEwxMzUzLjAsMjE5My4zQzEzNTMuMCwyMjA2LjIgMTM1My4zLDIyMTcuMCAxMzUzLjgsMjIxNy40QzEzNTUuMCwyMjE4LjcgMTM2Ni43LDIyMTcuMiAxMzcxLjMsMjIxNS4yWiBNMTU2OC4zLDIyMTQuMkMxNTc0LjMsMjIxMC45IDE1NzkuNCwyMjAzLjUgMTU4MC40LDIxOTYuN0MxNTgxLjgsMjE4Ny40IDE1NzUuNywyMTc2LjQgMTU2Ni42LDIxNzIuMUMxNTYxLjUsMjE2OS42IDE1NTEuOSwyMTY5LjMgMTU0Ni43LDIxNzEuNUMxNTMwLjUsMjE3OC4yIDE1MjYuMywyMTk4LjQgMTUzOC41LDIyMTAuNUMxNTQ2LjQsMjIxOC41IDE1NTguMSwyMjE5LjkgMTU2OC4zLDIyMTQuMlogTTE4NjIuNiwyMjE1LjVDMTg3MS41LDIyMTEuOCAxODc2LjQsMjIwNC4xIDE4NzYuNCwyMTkzLjVDMTg3Ni40LDIxNzkuMCAxODY4LjQsMjE3MS4xIDE4NTIuOCwyMTcwLjJMMTg0NS4wLDIxNjkuN0wxODQ1LjAsMjE5NC4wTDE4NDUuMCwyMjE4LjNMMTg1MS45LDIyMTcuN0MxODU1LjYsMjIxNy40IDE4NjAuNSwyMjE2LjQgMTg2Mi42LDIyMTUuNVogTTE5NzIuNCwyMjE2LjBDMTk5MC45LDIyMDkuMCAxOTkzLjQsMjE4My45IDE5NzYuNiwyMTczLjVDMTk3Mi4yLDIxNzAuOCAxOTcwLjgsMjE3MC41IDE5NjMuNSwyMTcwLjVDMTk1Ni4yLDIxNzAuNSAxOTU0LjgsMjE3MC44IDE5NTAuNCwyMTczLjVDMTkzOC4wLDIxODEuMiAxOTM1LjMsMjE5Ny45IDE5NDQuNiwyMjA4LjhDMTk1Mi4wLDIyMTcuNSAxOTYxLjcsMjIyMC4wIDE5NzIuNCwyMjE2LjBaIE0xMjgyLjcsMjE5OS44QzEyNzguNCwyMTg4LjcgMTI3Mi42LDIxNzYuMCAxMjcyLjAsMjE3Ni43QzEyNzEuMCwyMTc3LjggMTI2Mi4wLDIxOTguOCAxMjYyLjAsMjIwMC4wQzEyNjIuMCwyMjAwLjYgMTI2Ni4zLDIyMDEuMCAxMjcyLjYsMjIwMS4wQzEyODAuNywyMjAxLjAgMTI4My4xLDIyMDAuNyAxMjgyLjcsMjE5OS44WiBNMTc3NC43LDIxOTkuOEMxNzcwLjQsMjE4OC43IDE3NjQuNiwyMTc2LjAgMTc2NC4wLDIxNzYuN0MxNzYzLjAsMjE3Ny44IDE3NTQuMCwyMTk4LjggMTc1NC4wLDIyMDAuMEMxNzU0LjAsMjIwMC42IDE3NTguMywyMjAxLjAgMTc2NC42LDIyMDEuMEMxNzcyLjcsMjIwMS4wIDE3NzUuMSwyMjAwLjcgMTc3NC43LDIxOTkuOFoiIGZpbGw9IiMxRTIyMjciIGZpbGwtcnVsZT0iZXZlbm9kZCIvPjwvZz48L3N2Zz4=';
+ const head=(t,s)=>`<div class="top"><div><h1>${t}</h1><div class="s">${s}</div></div><img class="brand" src="${LOGO}" alt="Rusemberg Fernandes, Advogado"></div>`;
+ const kp=`<div class="kp"><span class="${ne?'er':'ok'}">${ne?ne+' ponto(s) a ajustar':'✓ Dentro da lei'}</span><span>Limites: <b>${limTx}</b></span><span>${S.cct?'Com acordo ou convenção coletiva':'Sem acordo de compensação: até <b>8h por dia</b>'}</span></div>`;
+ const tabela=`<table class="m" style="--rh:${rowH}px"><thead><tr><th class="nm">Funcionário</th>${th}<th class="tt">Dias</th><th class="tt">Folgas</th><th class="tt" style="width:44px">Horas</th></tr></thead><tbody>${corpo}<tr class="cvr"><th class="nm">Em serviço</th>${cobert}<td></td><td></td><td></td></tr></tbody></table>`;
+ const ferL=idx.filter(i=>D[i].hol).map(i=>fD(D[i].ms).slice(0,5)+' '+esc(D[i].hol));
+ const strip=`<div class="cl"><span><span class="sym" style="background:#fff;box-shadow:inset 0 0 0 1px #d6d0c0"> </span> dia de trabalho</span><span><span class="sym" style="background:#DCB651;color:#1E2227">F</span> folga</span><span><span class="sym" style="background:#f8e9e7;color:#9b2c2c;box-shadow:inset 0 0 0 1px #e8c4bf">D</span> domingo</span><span>${S.fer?'<span class="sym" style="background:#f8e9e7;box-shadow:inset 0 0 0 1.2px #9b2c2c"> </span>':'<span class="sym" style="background:#f3dcd8;color:#9b2c2c">—</span>'} feriado nacional${S.fer?' (com expediente)':''}</span><span><span class="sym" style="background:#f3f1ec;color:#9a9b9d">·</span> empresa fechada</span>${corte>=0?'<span><span class="sym" style="box-shadow:inset 2px 0 0 #1E2227;background:#F5F2EA">16</span> início da nova jornada</span>':''}${ferL.length?`<span class="fl"><b>Feriados no mês:</b> ${ferL.join(' · ')}</span>`:''}<span class="nt">Horas já sem o intervalo${S.funcs.some(f=>calc(f).night)?' · hora noturna (22h–5h) contada como 52min30s':''}</span></div>`;
+ const legBlk=`<div class="bx"><h2>Turnos</h2><div class="lgs">${leg}</div></div>`;
+ const resBlk=`<div class="bx"><h2>Horas por funcionário <small>semanas de segunda a domingo</small></h2>${resumo}</div>`;
+ const chkBlk=`<div class="bx"><h2>Conferência pela lei</h2><ul class="ck">${chk}</ul></div>`;
+ const ptsBlk=pts.length?`<ul class="pt">${pts.slice(0,um?3:8).map(x=>`<li>${x.msg}</li>`).join('')}</ul>`:'';
+ const law=`<p class="lw"><b>Base legal:</b> até 8h por dia (CF, art. 7º, XIII); 44h semanais até 15/12/2026, 42h de 16/12/2026 a 15/12/2027 e 40h depois (EC 141/2026); acima de 8h por dia só com acordo ou convenção (CLT, art. 59, § 2º; EC 141/2026, art. 7º). Duas folgas por semana (CF, art. 7º, XV), domingo ao menos a cada 3 semanas no comércio (Lei 10.101/2000) e no máximo 6 dias seguidos (OJ 410 do TST). Intervalo de 1h a 2h acima de 6h de trabalho (CLT, art. 71) e 11h entre jornadas (CLT, art. 66). Documento de apoio ao planejamento; a convenção coletiva da categoria pode exigir ajustes.</p>`;
+ const ft=`<div class="ft"><span><b>Rusemberg Tavares Fernandes</b> · Advogado · OAB/PB 30.070</span><span>(83) 99606-9271 · rusemberg@rusemberg.adv.br · www.rusemberg.adv.br · @rusembergadv</span></div>`;
+ const sub=`${n} funcionário${n>1?'s':''} · funcionamento: ${dias}${S.fer?' e feriados':''} · gerada em ${hj}${lead&&lead.email?' para '+esc(lead.nome?lead.nome+' ('+lead.email+')':lead.email):''}`;
+ /* quadro principal: horário de cada funcionário (chegada, descanso, saída), por período se mudar no dia 16 */
+ const hrRows=[];F.forEach((f,e)=>{const g=new Map();linhas[e].forEach((p,j)=>{if(p.t!=='w')return;const pp=perD(D[idx[j]]);if(!g.has(p.k))g.set(p.k,{x:cod.get(p.k),ps:new Set(),dias:0});const o=g.get(p.k);o.ps.add(pp);o.dias++});
+  const L=[...g.values()];L.forEach((o,q)=>{const pl=[...o.ps];const per=L.length>1&&allP.length>1?(pl.length>1?'mês todo':pl[0]===0?'até 15/12':pl[0]===1?(allP.includes(0)?'a partir de 16/12':'até 15/12'):'a partir de 16/12'):'';
+   hrRows.push({nome:q?'':esc(f.nome),per,c:o.x.c,sh:o.x.sh,dias:o.dias,first:!q})})});
+ const hasPer=hrRows.some(r=>r.per);
+ const hrTr=r=>{const c=r.c,di=c.bd?`<span class="dz">${hm(c.bs%1440)} às ${hm((c.bs+c.bd)%1440)}</span>`:'<span class="dz no">sem intervalo</span>';
+  return`<tr class="${r.first?'':'cont'}"><td class="fn">${r.nome}</td>${hasPer?`<td class="pe">${r.per}</td>`:''}<td class="hh">${r.sh.ent}</td><td>${di}</td><td class="du">${c.bd?fIv(c.bd):'—'}</td><td class="hh">${r.sh.sai}</td><td class="du"><b>${fH(c.comp)}</b>${c.night?`<small>${fH(c.night)} noturnas</small>`:''}</td><td class="du">${r.dias}</td></tr>`};
+ const hrHead=`<thead><tr><th>Funcionário</th>${hasPer?'<th>Período</th>':''}<th>Chegada</th><th>Descanso</th><th>Duração</th><th>Saída</th><th>Por dia</th><th>Dias</th></tr></thead>`;
+ const half=(hrRows.length>8&&um)||hrRows.length>18?Math.ceil(hrRows.length/2):0;
+ let cut=half;if(half){while(cut<hrRows.length&&!hrRows[cut].first)cut++}
+ const hrTab=rows=>`<table class="hr">${hrHead}<tbody>${rows.map(hrTr).join('')}</tbody></table>`;
+ const hrBlk=`<div class="hb"><h2>Horário de cada funcionário <small>trabalho por dia já sem o descanso${T.k>1?` · descansos revezados: sempre ${T.min} de ${n} na loja`:''}</small></h2>${half&&cut<hrRows.length?`<div class="h2c">${hrTab(hrRows.slice(0,cut))}${hrTab(hrRows.slice(cut))}</div>`:hrTab(hrRows)}</div>`;
+ /* conferência resumida em uma linha; só detalha o que exige atenção */
+ const okN=tmp.querySelectorAll('.ci.ok').length,totN=tmp.querySelectorAll('.ci').length;
+ const confBlk=`<div class="cf ${ne?'er':pts.length?'wa':'ok'}"><b>${ne?'!':'✓'} Conferência pela lei: ${okN} de ${totN} itens conformes</b> <span>(jornada diária, limite semanal, 2 folgas por semana, descanso, 11h entre jornadas, até 6 dias seguidos, domingo, feriados, horário noturno e cobertura da loja)</span>${(()=>{const L=um?(hrRows.length>8?1:3):6;return pts.length?`<ul>${pts.slice(0,L).map(x=>`<li>${x.msg}</li>`).join('')}${pts.length>L?`<li>e mais ${pts.length-L} ponto(s) do mesmo tipo ou relacionados.</li>`:''}</ul>`:''})()}</div>`;
+ const law2=`<p class="lw"><b>Base legal:</b> CF, art. 7º, XIII e XV; EC 141/2026 (44h até 15/12/2026, 42h até 15/12/2027 e 40h depois); CLT, arts. 59, 66, 71 e 73; Lei 10.101/2000; OJ 410 do TST. Documento de apoio ao planejamento; a convenção coletiva da categoria pode exigir ajustes.</p>`;
+ const p1=`<section class="pg">${head(`Escala de trabalho <em>5x2</em> · ${mesN}`,sub)}${kp}${tabela}${strip}`+
+  (um?`${hrBlk}${confBlk}${law2}${ft}`:ft)+`</section>`;
+ const p2=um?'':`<section class="pg">${head(`Horários · ${mesN}`,sub)}${hrBlk}${confBlk}${law2}${ft}</section>`;
+ return`<!DOCTYPE html><html lang="pt-BR"><head><meta charset="utf-8"><title>Escala 5x2 · ${mesN}</title>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Jost:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>@page{size:A4 landscape;margin:9mm 10mm 11mm}
+*{box-sizing:border-box}body{margin:0;font:8.5pt/1.35 "Jost","Century Gothic",Arial,sans-serif;color:#1E2227;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+h1,h2{font-family:"Libre Baskerville",Georgia,serif;font-weight:400;margin:0}
+.pg{page-break-after:always}.pg:last-child{page-break-after:auto}
+.top{display:grid;grid-template-columns:1fr auto;align-items:end;gap:12px;padding-bottom:6px;border-bottom:1px solid #e6e1d3;position:relative}
+.top::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:1.5px;background:linear-gradient(90deg,transparent,#DCB651 8%,#DCB651 45%,transparent 90%)}
+.top h1{font-size:18pt;line-height:1.1}.top h1 em{color:#8a6a22}.top .s{font-size:8pt;color:#6a6c6f;margin-top:3px}
+.brand{height:15mm;width:auto;display:block;margin-bottom:2px}
+.kp{display:flex;flex-wrap:wrap;gap:6px;margin:7px 0 6px}.kp span{border:1px solid #ebe6da;border-radius:99px;padding:3px 10px;font-size:7.8pt;background:#fbfaf6}.kp .ok{border-color:#cfe6d7;background:#eef7f1;color:#1f6a3c;font-weight:700}.kp .er{border-color:#f0cfca;background:#fcefed;color:#9b2c2c;font-weight:700}
+table.m{width:100%;border-collapse:separate;border-spacing:1.5px;table-layout:fixed}
+table.m th,table.m td{text-align:center;padding:0;height:var(--rh);font-size:8pt;border-radius:3px}
+table.m thead th{height:26px;background:#F5F2EA;font-weight:600;line-height:1.05}table.m thead th b{display:block;font-size:8.5pt}table.m thead th i{display:block;font-style:normal;font-size:6.5pt;color:#848688}
+table.m thead th.dom{background:#f8e9e7;color:#9b2c2c}table.m thead th.dom i{color:#9b2c2c}table.m thead th.fer{background:#9b2c2c;color:#fff}table.m thead th.fer i{color:#fff;font-weight:700;font-size:5.8pt;letter-spacing:.04em}
+table.m th.nm.one b,table.m th.nm.one small{display:inline}table.m th.nm.one small{float:right;margin-top:1px}table.m th.nm{width:150px;text-align:left;padding:2px 6px;background:none;font-weight:400;font-size:8.2pt;white-space:nowrap;overflow:hidden;line-height:1.25}table.m th.nm b{display:block;font-weight:700;font-size:8.4pt}table.m th.nm small{display:block;font-size:7pt;color:#55585c}table.m th.nm small b{display:inline;font-size:7pt;color:#1E2227}
+table.m thead th.nm{background:none;font-size:7.5pt;color:#6a6c6f;font-weight:600}
+table.m th.tt,table.m td.tt{width:30px;font-size:7.5pt}table.m td.tt{background:#F5F2EA;font-weight:600}table.m td.hr{width:44px;background:#1E2227;color:#fff}
+table.m thead th.tt{font-size:6.5pt;color:#6a6c6f;background:none;line-height:1.1}
+td.w{background:#fff;box-shadow:inset 0 0 0 1px #e6e1d3}td.f{background:#DCB651;color:#1E2227;font-weight:700;font-size:calc(var(--rh) * .34)}td.x{color:#a9abad;background:#f3f1ec}
+td.dom.x{background:#f8e9e7;color:#c98e87}td.dom.w{background:#fdf5f4;box-shadow:inset 0 0 0 1px #ecd0cb}td.fer.x{background:#f3dcd8;color:#9b2c2c;font-weight:700}td.fer.w{background:#f8e9e7;box-shadow:inset 0 0 0 1.2px #9b2c2c}td.f.dom,td.f.fer{box-shadow:inset 0 -3px 0 #9b2c2c}tr.cvr td.fer,tr.cvr td.dom{color:#9b2c2c!important}
+.corte{box-shadow:inset 2px 0 0 #1E2227!important}
+tr.cvr td,tr.cvr th{height:15px!important;font-size:7pt!important;color:#6a6c6f;background:none!important;font-weight:400}
+.cl{display:flex;flex-wrap:wrap;gap:4px 14px;align-items:center;margin:6px 0 0;font-size:7.4pt;color:#3d4046}.cl>span{display:inline-flex;align-items:center;gap:4px}.cl .nt{color:#848688;margin-left:auto}.cl .fl{color:#9b2c2c}.cl .fl b{color:#9b2c2c}
+.sym{display:inline-grid;place-items:center;min-width:18px;height:14px;border-radius:3px;font-weight:700;font-size:6.8pt;padding:0 3px;background:#F5F2EA}
+.b3{display:grid;grid-template-columns:1.15fr 1fr;gap:9px;margin-top:8px;align-items:stretch}
+.b2{display:grid;grid-template-columns:1.2fr 1fr;gap:12px;margin-top:8px;align-items:start}.b1{margin-top:8px}
+.bx{border:1px solid #ebe6da;border-radius:8px;padding:7px 9px}.bx h2{font-size:10pt;margin-bottom:5px}.bx h2 small{font:400 7pt "Jost",sans-serif;color:#848688;margin-left:4px}
+.lgs{display:grid;grid-template-columns:1fr;gap:5px}.b1 .lgs{grid-template-columns:repeat(2,1fr);gap:5px 14px}
+.lg{display:flex;gap:7px;align-items:center}.chip{flex:none;width:22px;height:22px;border-radius:5px;display:grid;place-items:center;font-weight:700;font-size:10pt;border:1px solid rgba(0,0,0,.06)}
+.lg p{margin:0;font-size:8pt}.lg p span{color:#c0b48a}.lg small{color:#6a6c6f;font-size:7pt}
+table.rs{width:100%;border-collapse:collapse;font-size:7.8pt}table.rs th,table.rs td{border-bottom:1px solid #ebe6da;padding:3px 5px;text-align:right;white-space:nowrap}table.rs th{background:#F5F2EA;font-weight:600}table.rs th small{display:block;font-weight:400;color:#848688;font-size:6.3pt}table.rs th:first-child,table.rs td:first-child{text-align:left}
+ul.ck{margin:0;padding:0;list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:3px}
+ul.ck li{display:grid;grid-template-columns:12px 1fr;column-gap:5px;border:1px solid #ebe6da;border-radius:5px;padding:2px 6px;font-size:7.4pt;line-height:1.25}ul.ck i{grid-row:1/3;font-style:normal;font-weight:700;color:#1f6a3c}ul.ck span{color:#6a6c6f;font-size:6.6pt}
+ul.ck li.warn{background:#fdf6e3}ul.ck li.warn i{color:#7d5600}ul.ck li.err{background:#fcefed}ul.ck li.err i{color:#9b2c2c}
+ul.pt{margin:6px 0 0;padding-left:14px;font-size:7.4pt}ul.pt li{margin-bottom:2px}
+.hb{margin-top:9px}.hb h2{font-size:11pt;margin-bottom:4px}.hb h2 small{font:400 7.4pt "Jost",sans-serif;color:#848688;margin-left:6px}
+.h2c{display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:start}
+table.hr{width:100%;border-collapse:collapse;font-size:8.4pt}table.hr th{background:#1E2227;color:#fff;font-weight:600;font-size:7.4pt;padding:4px 7px;text-align:center;letter-spacing:.02em}table.hr th:first-child{text-align:left;border-radius:4px 0 0 0}table.hr th:last-child{border-radius:0 4px 0 0}
+table.hr td{padding:3.5px 7px;}.h2c table.hr td{padding:2px 5px}.h2c table.hr td.hh{font-size:9.5pt}.h2c .dz{padding:0 8px;font-size:8pt}table.hr td{border-bottom:1px solid #ebe6da;text-align:center;white-space:nowrap}table.hr tr:nth-child(even) td{background:#fbfaf6}
+table.hr td.fn{text-align:left;font-weight:700}table.hr td.pe{color:#6a6c6f;font-size:7.6pt}table.hr tr.cont td{border-top:0}
+table.hr td.hh{font:700 10.5pt "Libre Baskerville",serif}
+.dz{display:inline-block;background:#DCB651;color:#1E2227;border-radius:99px;padding:1px 10px;font-weight:700;font-size:8.6pt}.dz.no{background:#f3f1ec;color:#6a6c6f;font-weight:400}
+table.hr td.du{color:#3a3f46}table.hr td.du small{display:block;font-size:6.6pt;color:#848688}
+.cf{margin-top:8px;border-radius:7px;padding:5px 10px;font-size:7.6pt;line-height:1.4}.cf.ok{background:#eef7f1;color:#1f6a3c}.cf.wa{background:#fdf6e3;color:#7d5600}.cf.er{background:#fcefed;color:#9b2c2c}.cf span{color:#55585c}.cf ul{margin:3px 0 0;padding-left:14px;color:#3a3f46}
+.lw{margin:8px 0 0;font-size:7.2pt;color:#55585c;line-height:1.45}.lw b{color:#1E2227}
+.ft{margin-top:6px;padding-top:5px;border-top:1px solid #e6e1d3;display:flex;justify-content:space-between;font-size:7.2pt;color:#6a6c6f}.ft b{color:#1E2227}
+</style></head><body>${p1}${p2}</body></html>`};
+/* modo documento: ?pdf=<estado> abre direto o PDF da escala (usado pelo servidor que envia a escala por e-mail) */
+const PDFQ=(()=>{try{const q=new URLSearchParams(location.search).get('pdf');if(!q)return null;const t=atob(q.replace(/-/g,'+').replace(/_/g,'/'));return JSON.parse(decodeURIComponent(escape(t)))}catch(e){return null}})();
+if(PDFQ&&PDFQ.e){const OK=['mes','abre','qtd','ent','sai','ivm','dur','ii','id','idFix','perP','cct','rev','minLoja','fer'];OK.forEach(k=>{if(k in PDFQ.e)S[k]=PDFQ.e[k]});
+ let html='';try{html=window.__pdfHTML({nome:PDFQ.n||'',email:PDFQ.m||''})}catch(e){html='<p>erro</p>'}
+ const troca=()=>{document.open();document.write(html);document.close();const ok=()=>document.body&&document.body.setAttribute('data-pronto','1');(document.fonts?document.fonts.ready:Promise.resolve()).then(()=>setTimeout(ok,200));setTimeout(ok,8000)};if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(troca,0));else troca()}
+else{
+fill();render();
+/* dentro do site (iframe): informa a altura necessária para a página do site ajustar o quadro */
+if(window.self!==window.top){document.documentElement.dataset.theme='light';let lh=0;const env=()=>{const hh=Math.ceil(document.querySelector('.app').scrollHeight);if(Math.abs(hh-lh)>2){lh=hh;try{parent.postMessage({escala5x2:hh},location.origin)}catch(e){}}};
+ new ResizeObserver(env).observe(document.querySelector('.app'));addEventListener('load',env);setTimeout(env,600)}
+}
+}
+</script>
+</body>
+</html>
