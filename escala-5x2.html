@@ -202,7 +202,7 @@ input,select{min-height:36px;padding:6px 10px;font-size:14px;border-radius:9px}
 @media(min-width:901px) and (max-height:780px){.app{height:auto;min-height:100vh;overflow:visible}html,body{overflow:visible}.cols{align-items:start}.chks{flex:none}.cg{grid-auto-rows:minmax(46px,auto)}}
 .cw{display:flex;gap:6px;align-items:flex-start;margin:4px 0 0;padding:6px 8px;border-radius:8px;background:var(--ambbg);color:var(--amb);font-size:11px;line-height:1.4}.cw[hidden]{display:none}.cw svg{width:14px;height:14px;flex:none;margin-top:1px}
 .mlw{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:5px}.mlw[hidden]{display:none}.step.sm{grid-template-columns:30px 44px 30px;gap:4px}.step.sm button{min-height:30px;font-size:15px}.step.sm input{min-height:30px;padding:2px;font-size:14px}
-.tlw{margin-top:8px;padding-top:7px;border-top:1px dashed var(--line2)}.tlw:has(.tl:empty){display:none}.tlh{margin:0 0 4px;font-size:11.5px;font-weight:600;color:var(--ink2)}.tlh b{color:var(--ok)}.tlh{display:flex;flex-wrap:wrap;align-items:center;gap:4px 6px}.lg{margin-left:auto;display:inline-flex;align-items:center;gap:5px;font-weight:400;color:var(--mute);font-size:10.5px}.lg i{display:inline-block;width:14px;height:8px;border-radius:3px}.lg .lw{background:light-dark(#5b5f66,#8a8e95)}.lg .ld{background:var(--gold);margin-left:6px}.tls{color:var(--amb);font-weight:600}
+.tlw{margin-top:8px;padding-top:7px;border-top:1px dashed var(--line2)}.tlw:has(.tl:empty){display:none}.tlh{margin:0 0 4px;font-size:11.5px;font-weight:600;color:var(--ink2)}.tlh b{color:var(--ok)}.tlh b.vz{color:var(--amb)}.tlh{display:flex;flex-wrap:wrap;align-items:center;gap:4px 6px}.lg{margin-left:auto;display:inline-flex;align-items:center;gap:5px;font-weight:400;color:var(--mute);font-size:10.5px}.lg i{display:inline-block;width:14px;height:8px;border-radius:3px}.lg .lw{background:light-dark(#5b5f66,#8a8e95)}.lg .ld{background:var(--gold);margin-left:6px}.tls{color:var(--amb);font-weight:600}
 .tl{display:grid;grid-template-columns:52px minmax(0,1fr);gap:8px}.tl:empty{display:none}
 .tl .lb{display:grid;grid-auto-rows:20px;font-size:11px;color:var(--ink2);font-weight:600}.tl .lb span{display:flex;align-items:center}
 .tl .trk{position:relative;display:grid;grid-auto-rows:20px}
@@ -529,9 +529,15 @@ function axFit(el){const ax=el.querySelector('.ax');if(!ax)return;const bs=[...a
    x.style.visibility='hidden';ok=false});
   ax.classList.toggle('two',two);return ok};
  if(!run(false))run(true)}
-function drawTl(T){const el=$('#tl');if(!el)return;if(!T||T.k<2){el.innerHTML='';return}
+function drawTl(T){const el=$('#tl');if(!el)return;
+ /* sem revezamento: todos descansam no mesmo horário; o gráfico continua aparecendo, com uma faixa só */
+ const solo=!T||T.k<2;
+ if(solo){const s0=toMin(S.ent),e0=toMin(S.sai);let t=toMin((T&&T.starts&&T.starts[0])||'');
+  if(!S.id||s0==null||e0==null||t==null){el.innerHTML='';return}
+  const e=e0<=s0?e0+1440:e0;if(t<s0)t+=1440;
+  T={...(T||{}),k:1,raw:[t],slotIdx:null,s0,e,id:S.id,min:0}}
  /* escala do eixo: o trecho dos descansos ganha a maior parte da largura; o trabalho antes e depois é encurtado (com marca de corte) */
- const ra=Math.min(...T.raw),rz=Math.max(...T.raw)+T.id,span=T.e-T.s0,pre=ra-T.s0,post=T.e-rz,CAP=.11;
+ const ra=Math.min(...T.raw),rz=Math.max(...T.raw)+T.id,span=T.e-T.s0,pre=ra-T.s0,post=T.e-rz,CAP=solo?1:.11;
  let fp=pre/span,fq=post/span;const cp=fp>CAP,cq=fq>CAP;if(cp)fp=CAP;if(cq)fq=CAP;const fm=1-fp-fq;
  const X=t=>t<=ra?(pre?fp*(t-T.s0)/pre:0):t>=rz?fp+fm+(post?fq*(t-rz)/post:0):fp+fm*(t-ra)/(rz-ra);
  const pc=t=>(X(t)*100).toFixed(2)+'%',BH=Math.min(S.funcs.length,6,R.off.length)*20-4,brk=(cp?`<em class="brk" style="left:${(fp*50).toFixed(2)}%;height:${BH}px"></em>`:'')+(cq?`<em class="brk" style="left:${((1-fq/2)*100).toFixed(2)}%;height:${BH}px"></em>`:''),lab=t=>{const x=hm(t);return x.endsWith(':00')?String(+x.slice(0,2))+'h':x.replace(':','h')};
@@ -542,9 +548,9 @@ function drawTl(T){const el=$('#tl');if(!el)return;if(!T||T.k<2){el.innerHTML=''
   B+=`<div class="b" title="Func. ${i+1}: intervalo das ${hm(t)} às ${hm(t+T.id)}"><i style="left:${pc(t)};width:${((X(t+T.id)-X(t))*100).toFixed(2)}%"></i></div>`}
  const marks=[...ts].sort((a,b)=>a-b);
  el.innerHTML=`<div class="lb">${L}<span></span></div><div class="trk">${B}${brk}`+marks.map(t=>`<em class="ln" style="left:${pc(t)};bottom:auto;height:${BH+4}px"></em>`).join('')+
-  `<div class="ax"><b class="e0" style="left:0;transform:none" data-s="${S.ent}">${S.ent} chegada</b>`+marks.map(t=>`<b style="left:${pc(t)}">${lab(t)}</b>`).join('')+`<b class="e1" style="left:auto;right:0;transform:none" data-s="${S.sai}">saída ${S.sai}</b></div></div>`+(S.funcs.length>rows?`<p class="tlm">Os demais funcionários seguem o mesmo revezamento.</p>`:'');
+  `<div class="ax"><b class="e0" style="left:0;transform:none" data-s="${S.ent}">${S.ent} chegada</b>`+marks.map(t=>`<b style="left:${pc(t)}">${lab(t)}</b>`).join('')+`<b class="e1" style="left:auto;right:0;transform:none" data-s="${S.sai}">saída ${S.sai}</b></div></div>`+(S.funcs.length>rows?`<p class="tlm">Os demais funcionários seguem o mesmo ${solo?'intervalo':'revezamento'}.</p>`:'');
  axFit(el);
- $('#tlH').innerHTML=`Horário de descanso <b>· sempre ${T.min} de ${S.qtd} na loja</b><span class="lg"><i class="lw"></i>Trabalho<i class="ld"></i>Descanso</span>`+(T.short?`<span class="tls"> · com este turno, o máximo possível é ${T.pmax}</span>`:'')}
+ $('#tlH').innerHTML=`Horário de descanso ${solo?(S.qtd>1?'<b class="vz">· todos juntos, a loja fica vazia</b>':''):`<b>· sempre ${T.min} de ${S.qtd} na loja</b>`}<span class="lg"><i class="lw"></i>Trabalho<i class="ld"></i>Descanso</span>`+(T.short?`<span class="tls"> · com este turno, o máximo possível é ${T.pmax}</span>`:'')}
 function prep(){
  S.id=S.idFix!=null?S.idFix:S.ivm==='dur'?+S.dur:autoIv();
  const iiEf=S.ivm==='ini'&&S.ii?S.ii:midIi(S.id);
@@ -650,7 +656,7 @@ function corrigir(fx){
 }
 function drawPv(){
  const el=$('#pv');if(!el||!R)return;const D=R.D,W=el.clientWidth||600,sm=W<420,nameW=sm?26:84;
- el.classList.toggle('sm',sm);const n=7;
+ el.classList.toggle('sm',sm);const n=10;
  const i0=D.findIndex(d=>!d.out),days=D.slice(i0,i0+n).map((d,k)=>i0+k),rows=Math.min(S.funcs.length,6,R.off.length);
  el.style.gridTemplateColumns=nameW+'px repeat('+n+',minmax(0,1fr))';
  const dc=i=>D[i].hol?' hol':D[i].dow===6?' sun':'';
@@ -662,7 +668,7 @@ function drawPv(){
  el.innerHTML=h;
  $('#pvT').innerHTML='Primeiros '+n+' dias de '+MES[+S.mes.split('-')[1]-1]+'<span class="dl"><i class="df"></i>Folga<i class="dd"></i>Domingo<i class="dh"></i>Feriado</span>';
  const c=calc(shNow()),f=S.funcs[0]||{};
- const T=S.T||{k:1};$('#pvN').innerHTML=`<svg><use href="#ml"/></svg>Mais ${NW*7-n} dias${S.funcs.length>rows?' e '+(S.funcs.length-rows)+' funcionário(s)':''} na escala completa por e-mail`+(T.k<2&&S.id?` · intervalo das ${f.ii} às ${hm(toMin(f.ii)+S.id)}`:'');
+ const T=S.T||{k:1};$('#pvN').innerHTML=`<svg><use href="#ml"/></svg>Mais ${D.filter(d=>!d.out).length-n} dias${S.funcs.length>rows?' e '+(S.funcs.length-rows)+' funcionário(s)':''} na escala completa por e-mail`+(T.k<2&&S.id?` · intervalo das ${f.ii} às ${hm(toMin(f.ii)+S.id)}`:'');
 }
 new ResizeObserver(()=>{if(V&&!(LEAD&&LEAD.ok)){drawPv();axFit($('#tl'))}}).observe(document.querySelector('.res'));
 /* Integração no site: gravar o cadastro no Supabase e pedir o envio do e-mail com a escala completa. */
